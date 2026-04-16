@@ -28,10 +28,10 @@ pnpm-debug.log*
 # OMC runtime state (local-only)
 .omc/
 
-# PDF conversion intermediate artifacts (regenerated each build)
-build/pdf/
+# Local session reports (not for git)
+report/
 
-# Generated portfolio HTML (regenerated from PDF each build)
+# Generated portfolio output (copied from Portfolios/ each build)
 public/portfolio/
 
 # Generated case studies (copied from Portfolios/ at build)

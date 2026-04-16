@@ -26,12 +26,6 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Setup JDK (required by opendataloader-pdf)
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
       - name: Install dependencies
         run: npm ci
 
