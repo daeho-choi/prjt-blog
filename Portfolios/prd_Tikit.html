@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIKIT — Case Study · 티켓처럼 공유하는 이벤트 초대장</title>
+  <meta name="description" content="TIKIT은 티켓처럼 공유하는 한국어 이벤트 초대장 서비스입니다. 기획부터 런칭까지 3주 만에 혼자 만든 웹 서비스.">
+  <meta property="og:title" content="TIKIT — Case Study">
+  <meta property="og:description" content="링크 한 줄로 초대가 감상이 되는 경험. 3주 만에 혼자 런칭한 웹 서비스 케이스 스터디.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --bg-soft: #111113;
+      --card: #17171a;
+      --border: #26262b;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --accent: #818CF8;
+      --accent-2: #E879F9;
+      --accent-3: #FF8C42;
+      --accent-4: #22D3EE;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-feature-settings: "ss06", "ss07";
+      letter-spacing: -0.011em;
+    }
+
+    .font-mono {
+      font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      letter-spacing: 0;
+    }
+
+    .mono-label {
+      font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .text-balance { text-wrap: balance; }
+    .text-pretty { text-wrap: pretty; }
+
+    /* Hero gradient orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .orb-1 { width: 520px; height: 520px; background: #312E81; top: -140px; left: -120px; }
+    .orb-2 { width: 440px; height: 440px; background: #1E1B4B; top: 120px; right: -120px; }
+    .orb-3 { width: 360px; height: 360px; background: #818CF8; bottom: -120px; left: 30%; opacity: 0.3; }
+
+    /* Ticket card */
+    .ticket {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.5),
+        0 20px 40px -10px rgba(129, 140, 248, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      background:
+        linear-gradient(135deg, #312E81 0%, #1E1B4B 50%, #0a0a0b 100%);
+      transform: perspective(1200px) rotateY(-8deg) rotateX(4deg);
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .ticket:hover {
+      transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) scale(1.02);
+    }
+    .ticket::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(129, 140, 248, 0.35) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(232, 121, 249, 0.25) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .ticket::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 62%;
+      width: 110%;
+      height: 1px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.15);
+      transform: translate(-50%, 0);
+    }
+    .ticket-notch {
+      position: absolute;
+      top: 62%;
+      width: 22px;
+      height: 22px;
+      background: var(--bg);
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+    .ticket-notch.left { left: -11px; }
+    .ticket-notch.right { right: -11px; }
+
+    /* Decorative shapes on ticket */
+    .deco {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+      opacity: 0.6;
+    }
+    .deco-1 { width: 110px; height: 110px; background: #818CF8; top: 10%; right: 12%; }
+    .deco-2 { width: 60px; height: 60px; background: #E879F9; top: 30%; left: 15%; border-radius: 20%; }
+    .deco-3 { width: 36px; height: 36px; background: #22D3EE; top: 45%; right: 30%; }
+
+    /* Animated fade-in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Section marker */
+    .section-marker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .section-marker::before {
+      content: "";
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--text-dim);
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #818CF8 0%, #E879F9 50%, #FF8C42 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Card hover */
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(129, 140, 248, 0.4);
+      transform: translateY(-4px);
+      background: #1c1c21;
+    }
+
+    /* Nav */
+    .nav-pill {
+      background: rgba(10, 10, 11, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Stack badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .badge:hover {
+      border-color: rgba(129, 140, 248, 0.5);
+      color: var(--text);
+    }
+    .badge-accent {
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(232, 121, 249, 0.08));
+      border-color: rgba(129, 140, 248, 0.35);
+      color: var(--text);
+    }
+
+    /* Table */
+    .tikit-table {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card);
+    }
+    .tikit-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tikit-table th {
+      text-align: left;
+      padding: 16px 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: #131316;
+      border-bottom: 1px solid var(--border);
+    }
+    .tikit-table td {
+      padding: 18px 20px;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .tikit-table td:first-child {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tikit-table tr:last-child td { border-bottom: none; }
+
+    /* Subtle grid background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* Scroll progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #818CF8, #E879F9, #FF8C42);
+      z-index: 100;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Sprint card — timeline */
+    .sprint-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 28px 28px 32px;
+      overflow: hidden;
+    }
+    .sprint-card::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent-color, #818CF8), transparent);
+    }
+    .sprint-1 { --accent-color: #818CF8; }
+    .sprint-2 { --accent-color: #E879F9; }
+    .sprint-3 { --accent-color: #FF8C42; }
+
+    @media (max-width: 768px) {
+      .orb-1 { width: 320px; height: 320px; }
+      .orb-2 { width: 280px; height: 280px; }
+      .ticket { transform: none; }
+    }
+
+    /* Print-friendly (PDF export) */
+    @media print {
+      body { background: white; color: black; }
+      .orb, .scroll-progress, nav { display: none; }
+      .feature-card, .tikit-table { border-color: #e5e5e5; background: white; }
+      .ticket { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 nav-pill rounded-full px-5 py-3 hidden md:flex items-center gap-7">
+    <a href="#top" class="font-black text-sm tracking-tight">TIKIT<span class="text-[var(--accent)]">.</span></a>
+    <div class="w-px h-4 bg-[var(--border)]"></div>
+    <a href="#problem" class="text-xs text-[var(--text-muted)] hover:text-white transition">문제</a>
+    <a href="#solution" class="text-xs text-[var(--text-muted)] hover:text-white transition">해결</a>
+    <a href="#ux" class="text-xs text-[var(--text-muted)] hover:text-white transition">UX</a>
+    <a href="#features" class="text-xs text-[var(--text-muted)] hover:text-white transition">기능</a>
+    <a href="#decisions" class="text-xs text-[var(--text-muted)] hover:text-white transition">설계 결정</a>
+    <a href="#sprint" class="text-xs text-[var(--text-muted)] hover:text-white transition">스프린트</a>
+    <a href="#stack" class="text-xs text-[var(--text-muted)] hover:text-white transition">요약</a>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section id="top" class="relative min-h-screen flex items-center overflow-hidden">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="absolute inset-0 grid-bg opacity-60"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 py-24 w-full">
+      <div class="grid md:grid-cols-[1.2fr_1fr] gap-16 items-center">
+        <!-- Copy -->
+        <div>
+          <div class="section-marker mb-8">CASE STUDY · 2026</div>
+          <h1 class="text-[44px] md:text-[64px] lg:text-[72px] font-black leading-[1.02] tracking-[-0.03em] mb-8 text-balance">
+            티켓처럼 공유하는<br>
+            <span class="gradient-text">이벤트 초대장.</span>
+          </h1>
+          <p class="text-lg md:text-xl text-[var(--text-muted)] leading-relaxed max-w-xl mb-10 text-pretty">
+            링크 한 줄로 초대가 감상이 되는 경험.<br>
+            기획부터 디자인, 개발, 보안, 배포까지<br>
+            <span class="text-white font-medium">3주 만에 혼자 런칭한 웹 서비스</span>입니다.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-10">
+            <span class="badge badge-accent">🤖 AI 제작 파이프라인</span>
+            <span class="badge">웹 · PC / Mobile</span>
+            <span class="badge">Next.js 16</span>
+            <span class="badge">Firebase</span>
+            <span class="badge">TypeScript</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-5 text-sm">
+            <a href="https://tikit.day" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-black font-semibold px-5 py-3 rounded-full hover:scale-[1.03] transition">
+              tikit.day 방문하기
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+            </a>
+            <a href="#problem" class="text-[var(--text-muted)] hover:text-white transition">케이스 스터디 읽기 ↓</a>
+          </div>
+        </div>
+
+        <!-- Ticket visual -->
+        <div class="relative flex justify-center">
+          <div class="ticket w-full max-w-[320px]">
+            <div class="deco deco-1"></div>
+            <div class="deco deco-2"></div>
+            <div class="deco deco-3"></div>
+            <div class="ticket-notch left"></div>
+            <div class="ticket-notch right"></div>
+
+            <!-- Top (invitation side) -->
+            <div class="relative h-[62%] p-6 flex flex-col justify-between">
+              <div class="flex items-start justify-between">
+                <span class="mono-label">INVITATION · 2026</span>
+                <span class="mono-label">No.</span>
+              </div>
+              <div>
+                <div class="mono-label mb-2" style="color: rgba(255,255,255,0.5);">Event</div>
+                <h3 class="text-white font-black text-[28px] leading-tight tracking-[-0.02em]">
+                  Friday<br>Night<br>Studio.
+                </h3>
+              </div>
+            </div>
+
+            <!-- Bottom (stub) -->
+            <div class="absolute left-0 right-0 bottom-0 h-[38%] p-6 flex flex-col justify-between">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="mono-label mb-1" style="color: rgba(255,255,255,0.5);">Date</div>
+                  <div class="text-white font-bold text-sm">04.08 · WED</div>
+                </div>
+                <div>
+                  <div class="mono-label mb-1" style="color: rgba(255,255,255,0.5);">Time</div>
+                  <div class="text-white font-bold text-sm">LAUNCH</div>
+                </div>
+              </div>
+              <div class="flex items-end justify-between">
+                <span class="font-black text-white text-lg tracking-tight">TIKIT<span style="color: #E879F9;">.</span></span>
+                <span class="mono-label" style="color: rgba(255,255,255,0.5);">RSVP →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating chips -->
+          <div class="hidden md:block absolute -top-4 -right-4 bg-[var(--card)] border border-[var(--border)] rounded-full px-4 py-2 text-xs font-medium text-[var(--text-muted)]">
+            🎟 이름이 곧 티켓
+          </div>
+          <div class="hidden md:block absolute -bottom-4 -left-4 bg-[var(--card)] border border-[var(--border)] rounded-full px-4 py-2 text-xs font-medium text-[var(--text-muted)]">
+            ⚡ 정원 안 꼬이는 RSVP
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ META / ROLE ═══════════════ -->
+  <section class="relative py-20 border-t border-[var(--border)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal grid md:grid-cols-4 gap-8 md:gap-12">
+        <div>
+          <div class="mono-label mb-3">Role</div>
+          <div class="text-white font-semibold">Full-stack Solo</div>
+          <div class="text-sm text-[var(--text-muted)] mt-1">기획 · 디자인 · 개발 · 배포</div>
+        </div>
+        <div>
+          <div class="mono-label mb-3">Timeline</div>
+          <div class="text-white font-semibold">3주 · 3 Sprint</div>
+          <div class="text-sm text-[var(--text-muted)] mt-1">~ 2026.04.08 런칭</div>
+        </div>
+        <div>
+          <div class="mono-label mb-3">Platform</div>
+          <div class="text-white font-semibold">웹 서비스</div>
+          <div class="text-sm text-[var(--text-muted)] mt-1">PC / Mobile 크로스 플랫폼</div>
+        </div>
+        <div>
+          <div class="mono-label mb-3">Status</div>
+          <div class="text-white font-semibold">운영 중</div>
+          <div class="text-sm text-[var(--text-muted)] mt-1">tikit.day</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 01 · PROBLEM ═══════════════ -->
+  <section id="problem" class="relative py-32 border-t border-[var(--border)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">01 · PROBLEM</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          카카오톡으로 뿌려지는 초대는<br>
+          대체로 <span class="gradient-text">셋 중 하나였습니다.</span>
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          사적인 이벤트를 여는 사람은 많은데, "모이게 만드는 초대장"의 비주얼과 참석 관리를 한 번에 해결해주는 서비스가 한국 시장에 없었습니다.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="reveal feature-card p-7">
+          <div class="mono-label mb-4">Option 1</div>
+          <h3 class="text-xl font-bold mb-3">구글폼 · 네이버폼</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            투박하고 정보만 받습니다. "간다 / 안 간다"를 묻는 폼이 이벤트의 첫인상이 됩니다.
+          </p>
+        </div>
+        <div class="reveal feature-card p-7">
+          <div class="mono-label mb-4">Option 2</div>
+          <h3 class="text-xl font-bold mb-3">카카오톡 단톡방</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            참석 의사를 사람 손으로 집계해야 합니다. 이미지나 디자인은 전혀 남지 않고 기록도 없습니다.
+          </p>
+        </div>
+        <div class="reveal feature-card p-7">
+          <div class="mono-label mb-4">Option 3</div>
+          <h3 class="text-xl font-bold mb-3">Partiful · Paperless Post</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            감성은 좋지만 <b class="text-white">카카오톡 OG 미리보기</b>와 한국어 UX가 애초에 맞지 않습니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal mt-16 p-8 md:p-10 rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[rgba(129,140,248,0.08)] to-transparent">
+        <div class="mono-label mb-3" style="color: var(--accent);">INSIGHT</div>
+        <p class="text-xl md:text-2xl font-bold leading-snug text-pretty">
+          카카오톡으로 공유되는 링크는 <span class="gradient-text">OG 이미지 한 장이 첫인상</span>을 좌우합니다.<br>
+          그러면 OG 이미지 자체가 초대장이 되어야 합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 02 · SOLUTION / PRINCIPLES ═══════════════ -->
+  <section id="solution" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">02 · SOLUTION</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          링크 한 줄로 초대가<br><span class="gradient-text">감상이 되는 경험.</span>
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          제품을 만들기 전에 다섯 가지 설계 원칙을 먼저 정했습니다. 이후 모든 기능·품질·보안 의사결정은 이 원칙에서 나왔습니다.
+        </p>
+      </div>
+
+      <div class="space-y-5">
+        <div class="reveal feature-card p-7 md:p-9">
+          <div class="flex items-start gap-6">
+            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">01</div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">티켓은 장식이 아니라 약속입니다</h3>
+              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
+                초대장은 실물 티켓 카드처럼 보여야 합니다. 카드 앞면, 뒷면, 그라디언트, OG 이미지 모두 <b class="text-white">같은 티켓 언어</b>로 말합니다. 이름에서 뽑아낸 그라디언트가 클라이언트와 서버 어디에서 그려지든 똑같이 나오게 설계했습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal feature-card p-7 md:p-9">
+          <div class="flex items-start gap-6">
+            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">02</div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">로그인 없이도 참석할 수 있습니다</h3>
+              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
+                참석자에게 가입 장벽을 두지 않습니다. 이름 한 줄, 한 번의 탭으로 RSVP가 끝나야 합니다. 익명 참석자도 안전하게 집계될 수 있도록 인증 계층을 통일했습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal feature-card p-7 md:p-9">
+          <div class="flex items-start gap-6">
+            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">03</div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">PC와 모바일 어디서 열어도 자연스럽게</h3>
+              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
+                카카오톡에서 탭해 모바일로 들어오는 동선과, 데스크톱에서 공유받아 여는 동선 모두 티켓 경험이 일관되게 유지되도록 크로스 플랫폼 레이아웃을 설계했습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal feature-card p-7 md:p-9">
+          <div class="flex items-start gap-6">
+            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">04</div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">카카오톡 미리보기가 첫 화면입니다</h3>
+              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
+                공유 링크의 OG 이미지가 곧 이벤트의 얼굴입니다. 서버에서 이벤트마다 고유한 티켓 이미지를 그때그때 생성해 카카오톡 미리보기에 바로 띄웁니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal feature-card p-7 md:p-9">
+          <div class="flex items-start gap-6">
+            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">05</div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">보안은 기본값, 편의는 선택</h3>
+              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
+                RSVP는 서버를 반드시 거치고, 비밀번호는 bcrypt로 저장합니다. 외부 API에는 속도 제한을, 카카오 로그인에는 CSRF 방어를 걸었습니다. AI 보안 감사로 실수를 교차 검증했습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 03 · UX DETAILS ═══════════════ -->
+  <section id="ux" class="relative py-32 border-t border-[var(--border)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">03 · UX DETAILS</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          디테일이 서비스를 완성합니다.
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          기능 목록보다 더 중요한 건 "이 초대장이 카카오톡에서 어떻게 보이는가" 같은 미세한 경험입니다. 아래는 서비스 품질을 결정지은 여섯 가지 디테일입니다.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+            한 장의 티켓이 끝까지 이어지는 구조
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            생성 단계에서 본 카드 = 카카오톡에 뜨는 OG 이미지 = 상세 페이지의 티켓이 모두 같은 그림입니다. 앞면은 포스터 감성, 뒷면은 행사 상세. "FLIP" 펄스 애니메이션이 처음 온 사람에게 카드를 뒤집어보도록 자연스럽게 유도합니다.
+          </p>
+        </div>
+
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-2)]"></span>
+            OG 이미지가 곧 제품의 얼굴
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            카카오톡에서 링크를 탭하기 전부터, 사용자는 이미 이벤트의 티켓 카드를 한 번 본 상태입니다. 이미지 있는 이벤트 / 없는 이벤트는 레이아웃을 분기해서 각각 다르게 렌더합니다.
+          </p>
+        </div>
+
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-3)]"></span>
+            바이럴 루프 설계
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            참석자 페이지 하단에 "나도 초대장 만들기 →" 작은 CTA. 호스트 본인에게는 노출되지 않습니다. "이 초대장 예쁘네 → 나도 만들어볼까"까지 가는 심리 동선을 최대한 짧게 유지합니다.
+          </p>
+        </div>
+
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-4)]"></span>
+            카카오톡 중복 메시지 방지
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            카카오 공유 시 제목·설명을 일부러 비웠습니다. 그렇지 않으면 사용자가 친구에게 보낸 메시지 텍스트와 링크 미리보기 텍스트가 중복으로 떠서 스팸처럼 보입니다.
+          </p>
+        </div>
+
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: #34D399;"></span>
+            신호등 참석자 UI
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            갈래요 / 미정 / 못가요를 신호등 컬러(초록·노랑·빨강)로 시각화했습니다. 호스트가 한눈에 인원을 파악할 수 있고, "호스트 / 참석" 뱃지로 권한도 명확히 표시됩니다.
+          </p>
+        </div>
+
+        <div class="reveal feature-card p-8">
+          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: #FCA5A5;"></span>
+            휴지통 (soft-delete)
+          </h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            이벤트 삭제는 바로 지우는 게 아니라 휴지통으로 먼저 보냅니다. 소유자는 다시 복구할 수 있고, 실수 삭제와 관리자 감사 두 가지를 모두 대응합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 04 · FEATURES ═══════════════ -->
+  <section id="features" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">04 · FEATURES</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          여섯 개의 기능 축.
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          제품을 여섯 개의 축으로 분해해 각자 독립적으로 작동하면서도, 티켓 메타포로 연결되도록 설계했습니다.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Feature 1 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#818CF8] to-[#312E81] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">4단계 생성 위저드</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            테마 → 정보 → 장소 → 이미지·공개설정. 6 + 15종의 이름 시드 그라디언트 테마, Google Places 검색, 드래그 기반 이미지 위치 편집기까지.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E879F9] to-[#7C3AED] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">정원 안 꼬이는 RSVP</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            여러 명이 동시에 참석을 눌러도 정원이 꼬이지 않습니다. 서버가 한 번에 한 건씩만 처리해서 중복·초과를 원천 차단합니다.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF8C42] to-[#D97706] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">서버 렌더 OG 이미지</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            이벤트마다 고유한 600×800 티켓 이미지를 서버에서 그려 카카오톡 미리보기에 바로 띄웁니다. 클라이언트 티켓과 완전히 같은 그라디언트로.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#22D3EE] to-[#0891B2] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">공유 바텀시트</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            카카오톡 공유 + 티켓 카드 이미지 저장 + 링크 복사. 세 가지 공유 경로를 바텀시트 하나에 담았습니다. 인스타 스토리용 캡처도 한 번에.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA5A5] to-[#EF4444] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Google + Kakao + 익명 로그인</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            세 가지 인증 경로를 제공하고, 같은 이메일이면 Google과 Kakao 계정을 자동으로 연결합니다. 익명 로그인으로 비로그인 RSVP도 안전하게 집계.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="reveal feature-card p-8">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#34D399] to-[#059669] flex items-center justify-center mb-5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">마이 이벤트 3뷰</h3>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            리스트 · 덱(스와이프) · 캘린더 세 가지 뷰를 제공합니다. 호스트·참석 뱃지로 권한을 구분하고, 검색·정렬·필터도 한곳에 모았습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 05 · DECISIONS ═══════════════ -->
+  <section id="decisions" class="relative py-32 border-t border-[var(--border)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">05 · DECISIONS</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          주요 의사결정과 이유.
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          "왜 이렇게 만들었는가"가 코드보다 중요합니다. 기술 세부는 짧게, 결정의 이유는 분명하게 정리했습니다.
+        </p>
+      </div>
+
+      <div class="reveal space-y-4">
+        <!-- Decision 1 -->
+        <details class="feature-card p-6 md:p-7 group" open>
+          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-xs text-[var(--text-dim)]">01</span>
+              <h3 class="text-lg md:text-xl font-bold">RSVP는 서버가 한 번에 한 건씩만 처리</h3>
+            </div>
+            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
+            <b class="text-white">문제</b> · 여러 명이 동시에 참석 버튼을 누르면 정원이 꼬이거나 같은 사람이 두 번 등록될 수 있음.<br>
+            <b class="text-white">선택</b> · 클라이언트에서 직접 저장하는 걸 막고, 반드시 서버를 거쳐 한 번에 한 건씩 안전하게 처리하도록 경로를 하나로 묶었음.<br>
+            <b class="text-white">효과</b> · 이 경로 하나만 제대로 만들면 되기 때문에 보안 검증도 간단해짐.
+          </p>
+        </details>
+
+        <!-- Decision 2 -->
+        <details class="feature-card p-6 md:p-7 group">
+          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-xs text-[var(--text-dim)]">02</span>
+              <h3 class="text-lg md:text-xl font-bold">DB 문서와 UI 사이에 변환 함수 한 겹</h3>
+            </div>
+            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
+            <b class="text-white">문제</b> · 개발 초반 필드명과 지금 필드명이 달라서, 예전에 만든 이벤트가 UI에 빈칸으로 뜨는 버그가 있었음.<br>
+            <b class="text-white">선택</b> · DB에서 가져온 원본을 UI가 절대 그대로 쓰지 못하게 하고, 가운데에 "변환 함수 한 겹"을 두어 예전 필드와 지금 필드를 한곳에서 맞춰줌.<br>
+            <b class="text-white">효과</b> · 새 필드를 추가해도 한 곳만 고치면 돼서 같은 종류의 버그가 구조적으로 재발하지 않음.
+          </p>
+        </details>
+
+        <!-- Decision 3 -->
+        <details class="feature-card p-6 md:p-7 group">
+          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-xs text-[var(--text-dim)]">03</span>
+              <h3 class="text-lg md:text-xl font-bold">티켓 그라디언트는 "이름에서 뽑아냄"</h3>
+            </div>
+            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
+            <b class="text-white">문제</b> · 티켓 카드(웹 화면)와 OG 이미지(카카오톡 미리보기)가 서로 다른 그라디언트를 그리면 티켓 일관성이 무너짐.<br>
+            <b class="text-white">선택</b> · 이벤트 이름을 시드로 사용하는 그라디언트 생성 함수를 만들어, 클라이언트와 서버가 이 함수 하나를 같이 씀.<br>
+            <b class="text-white">효과</b> · 같은 이벤트 이름은 언제 어디서 렌더해도 같은 티켓이 나옴.
+          </p>
+        </details>
+
+        <!-- Decision 4 -->
+        <details class="feature-card p-6 md:p-7 group">
+          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-xs text-[var(--text-dim)]">04</span>
+              <h3 class="text-lg md:text-xl font-bold">카카오 로그인은 서버를 한 번 거쳐서</h3>
+            </div>
+            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
+            <b class="text-white">문제</b> · 사용 중인 인증 시스템에 Kakao 로그인이 기본 제공되지 않음. 한국 서비스에 카카오 로그인은 필수.<br>
+            <b class="text-white">선택</b> · 서버에서 카카오 인증 코드를 받아 내부 인증 토큰으로 교환하는 방식을 직접 구현. 중간에 CSRF 방어 코드도 추가.<br>
+            <b class="text-white">효과</b> · Google, Kakao, 익명 로그인 모두 같은 체계로 권한 관리가 가능해짐.
+          </p>
+        </details>
+
+        <!-- Decision 5 -->
+        <details class="feature-card p-6 md:p-7 group">
+          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
+            <div class="flex items-center gap-4">
+              <span class="font-mono text-xs text-[var(--text-dim)]">05</span>
+              <h3 class="text-lg md:text-xl font-bold">AI 멀티에이전트로 품질·보안 교차 검증</h3>
+            </div>
+            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </summary>
+          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
+            <b class="text-white">문제</b> · 혼자 3주 안에 런칭하면서도 보안·품질을 놓칠 수 없었음. 사람 한 명의 눈으로는 엣지 케이스를 다 잡기 어려움.<br>
+            <b class="text-white">선택</b> · 기획·구현·보안 감사·한국어 UX 리뷰·경계면 QA를 각각 담당하는 AI 에이전트 팀을 구성해 교차로 체크하게 만듦.<br>
+            <b class="text-white">효과</b> · 보안 이슈를 런칭 전에 발견해 수정할 수 있었고, 이터레이션 속도를 올리면서도 꼼꼼한 품질 관리가 가능했음.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 06 · TECH SUMMARY (short) ═══════════════ -->
+  <section class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">06 · TECH SUMMARY</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          사용한 기술, 짧게.
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-12 text-pretty">
+          세부 스택보다 선택의 이유가 더 중요합니다. 한 코드베이스 안에서 웹 UI · 서버 API · 인증 · 서버 OG 이미지를 모두 다룰 수 있는 구성을 골랐습니다.
+        </p>
+      </div>
+
+      <div class="reveal grid md:grid-cols-3 gap-5">
+        <div class="feature-card p-7">
+          <div class="mono-label mb-4" style="color: var(--accent);">FRONTEND</div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            모던 웹 UI 프레임워크로 PC와 모바일을 한 번에 대응. 애니메이션·컴포넌트·타이포까지 일관된 디자인 시스템을 유지.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="badge text-[11px]">Next.js 16</span>
+            <span class="badge text-[11px]">React 19</span>
+            <span class="badge text-[11px]">TypeScript</span>
+            <span class="badge text-[11px]">Tailwind 4</span>
+          </div>
+        </div>
+        <div class="feature-card p-7">
+          <div class="mono-label mb-4" style="color: var(--accent-2);">BACKEND</div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            1인 운영에 맞게 서버 없이도 인증·DB·스토리지·실시간까지 돌아가는 BaaS를 선택. 운영 부담을 최소화.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="badge text-[11px]">Firebase Auth</span>
+            <span class="badge text-[11px]">Firestore</span>
+            <span class="badge text-[11px]">Storage</span>
+            <span class="badge text-[11px]">Hosting</span>
+          </div>
+        </div>
+        <div class="feature-card p-7">
+          <div class="mono-label mb-4" style="color: var(--accent-3);">EXTERNAL</div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            카카오 로그인·공유, 장소 검색, 서버 OG 이미지 렌더링 등 한국 사용자 경험에 필요한 외부 서비스를 연동.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="badge text-[11px]">Kakao OAuth</span>
+            <span class="badge text-[11px]">Google Places</span>
+            <span class="badge text-[11px]">next/og</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal mt-12 p-6 md:p-8 rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[rgba(129,140,248,0.06)] to-transparent text-sm text-[var(--text-muted)] leading-relaxed">
+        <span class="text-white font-semibold">한 줄 요약</span> · Next.js 하나 안에서 프론트엔드 · 서버 API · 카카오톡용 OG 이미지까지 모두 처리하고, Firebase로 인증·DB·실시간·배포를 1인 운영에 최적화된 형태로 묶었습니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 07 · LAUNCH SPRINT ═══════════════ -->
+  <section id="sprint" class="relative py-32 border-t border-[var(--border)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">07 · LAUNCH SPRINT</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
+          3주, 3개의 마일스톤.
+        </h2>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
+          기획부터 런칭까지 3주. 각 스프린트마다 목표가 명확히 다르고, AI 제작 파이프라인이 모든 단계의 중심에 있었습니다.
+        </p>
+      </div>
+
+      <div class="reveal space-y-5 mb-20">
+        <!-- Sprint 1 -->
+        <div class="sprint-card sprint-1">
+          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+            <div>
+              <div class="mono-label mb-2" style="color: #818CF8;">SPRINT 1 · M1</div>
+              <h3 class="text-xl md:text-2xl font-bold">MVP + AI 제작 파이프라인 구축</h3>
+            </div>
+            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-03-27</span>
+          </div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            기본 기능이 돌아가는 MVP를 빠르게 만들고, 동시에 <b class="text-white">AI를 활용한 서비스 제작 파이프라인</b>을 구축했습니다. 설계·코드 생성·리뷰·리팩토링 루프를 세팅해, 짧은 시간에 많은 기능을 만들 수 있는 환경을 확보하는 게 이 스프린트의 진짜 목표였습니다.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge text-[11px]">이벤트 생성·상세</span>
+            <span class="badge text-[11px]">RSVP 기본 흐름</span>
+            <span class="badge text-[11px]">Firebase 연동</span>
+            <span class="badge text-[11px]">기본 티켓 카드</span>
+          </div>
+        </div>
+
+        <!-- Sprint 2 -->
+        <div class="sprint-card sprint-2">
+          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+            <div>
+              <div class="mono-label mb-2" style="color: #E879F9;">SPRINT 2 · M2</div>
+              <h3 class="text-xl md:text-2xl font-bold">브랜딩 + 실서비스화</h3>
+            </div>
+            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-04-03</span>
+          </div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            단순 기능 중심의 MVP에 <b class="text-white">TIKIT의 브랜드 언어</b>(티켓 메타포, 타이포, 그라디언트)를 입혔습니다. 제작 파이프라인을 한 번 더 강화해 이터레이션 속도를 끌어올렸고, 한 주 안에 여러 번 개선 루프를 돌릴 수 있게 됐습니다. 도메인(<code class="text-[11px] px-1.5 py-0.5 bg-black/40 rounded">tikit.day</code>)을 등록하고 실서비스 운영 준비도 이 단계에서 마쳤습니다.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge text-[11px]">브랜드 언어 적용</span>
+            <span class="badge text-[11px]">OG 이미지 서버 렌더</span>
+            <span class="badge text-[11px]">카카오톡 공유 최적화</span>
+            <span class="badge text-[11px]">도메인 등록</span>
+            <span class="badge text-[11px]">이터레이션 가속</span>
+          </div>
+        </div>
+
+        <!-- Sprint 3 -->
+        <div class="sprint-card sprint-3">
+          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
+            <div>
+              <div class="mono-label mb-2" style="color: #FF8C42;">SPRINT 3 · M3</div>
+              <h3 class="text-xl md:text-2xl font-bold">QA + 보안 + UI/UX 보완 → GTM</h3>
+            </div>
+            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-04-08 런칭</span>
+          </div>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+            PC·모바일 크로스 플랫폼 회귀 테스트와 엣지 케이스를 점검했습니다. <b class="text-white">AI 멀티에이전트 방식으로 보안을 교차 검토</b>해 CRITICAL 5건, MEDIUM 4건을 수정했고, 한국어 카피 리뷰와 인터랙션 회귀 테스트로 사용성을 마감했습니다. <b class="text-white">4월 8일(수) 런칭 완료</b>, 현재 운영 중입니다.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge text-[11px]">크로스 플랫폼 QA</span>
+            <span class="badge text-[11px]">AI 보안 감사</span>
+            <span class="badge text-[11px]">CRITICAL 5 · MEDIUM 4</span>
+            <span class="badge text-[11px]">한국어 UX 리뷰</span>
+            <span class="badge text-[11px]">런칭 · GTM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI 활용 포인트 -->
+      <div class="reveal">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl">🤖</span>
+          <h3 class="text-2xl md:text-3xl font-black tracking-[-0.02em]">AI 활용 포인트</h3>
+        </div>
+        <p class="text-base text-[var(--text-muted)] leading-relaxed mb-8 max-w-3xl text-pretty">
+          혼자 만드는 풀스택 서비스에서 AI는 "더 빠르게"가 아니라 <b class="text-white">"더 꼼꼼하게 체크하는"</b> 용도로 썼습니다. 3주라는 짧은 기간 안에 혼자서 런칭하면서도 보안·품질을 놓치지 않을 수 있었던 이유입니다.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: var(--accent);">01 · 설계 리뷰</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              기능 스펙과 데이터 모델의 영향도를 사전에 분석. 나중에 스키마가 어긋나는 일을 예방.
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: var(--accent-2);">02 · 구현 가속</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              반복 패턴 리팩토링과 보일러플레이트 생성. 손 품이 들어가는 단순 작업을 빠르게 처리.
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: var(--accent-3);">03 · 보안 감사</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              Firestore 규칙, API 인증 흐름, 입력 검증을 멀티에이전트로 교차 점검. 런칭 전 CRITICAL 5건 수정.
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: var(--accent-4);">04 · 한국어 UX 카피 리뷰</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              번역투, 톤 일관성, 용어 사전을 AI가 체크. 사람 한 명으로는 놓치기 쉬운 디테일을 잡아냈습니다.
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: #34D399;">05 · 스키마 동기화 점검</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              UI 데이터 계약과 DB 필드가 어긋나지 않는지, 새 필드를 추가할 때마다 자동으로 확인.
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <div class="mono-label mb-3" style="color: #FCA5A5;">06 · 경계면 QA</div>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              DB → 변환 함수 → UI, API → 프론트 경계를 교차 비교. 사람 눈으로 놓치기 쉬운 불일치를 탐지.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sprint stats -->
+      <div class="reveal mt-16 grid md:grid-cols-3 gap-5">
+        <div class="feature-card p-7 text-center">
+          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">3주</div>
+          <div class="text-sm text-[var(--text-muted)]">기획부터 런칭까지</div>
+        </div>
+        <div class="feature-card p-7 text-center">
+          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">0 → 1</div>
+          <div class="text-sm text-[var(--text-muted)]">혼자 만든 실서비스</div>
+        </div>
+        <div class="feature-card p-7 text-center">
+          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">100+</div>
+          <div class="text-sm text-[var(--text-muted)]">커밋 · AI 교차 검증 포함</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ 08 · STACK / CREDITS ═══════════════ -->
+  <section id="stack" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="reveal">
+        <div class="section-marker mb-6">08 · ROLE & SUMMARY</div>
+        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-16 text-balance">
+          제가 한 일.
+        </h2>
+      </div>
+
+      <div class="reveal grid md:grid-cols-2 gap-12 mb-16">
+        <div>
+          <div class="mono-label mb-4">CORE CONTRIBUTIONS</div>
+          <ul class="space-y-4 text-[var(--text-muted)]">
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">3주 만에 0 → 1</b> · 기획 · 디자인 · 개발 · 배포까지 혼자 마감하고 실서비스 운영</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">AI 제작 파이프라인 구축</b> · 설계 · 구현 · 리뷰 · QA 루프를 AI로 가속. 이터레이션 속도와 품질을 함께 확보</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">AI 멀티에이전트 기반 품질 검증</b> · 보안 · UX 카피 · 스키마 드리프트를 자동으로 교차 점검하는 구조 운영</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">크로스 플랫폼 웹 서비스</b> · PC·모바일 어디서 열어도 일관된 티켓 경험</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">카카오톡 공유 최적화</b> · OG 이미지가 곧 초대장이 되는 구조 설계</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-[var(--accent)] font-bold">·</span>
+              <span><b class="text-white">정원 안 꼬이는 RSVP</b> · 서버 한 경로로 묶어 동시 접근·중복 문제를 원천 차단</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="mono-label mb-4">TECH STACK</div>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="badge">Next.js 16</span>
+            <span class="badge">React 19</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge">Tailwind 4</span>
+            <span class="badge">shadcn/ui</span>
+            <span class="badge">framer-motion</span>
+            <span class="badge">Firebase</span>
+            <span class="badge">Firestore</span>
+            <span class="badge">Kakao OAuth</span>
+            <span class="badge">Google Places</span>
+            <span class="badge">next/og</span>
+          </div>
+
+          <div class="mono-label mb-4">AI TOOLS</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-accent">🤖 Claude (멀티에이전트)</span>
+            <span class="badge">코드 리뷰</span>
+            <span class="badge">보안 감사</span>
+            <span class="badge">UX 카피 리뷰</span>
+            <span class="badge">스키마 동기화</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="reveal relative overflow-hidden rounded-3xl border border-[var(--border)] p-10 md:p-14 text-center">
+        <div class="absolute inset-0 bg-gradient-to-br from-[rgba(129,140,248,0.12)] via-[rgba(232,121,249,0.06)] to-transparent"></div>
+        <div class="relative">
+          <div class="mono-label mb-4">LIVE SERVICE</div>
+          <h3 class="text-3xl md:text-4xl font-black mb-4 tracking-[-0.02em]">
+            직접 만들어보세요.
+          </h3>
+          <p class="text-[var(--text-muted)] mb-8 max-w-xl mx-auto">
+            TIKIT은 2026년 4월 8일(수) 런칭 후 운영 중입니다. 링크를 눌러 서비스를 직접 사용해볼 수 있어요.
+          </p>
+          <a href="https://tikit.day" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-3.5 rounded-full hover:scale-[1.03] transition">
+            tikit.day 열기
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="border-t border-[var(--border)] py-12">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <span class="font-black text-lg tracking-tight">TIKIT<span class="text-[var(--accent)]">.</span></span>
+          <span class="text-xs text-[var(--text-dim)]">Case Study · 2026</span>
+        </div>
+        <div class="flex items-center gap-6 text-xs text-[var(--text-dim)]">
+          <a href="https://tikit.day" target="_blank" rel="noopener" class="hover:text-white transition">tikit.day</a>
+          <a href="#top" class="hover:text-white transition">맨 위로 ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress bar
+    const progress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      progress.style.width = pct + '%';
+    }, { passive: true });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

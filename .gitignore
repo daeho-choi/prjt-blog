@@ -1,0 +1,38 @@
+# Build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.production
+.env.local
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# OMC runtime state (local-only)
+.omc/
+
+# PDF conversion intermediate artifacts (regenerated each build)
+build/pdf/
+
+# Generated portfolio HTML (regenerated from PDF each build)
+public/portfolio/
+
+# Generated case studies (copied from Portfolios/ at build)
+public/case-studies/

@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>붐빔 BoomBim — Product Requirements Document</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fire-500: #FF4500;
+  --fire-400: #FF6B35;
+  --fire-300: #FF8C42;
+  --fire-600: #CC3700;
+  --ember: #FF2D00;
+  --ash-900: #0D0D0D;
+  --ash-800: #1A1A1A;
+  --ash-700: #2A2A2A;
+  --ash-600: #3A3A3A;
+  --ash-500: #555;
+  --ash-400: #888;
+  --ash-300: #AAA;
+  --ash-200: #D0D0D0;
+  --ash-100: #F0F0F0;
+  --smoke: rgba(255,69,0,0.06);
+  --glow: rgba(255,69,0,0.15);
+  --pin-red: #FF4500;
+  --pin-blue: #3B82F6;
+  --pin-yellow: #F59E0B;
+  --pin-cyan: #06B6D4;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Noto Sans KR', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--ash-900);
+  color: var(--ash-200);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ash-900); }
+::-webkit-scrollbar-thumb { background: var(--ash-600); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fire-500); }
+
+/* ─── SELECTION ─── */
+::selection { background: var(--fire-500); color: #fff; }
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(13,13,13,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,69,0,0.1);
+  transition: all 0.3s;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--fire-500);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo .fire { font-size: 1.4rem; }
+
+.nav-links {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--ash-400);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.nav-links a:hover {
+  color: var(--fire-400);
+  border-color: rgba(255,69,0,0.2);
+  background: rgba(255,69,0,0.05);
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(255,69,0,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+.hero-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fire-400);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 32px;
+  position: relative;
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards 0.2s;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  color: #fff;
+  letter-spacing: -3px;
+  line-height: 0.95;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards 0.4s;
+}
+
+.hero-title .fire-text {
+  background: linear-gradient(135deg, var(--fire-500), var(--fire-300), var(--fire-500));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: var(--ash-300);
+  font-weight: 300;
+  max-width: 500px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards 0.6s;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards 0.8s;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hero-meta-item .label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ash-500);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero-meta-item .value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ash-200);
+}
+
+.hero-meta-item .value a {
+  color: var(--fire-400);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,107,53,0.3);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION ─── */
+.section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.section-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fire-500);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: #fff;
+  letter-spacing: -1px;
+  margin-bottom: 40px;
+  line-height: 1.2;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ash-600), transparent);
+  margin: 0 auto;
+}
+
+/* ─── BLOCKQUOTE ─── */
+.quote-block {
+  border-left: 3px solid var(--fire-500);
+  padding: 24px 32px;
+  margin: 32px 0;
+  background: linear-gradient(135deg, rgba(255,69,0,0.06), transparent);
+  border-radius: 0 12px 12px 0;
+  font-size: 1.15rem;
+  color: var(--ash-100);
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* ─── POWER BLOCK (권력 구조) ─── */
+.power-block {
+  background: linear-gradient(135deg, rgba(255,69,0,0.08), rgba(255,69,0,0.02));
+  border: 1px solid rgba(255,69,0,0.15);
+  border-radius: 16px;
+  padding: 40px;
+  margin: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.power-block::before {
+  content: '🔥';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 8rem;
+  opacity: 0.05;
+}
+
+.power-block .highlight {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--fire-400);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.power-block p {
+  color: var(--ash-300);
+  margin-bottom: 12px;
+}
+
+/* ─── PRINCIPLES ─── */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 32px 0;
+}
+
+.principle-card {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 12px;
+  padding: 28px;
+  transition: all 0.3s;
+}
+
+.principle-card:hover {
+  border-color: rgba(255,69,0,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255,69,0,0.08);
+}
+
+.principle-card .icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.principle-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.principle-card p {
+  font-size: 0.85rem;
+  color: var(--ash-400);
+  line-height: 1.6;
+}
+
+/* ─── TABLE ─── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 24px 0;
+  border-radius: 12px;
+  border: 1px solid var(--ash-700);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+thead {
+  background: var(--ash-800);
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ash-300);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--ash-700);
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--ash-300);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+td:first-child {
+  font-weight: 500;
+  color: var(--ash-100);
+  white-space: nowrap;
+}
+
+.td-fire { color: var(--fire-400); font-weight: 600; }
+.td-check { color: #22c55e; }
+.td-cross { color: #ef4444; }
+
+/* ─── PERSONA CARDS ─── */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+
+.persona-card {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.persona-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--fire-500), var(--fire-300));
+}
+
+.persona-card .tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fire-400);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.persona-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.persona-card .detail {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.persona-card .detail .lbl {
+  color: var(--ash-500);
+  min-width: 70px;
+  font-weight: 500;
+}
+
+.persona-card .detail .val {
+  color: var(--ash-200);
+}
+
+/* ─── METRIC CARDS ─── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.metric-card {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.metric-card:hover {
+  border-color: rgba(255,69,0,0.2);
+}
+
+.metric-card .metric-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--fire-400);
+  margin-bottom: 4px;
+}
+
+.metric-card .metric-label {
+  font-size: 0.75rem;
+  color: var(--ash-400);
+}
+
+.metric-card .metric-how {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ash-500);
+  margin-top: 8px;
+}
+
+/* ─── GOALS ─── */
+.goals-list {
+  list-style: none;
+  margin: 24px 0;
+}
+
+.goals-list li {
+  padding: 12px 0 12px 28px;
+  position: relative;
+  color: var(--ash-200);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.goals-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fire-500);
+}
+
+.goals-list.non-goals li::before {
+  background: var(--ash-600);
+  border: 2px solid var(--ash-500);
+  width: 6px;
+  height: 6px;
+}
+
+/* ─── FEATURE CONCEPT ─── */
+.concept-table {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1px;
+  background: var(--ash-700);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.concept-table .ct-label {
+  background: var(--ash-800);
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ash-400);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.concept-table .ct-value {
+  background: var(--ash-800);
+  padding: 14px 20px;
+  color: var(--ash-100);
+  font-size: 0.9rem;
+}
+
+/* ─── FEATURE BLOCKS ─── */
+.feature-block {
+  margin: 40px 0;
+}
+
+.feature-block h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-block h3 .num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fire-500);
+  background: rgba(255,69,0,0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.feature-block ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.feature-block ul li {
+  padding: 6px 0 6px 20px;
+  position: relative;
+  color: var(--ash-300);
+  font-size: 0.9rem;
+}
+
+.feature-block ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--ash-600);
+}
+
+.feature-block ul ul li { padding-left: 20px; font-size: 0.85rem; }
+.feature-block ul ul li::before { content: '·'; }
+
+/* ─── FLOW DIAGRAM ─── */
+.flow-block {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.flow-block pre {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ash-300);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* ─── SCREEN SECTION ─── */
+.screen-section {
+  margin: 48px 0;
+  padding: 32px;
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 16px;
+  position: relative;
+}
+
+.screen-section::before {
+  content: attr(data-screen);
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fire-400);
+  background: var(--ash-800);
+  padding: 2px 12px;
+  border: 1px solid rgba(255,69,0,0.2);
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.screen-section h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.screen-section .figma-ref {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--ash-500);
+  margin-bottom: 16px;
+}
+
+.screen-section .desc {
+  color: var(--ash-300);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.screen-section h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ash-100);
+  margin: 24px 0 12px;
+}
+
+/* ─── PRIORITY BADGE ─── */
+.priority {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  margin: 16px 0 8px;
+}
+
+.priority.p0 { background: rgba(255,69,0,0.15); color: var(--fire-400); }
+.priority.p1 { background: rgba(59,130,246,0.15); color: var(--pin-blue); }
+.priority.p2 { background: rgba(255,255,255,0.06); color: var(--ash-400); }
+
+/* ─── FEED CARD MOCK ─── */
+.feed-mock {
+  background: var(--ash-700);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
+  font-size: 0.85rem;
+  max-width: 400px;
+  border: 1px solid var(--ash-600);
+}
+
+.feed-mock .feed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+}
+
+.feed-mock .feed-header .author {
+  font-family: var(--font-mono);
+  color: var(--fire-400);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.feed-mock .feed-header .meta {
+  color: var(--ash-500);
+  font-size: 0.75rem;
+}
+
+.feed-mock .feed-text {
+  color: var(--ash-100);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.feed-mock .feed-tag {
+  color: var(--pin-blue);
+  font-size: 0.8rem;
+}
+
+.feed-mock .feed-timer {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fire-300);
+  margin: 12px 0 8px;
+}
+
+.feed-mock .feed-reactions {
+  display: flex;
+  gap: 20px;
+  font-size: 0.8rem;
+  color: var(--ash-400);
+  margin: 8px 0 16px;
+}
+
+.feed-mock .feed-comments {
+  border-top: 1px solid var(--ash-600);
+  padding-top: 12px;
+}
+
+.feed-mock .comment {
+  font-size: 0.8rem;
+  color: var(--ash-300);
+  margin-bottom: 6px;
+}
+
+.feed-mock .comment .c-author {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ash-200);
+  font-weight: 700;
+}
+
+/* ─── PIN COLORS ─── */
+.pin-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.pin-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--ash-300);
+}
+
+.pin-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pin-dot.red { background: var(--pin-red); }
+.pin-dot.blue { background: var(--pin-blue); }
+.pin-dot.yellow { background: var(--pin-yellow); }
+.pin-dot.cyan { background: var(--pin-cyan); }
+
+/* ─── TECH STACK ─── */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.tech-item {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.tech-item .tech-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ash-500);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.tech-item .tech-value {
+  color: var(--ash-100);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ─── TIMELINE ─── */
+.timeline {
+  margin: 32px 0;
+  position: relative;
+  padding-left: 32px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--fire-500), var(--ash-700));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fire-500);
+  border: 2px solid var(--ash-900);
+}
+
+.timeline-item.future::before {
+  background: var(--ash-600);
+  border-color: var(--ash-700);
+}
+
+.timeline-item .tl-phase {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.timeline-item .tl-duration {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fire-400);
+  margin-bottom: 8px;
+}
+
+.timeline-item .tl-desc {
+  color: var(--ash-400);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ─── MONETIZATION ─── */
+.money-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.money-card {
+  background: var(--ash-800);
+  border: 1px solid var(--ash-700);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.money-card h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ash-100);
+  margin-bottom: 8px;
+}
+
+.money-card p {
+  font-size: 0.8rem;
+  color: var(--ash-400);
+  line-height: 1.6;
+}
+
+/* ─── OPEN QUESTIONS ─── */
+.question-list {
+  margin: 24px 0;
+}
+
+.question-item {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: start;
+}
+
+.question-item .q-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ash-500);
+  text-align: center;
+}
+
+.question-item .q-text {
+  color: var(--ash-200);
+  font-size: 0.85rem;
+}
+
+.question-item .q-owner {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--ash-500);
+  white-space: nowrap;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align: center;
+  padding: 80px 40px;
+  border-top: 1px solid var(--ash-800);
+}
+
+.footer .f-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--fire-500);
+  margin-bottom: 8px;
+}
+
+.footer .f-sub {
+  color: var(--ash-500);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.footer .f-author {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ash-600);
+  margin-top: 24px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .nav { padding: 12px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .section { padding: 60px 24px; }
+  .hero-meta { gap: 20px; }
+  .screen-section { padding: 24px 20px; }
+  .concept-table { grid-template-columns: 1fr; }
+  .feed-mock { max-width: 100%; }
+}
+
+/* ─── SCROLL ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo"><span class="fire">🔥</span> BoomBim PRD</div>
+  <div class="nav-links">
+    <a href="#vision">Vision</a>
+    <a href="#problem">Problem</a>
+    <a href="#users">Users</a>
+    <a href="#metrics">Metrics</a>
+    <a href="#features">Features</a>
+    <a href="#screens">Screens</a>
+    <a href="#tech">Tech</a>
+    <a href="#gtm">GTM</a>
+    <a href="#questions">Questions</a>
+    <a href="#backlog">Backlog</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">Product Requirements Document</div>
+  <h1 class="hero-title"><span class="fire-text">붐빔</span></h1>
+  <p class="hero-subtitle">오프라인의 복작거림을 온라인에서도</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="label">Author</span>
+      <span class="value">최대호 (PM)</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Platform</span>
+      <span class="value">iOS (iPhone)</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Status</span>
+      <span class="value" style="color: var(--fire-400);">Prototyping</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Prototype</span>
+      <span class="value"><a href="https://www.figma.com/proto/PyL9tL4losO5RsQJD5jzaR/Project_boombim?node-id=735-429&t=GxK9goGuHBaXQXci-1" target="_blank">Figma →</a></span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Domain</span>
+      <span class="value">boomb.im</span>
+    </div>
+  </div>
+</header>
+
+<div class="section-divider"></div>
+
+<!-- 1. VISION -->
+<section id="vision" class="section">
+  <span class="section-number">01 — Product Vision</span>
+  <h2 class="section-title">위치 기반 실시간<br>커뮤니티 앱</h2>
+
+  <p style="color: var(--ash-300); font-size: 1rem; margin-bottom: 24px;">
+    BoomBim은 오프라인에서 발생하는 '붐빔(복작거림)'을 온라인에 표현하여, 일시적이고 강한 집중도의 커뮤니케이션을 가능하게 하는 서비스입니다.
+  </p>
+
+  <div class="quote-block">
+    "오프라인에서 리얼타임으로 발생하는 붐빔은 일시적으로 강한 집중도를 갖는다.<br>
+    이 현상을 온라인으로 옮기면, 강한 집중도를 매일 새롭게 만들어내는 서비스가 가능하다."
+  </div>
+
+  <p style="color: var(--ash-400); font-size: 0.9rem; margin: 20px 0;">
+    기존 위치 기반 서비스와의 차이: <strong style="color: var(--ash-200);">'실시간으로 발생하며, 누적되지 않는 데이터'</strong>
+  </p>
+  <ul style="list-style: none; padding: 0; margin-bottom: 40px;">
+    <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-400); font-size: 0.9rem;">
+      <span style="position: absolute; left: 0; color: var(--ash-600);">—</span>
+      '맛집'이지만 데이터가 누적식이라 요즘 핫한 곳인지 n년 전에 핫했던 곳인지 분간이 어려움
+    </li>
+    <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-400); font-size: 0.9rem;">
+      <span style="position: absolute; left: 0; color: var(--ash-600);">—</span>
+      동네에 소방차가 와서 소란스러우나 무슨 일인지 알기 어려운 경우
+    </li>
+  </ul>
+
+  <!-- 권력 구조 -->
+  <div class="power-block reveal">
+    <div class="highlight">"붐빔의 권력은 그 날, 그 타이밍에, 그 곳에 있었다는 것이다."</div>
+    <p>누구나 올릴 수 있고, 누구나 자신이 살아가는 그 시간과 장소를 권력으로 — 다른 이는 올릴 수 없는 것을 올릴 수 있다는 것만으로 집중과 관심을 받을 수 있게 해주는 것이 붐빔이 채워야 할 욕구입니다.</p>
+    <p>그 장소에 있었던 사람들이 동시간에 동일한 일을 겪었다는 심리적 동질감을 유도하고, 소통의 창구를 제공합니다.</p>
+  </div>
+
+  <!-- 설계 원칙 -->
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">핵심 설계 원칙</h4>
+  <div class="principles-grid">
+    <div class="principle-card reveal">
+      <div class="icon">⚡</div>
+      <h3>퀵 & 인스턴트</h3>
+      <p>동네 기반 공고한 커뮤니티가 목표가 아님. 이벤트가 있을 때 확 끓어올랐다가 확 꺼지는 형태.</p>
+    </div>
+    <div class="principle-card reveal">
+      <div class="icon">👁️</div>
+      <h3>주목 효과</h3>
+      <p>지도에서 다 조용한데 어디 한군데가 불타오른다 — 이로 인한 주목 효과가 가장 큰 힘.</p>
+    </div>
+    <div class="principle-card reveal">
+      <div class="icon">🌱</div>
+      <h3>점진적 오픈</h3>
+      <p>어뷰징 방지를 위해 특정 지역부터 코어유저를 키우며 확장. 자정작용 기대.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 2. PROBLEM -->
+<section id="problem" class="section">
+  <span class="section-number">02 — Problem Definition</span>
+  <h2 class="section-title">경쟁 서비스 비교</h2>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="td-fire">붐빔</th>
+          <th>당근 동네생활</th>
+          <th>와글</th>
+          <th>티키타카</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>데이터 속성</td>
+          <td class="td-fire">휘발성 (6시간)</td>
+          <td>누적식</td>
+          <td>누적식</td>
+          <td>누적식</td>
+        </tr>
+        <tr>
+          <td>위치 특정성</td>
+          <td class="td-fire">100m 반경 핀</td>
+          <td>동 단위</td>
+          <td>지역 단위</td>
+          <td>지역 단위</td>
+        </tr>
+        <tr>
+          <td>실시간성</td>
+          <td class="td-fire">실시간 + 타이머</td>
+          <td>낮음</td>
+          <td>중간</td>
+          <td>중간</td>
+        </tr>
+        <tr>
+          <td>아이덴티티</td>
+          <td class="td-fire">MBTI 반익명</td>
+          <td>실명(닉네임)</td>
+          <td>닉네임</td>
+          <td>닉네임</td>
+        </tr>
+        <tr>
+          <td>지도 UX</td>
+          <td class="td-fire">지도 중심</td>
+          <td>텍스트 피드</td>
+          <td>텍스트 중심</td>
+          <td>텍스트 중심</td>
+        </tr>
+        <tr>
+          <td>핵심 가치</td>
+          <td class="td-fire">순간의 집중도</td>
+          <td>동네 정보 교류</td>
+          <td>지역 커뮤니티</td>
+          <td>로컬 소통</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color: var(--ash-400); font-size: 0.9rem; margin-top: 20px;">
+    <strong style="color: var(--ash-200);">차별화 요약</strong>: "누적되지 않는 데이터 × 100m 정밀 위치 × 지도 중심 UX"의 조합으로, 기존 로컬 커뮤니티가 풀지 못하는 "지금 이 순간, 바로 이 장소"의 실시간 맥락을 포착합니다.
+  </p>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 3. USERS -->
+<section id="users" class="section">
+  <span class="section-number">03 — Target Users</span>
+  <h2 class="section-title">타겟 유저</h2>
+
+  <div class="persona-grid">
+    <div class="persona-card reveal">
+      <div class="tag">Primary Persona</div>
+      <h3>🗺️ 동네 탐험가</h3>
+      <div class="detail"><span class="lbl">연령대</span><span class="val">20~30대</span></div>
+      <div class="detail"><span class="lbl">특성</span><span class="val">동네 맛집, 이벤트, 로컬 소식에 관심이 많은 MZ세대</span></div>
+      <div class="detail"><span class="lbl">Pain</span><span class="val">실시간으로 주변 상황을 파악할 채널이 없음</span></div>
+      <div class="detail"><span class="lbl">행동</span><span class="val">인스타 스토리, X(트위터) 실시간 트렌드 자주 확인</span></div>
+    </div>
+    <div class="persona-card reveal">
+      <div class="tag">Secondary Persona</div>
+      <h3>📢 동네 정보통</h3>
+      <div class="detail"><span class="lbl">연령대</span><span class="val">25~40대</span></div>
+      <div class="detail"><span class="lbl">특성</span><span class="val">로컬 정보를 공유하고 반응을 얻는 데 보람을 느낌</span></div>
+      <div class="detail"><span class="lbl">Pain</span><span class="val">정보를 공유할 적절한 플랫폼 없음. SNS에 흩어져 게시</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 4. METRICS -->
+<section id="metrics" class="section">
+  <span class="section-number">04 — Objectives & Metrics</span>
+  <h2 class="section-title">목표 & 성공 지표</h2>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 12px;">Goals</h4>
+  <ul class="goals-list">
+    <li>서울 송파구 일대 초기 사용자 확보 및 활성 커뮤니티 형성</li>
+    <li>위치 기반 실시간 피드의 PMF(Product-Market Fit) 검증</li>
+    <li>MBTI 기반 익명 시스템의 사용자 수용도 확인</li>
+  </ul>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 28px 0 12px;">Non-Goals</h4>
+  <ul class="goals-list non-goals">
+    <li>전국 단위 서비스 확장</li>
+    <li>DM/채팅 기능</li>
+    <li>상업적 게시물/광고 시스템</li>
+    <li>실명 인증 또는 소셜 로그인</li>
+  </ul>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Success Metrics</h4>
+  <div class="metrics-grid reveal">
+    <div class="metric-card">
+      <div class="metric-value">500+</div>
+      <div class="metric-label">DAU</div>
+      <div class="metric-how">Analytics</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">50+</div>
+      <div class="metric-label">일평균 피드</div>
+      <div class="metric-how">Server logs</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">3+</div>
+      <div class="metric-label">피드당 코멘트</div>
+      <div class="metric-how">Server logs</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">30%+</div>
+      <div class="metric-label">D7 리텐션</div>
+      <div class="metric-how">Cohort analysis</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">지표 산출 근거</h4>
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Metric</th><th>Target</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>DAU</td><td class="td-fire">500+</td><td>잠실 일대 일 유동인구 약 30만 중 0.15~0.2% 전환 가정. 하이퍼 로컬 커뮤니티가 자생적 콘텐츠 루프를 유지하려면 최소 수백 명 규모의 동시 활성 유저 필요</td></tr>
+        <tr><td>일평균 피드</td><td class="td-fire">50+</td><td>DAU 500 기준 작성률 10%. 일반 커뮤니티 1% rule 대비 공격적이나, 140자 단문 + 위치 탭 2단계의 낮은 작성 진입장벽 감안</td></tr>
+        <tr><td>피드당 코멘트</td><td class="td-fire">3+</td><td>"게시판"이 아닌 "커뮤니티" 작동 여부의 핵심 지표. 3건 미만이면 일방적 브로드캐스트 → 소통 루프 미작동 신호</td></tr>
+        <tr><td>D7 리텐션</td><td class="td-fire">30%+</td><td>소셜/커뮤니티 앱 평균 D7 리텐션 20~25%. 30% 이상이면 PMF 초기 신호. 참고: 당근 동네생활 초기 D7 약 35% 추정</td></tr>
+        <tr><td>오픈 요청</td><td>측정 시작</td><td>지역 확장 우선순위의 정량적 기준으로 활용. 절대 목표치 미설정, 지역 간 상대 비교에 사용</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 5. FEATURES -->
+<section id="features" class="section">
+  <span class="section-number">05 — Service Concept</span>
+  <h2 class="section-title">서비스 컨셉 & 핵심 기능</h2>
+
+  <div class="concept-table reveal">
+    <div class="ct-label">서비스명</div>
+    <div class="ct-value">붐빔 (BoomBim)</div>
+    <div class="ct-label">슬로건</div>
+    <div class="ct-value">오프라인의 복작거림을 온라인에서도</div>
+    <div class="ct-label">메타포</div>
+    <div class="ct-value">🔥 불 붙이기 = 게시물 작성</div>
+    <div class="ct-label">사용자 ID</div>
+    <div class="ct-value">MBTI 4글자 + # + 숫자 (예: ENFJ#0130) <span style="font-size: 0.75rem; color: var(--ash-500);">— MVP용 임시 설계, <a href="#backlog" style="color: var(--fire-400); text-decoration: none; border-bottom: 1px dotted var(--fire-400);">Backlog B-01</a> 참조</span></div>
+    <div class="ct-label">게시물</div>
+    <div class="ct-value">140자 제한 · 시간 제한(자동 소멸) · 위치 태그 필수</div>
+  </div>
+
+  <div class="feature-block">
+    <h3><span class="num">5.1</span> 유저 프로필</h3>
+    <ul>
+      <li>가상 프로필로 서비스 참여 (MBTI, 아바타 기반)</li>
+      <li>실제 얼굴/이름 불필요 — 추구하는 컨셉을 간결하게 표현</li>
+      <li>프로필은 다른 유저에게 공개</li>
+      <li>받은 추천수에 따라 LV 상승</li>
+    </ul>
+  </div>
+
+  <div class="feature-block">
+    <h3><span class="num">5.2</span> 위치 기반 게시글 작성</h3>
+    <ul>
+      <li>자신의 위치 <strong style="color: var(--fire-400);">반경 100m 내</strong> 위치를 지도에서 선택하여 작성</li>
+      <li>140자 이내 텍스트 + 이미지(최대 5장)</li>
+      <li>댓글, 이모지 반응(슬랙 스타일), 추천/신고 가능</li>
+      <li>최종 활성화 시점 <strong style="color: var(--fire-400);">6시간 후 자동 소멸</strong>
+        <ul>
+          <li>작성자는 소멸 후에도 열람 가능 (인스타 스토리 레퍼런스)</li>
+          <li>소멸 = 다른 유저에게 비노출 (서버 보존). 본인 삭제 시 완전 삭제.</li>
+        </ul>
+      </li>
+      <li>게시글 <strong>열람은 거리 제한 없음</strong> (작성만 100m 제한)</li>
+    </ul>
+  </div>
+
+  <div class="feature-block">
+    <h3><span class="num">5.3</span> 게시글 확인</h3>
+    <ul>
+      <li>글이 많거나 반응이 뜨거운 지역을 확인 가능</li>
+      <li>한 동네에 여러 게시글이 있을 경우 피드 형태로 확인</li>
+    </ul>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 6. SCREENS -->
+<section id="screens" class="section">
+  <span class="section-number">06 — Screens & User Stories</span>
+  <h2 class="section-title">화면별 User Flow</h2>
+
+  <div class="flow-block reveal">
+<pre>[앱 실행]
+    │
+    ▼
+[튜토리얼] ──시작하기──▶ [권한 동의]
+                              │
+                              ▼
+                        [MBTI 선택]
+                              │
+                              ▼
+                        [메인 지도 화면]
+                         ╱    │    ╲
+                        ╱     │     ╲
+                 [피드 목록] [글쓰기] [마이페이지]
+                    │         │         │
+                    ▼         ▼         ▼
+              [피드 상세]  [위치 지정]  [내 피드 목록]
+                 │         │         [알림] [설정]
+                 ▼         ▼
+              [코멘트]  [텍스트 입력]
+              [신고]    [사진 첨부]
+                        [게시 완료]</pre>
+  </div>
+
+  <!-- Screen 1 -->
+  <div class="screen-section reveal" data-screen="Screen 1">
+    <h3>튜토리얼 (Onboarding)</h3>
+    <div class="figma-ref">Figma Node: 685:147</div>
+    <p class="desc">앱 최초 실행 시 표시되는 환영 화면. 서비스의 핵심 가치를 한 문장으로 전달하고, "시작하기" CTA로 온보딩 플로우를 시작한다.</p>
+
+    <span class="priority p0">P0 — Must Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>T-01</td><td>앱 첫 실행 시 서비스 목적을 이해할 수 있는 환영 화면을 보고 싶다</td><td>튜토리얼 화면 표시 / 설명 텍스트 노출 / "시작하기" 버튼 활성화</td></tr>
+          <tr><td>T-02</td><td>"시작하기" 탭하여 온보딩 플로우를 시작하고 싶다</td><td>권한 동의 화면으로 이동 / 온보딩 완료 사용자는 스킵</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Screen 2 -->
+  <div class="screen-section reveal" data-screen="Screen 2">
+    <h3>권한 동의 & MBTI 선택</h3>
+    <div class="figma-ref">Figma Node: 405:141</div>
+    <p class="desc">지도 위 오버레이 모달. 위치/카메라 권한 안내 후 MBTI를 선택하여 익명 아이디를 생성한다.</p>
+
+    <div class="flow-block" style="margin: 16px 0;">
+<pre>[권한 안내] → [MBTI 선택: E/I → S/N → T/F → J/P] → [이용약관 동의] → [메인 지도 진입]</pre>
+    </div>
+
+    <span class="priority p0">P0 — Must Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>R-01</td><td>앱 사용에 필요한 권한을 명확히 안내받고 동의하고 싶다</td><td>위치/카메라 "선택" 명시 / 권한 거부해도 이용 가능</td></tr>
+          <tr><td>R-02</td><td>MBTI 4글자를 선택하여 익명 아이디를 생성하고 싶다</td><td>4개 모두 선택 시 버튼 활성화 / MBTI + 랜덤 번호로 ID 생성</td></tr>
+          <tr><td>R-03</td><td>이용약관에 동의한 후 서비스를 시작하고 싶다</td><td>체크박스 필수 / 약관 링크 제공</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Screen 3 -->
+  <div class="screen-section reveal" data-screen="Screen 3">
+    <h3>메인 지도 화면 (Main Map)</h3>
+    <div class="figma-ref">Figma Node: 512:185 — 18 variants</div>
+    <p class="desc">앱의 핵심 화면. 전체 화면 지도 위에 주변의 활성 피드가 색상별 핀으로 표시된다.</p>
+
+    <h4>지도 핀 컬러 체계</h4>
+    <div class="pin-grid">
+      <div class="pin-item"><span class="pin-dot red"></span> 일반 피드</div>
+      <div class="pin-item"><span class="pin-dot blue"></span> 정보성 피드</div>
+      <div class="pin-item"><span class="pin-dot yellow"></span> 이벤트/축제</div>
+      <div class="pin-item"><span class="pin-dot cyan"></span> 질문/궁금</div>
+    </div>
+
+    <h4>서비스 미오픈 지역</h4>
+    <div class="flow-block" style="margin: 12px 0;">
+<pre>[미오픈 지역 접근] → [🚧 안내 팝업] → [오픈 조르기 👍] or [닫기]</pre>
+    </div>
+
+    <span class="priority p0">P0 — Must Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>M-01</td><td>지도에서 주변 활성 피드를 핀으로 확인하고 싶다</td><td>현재 위치 기반 중심 설정 / 컬러 핀 표시 / 핀 탭 시 상세로 이동</td></tr>
+          <tr><td>M-02</td><td>현재 내 위치(동 단위)를 확인하고 싶다</td><td>상단에 동 이름 표시 / 위치 변경 시 실시간 갱신</td></tr>
+          <tr><td>M-03</td><td>🔥 BOOM 버튼을 탭하여 새 피드를 작성하고 싶다</td><td>FAB 버튼 → 글쓰기 플로우 / 항상 노출</td></tr>
+          <tr><td>M-04</td><td>하단 탭으로 지도/피드/마이페이지를 전환하고 싶다</td><td>3개 탭 / 현재 탭 하이라이트</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <span class="priority p1">P1 — Should Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>M-05</td><td>미오픈 지역에서 오픈 요청("조르기")하고 싶다</td><td>안내 팝업 / 중복 요청 시 안내</td></tr>
+          <tr><td>M-06</td><td>인기 해시태그를 확인하고 싶다</td><td>HOT 뱃지 + 트렌딩 태그 / 탭 시 필터링</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Screen 4 -->
+  <div class="screen-section reveal" data-screen="Screen 4">
+    <h3>피드 목록 & 상세 (Feed)</h3>
+    <div class="figma-ref">Figma Node: 514:1277 — 36 variants</div>
+
+    <div class="feed-mock">
+      <div class="feed-header">
+        <span class="author">ENFJ#0130</span>
+        <span class="meta">삼전동, 13시간 전</span>
+      </div>
+      <div class="feed-text">오랜만에 밥 먹으러 왔는데, 장사 안하시나 보네요. 혹시 <span class="feed-tag">#대왕타꼬야끼</span> 어디로 이전 하셨는지 아시는분? 😢😢</div>
+      <div class="feed-timer">⏳ 03:28 남음</div>
+      <div class="feed-reactions">
+        <span>👍 1730</span>
+        <span>🔥 32</span>
+        <span>💬 14</span>
+      </div>
+      <div class="feed-comments">
+        <div class="comment"><span class="c-author">ISFP#0003</span> 아 여기 전에 확장 이전 하신다고...</div>
+        <div class="comment"><span class="c-author">INFJ#0023</span> 아 그렇군요 감사합니다</div>
+        <div class="comment"><span class="c-author">ENFJ#0130</span> 아 찾았습니다!! 감사합니다!!</div>
+      </div>
+    </div>
+
+    <span class="priority p0">P0 — Must Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>F-01</td><td>주변 피드를 시간순으로 목록 형태로 보고 싶다</td><td>최신순 정렬 / 스크롤 로드 / 타이머 표시</td></tr>
+          <tr><td>F-02</td><td>피드에 추천/비추천으로 반응하고 싶다</td><td>카운트 증가 / 중복 방지 / 실시간 갱신</td></tr>
+          <tr><td>F-03</td><td>피드에 코멘트를 작성하고 싶다</td><td>즉시 반영 / MBTI ID 자동 표시</td></tr>
+          <tr><td>F-04</td><td>작성자 MBTI ID와 위치/시간을 확인하고 싶다</td><td>모든 피드에 표시</td></tr>
+          <tr><td>F-05</td><td>피드의 남은 시간(타이머)을 확인하고 싶다</td><td>실시간 카운트다운 / 만료 시 비노출</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <span class="priority p1">P1 — Should Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>F-06</td><td>특정 동의 전체 피드를 모아보고 싶다</td><td>"모아보기" 탭 시 해당 동 전체 피드</td></tr>
+          <tr><td>F-07</td><td>부적절한 피드를 신고하고 싶다</td><td>신고 옵션 / 확인 팝업 / 사유 선택</td></tr>
+          <tr><td>F-08</td><td>코멘트 작성 중 실수로 나가지 않도록 확인</td><td>뒤로가기 시 확인 팝업</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Screen 5 -->
+  <div class="screen-section reveal" data-screen="Screen 5">
+    <h3>글쓰기 (Post Creation)</h3>
+    <div class="figma-ref">Figma Node: 762:1788</div>
+    <p class="desc">2단계 플로우: (1) 지도 드래그로 위치 지정 → (2) 텍스트 및 사진 입력</p>
+
+    <div class="flow-block" style="margin: 12px 0;">
+<pre>[🔥 BOOM 탭] → [위치 지정: 지도 드래그 100m] → [텍스트 140자 + 사진 5장 + 해시태그] → [게시 → 메인 복귀]</pre>
+    </div>
+
+    <span class="priority p0">P0 — Must Have</span>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
+        <tbody>
+          <tr><td>W-01</td><td>지도를 드래그하여 게시 위치를 지정하고 싶다</td><td>중심 핀 변경 / 현재 위치 기본 설정</td></tr>
+          <tr><td>W-02</td><td>140자 이내 텍스트로 피드를 작성하고 싶다</td><td>실시간 카운터 / 초과 시 제한</td></tr>
+          <tr><td>W-03</td><td>사진을 첨부하고 싶다 (선택)</td><td>카메라/갤러리 / 최대 5장</td></tr>
+          <tr><td>W-04</td><td>해시태그를 추가하고 싶다</td><td># 자동 접두사</td></tr>
+          <tr><td>W-05</td><td>게시 완료 피드백을 받고 싶다</td><td>"등록 완료" / 새 핀 표시</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Screen 6 & 7 -->
+  <div class="screen-section reveal" data-screen="Screen 6-7">
+    <h3>알림 & 마이페이지</h3>
+
+    <h4>알림 (Notifications)</h4>
+    <p class="desc">피드에 발생한 반응(추천, 비추천, 코멘트)을 시간순으로 표시. 탭 시 해당 피드로 딥링크.</p>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap; margin: 12px 0; font-size: 0.85rem; color: var(--ash-300);">
+      <span>👍 추천 알림</span>
+      <span>👎 비추천 알림</span>
+      <span>💬 코멘트 알림</span>
+    </div>
+
+    <h4 style="margin-top: 28px;">마이페이지 (My Page)</h4>
+    <p class="desc">MBTI ID + 성향 태그, 내가 쓴 피드 목록, 팀 응원 메시지, 서비스 탈퇴 기능 제공.</p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 7. TECH -->
+<section id="tech" class="section">
+  <span class="section-number">07 — Technical Architecture</span>
+  <h2 class="section-title">기술 스택 & 설계 결정</h2>
+
+  <div class="tech-grid reveal">
+    <div class="tech-item">
+      <div class="tech-label">Client</div>
+      <div class="tech-value">iOS Native (Swift/SwiftUI)</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Map</div>
+      <div class="tech-value">Apple Maps / Naver Maps API</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Server</div>
+      <div class="tech-value">REST API</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Realtime</div>
+      <div class="tech-value">WebSocket (타이머, 알림)</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Auth</div>
+      <div class="tech-value">Device UID + MBTI (비회원)</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Storage</div>
+      <div class="tech-value">피드 DB + 이미지 스토리지</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">핵심 설계 결정</h4>
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>결정</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>비회원 모델</td><td>UID + MBTI만으로 아이덴티티 생성 → 가입 마찰 최소화</td></tr>
+        <tr><td>시간 제한 피드</td><td>만료 타이머 적용 → 실시간성 강화, 스토리지 관리 용이</td></tr>
+        <tr><td>140자 제한</td><td>짧은 텍스트 → 빠른 소비, 부담 없는 작성</td></tr>
+        <tr><td>위치 필수</td><td>모든 피드에 위치 태그 강제 → 하이퍼 로컬 핵심 가치 보장</td></tr>
+        <tr><td>점진적 지역 오픈</td><td>미오픈 지역 "조르기" 기능 → 수요 측정 및 바이럴</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">디자인 시스템</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>요소</th><th>사양</th></tr></thead>
+      <tbody>
+        <tr><td>아이콘</td><td>Feather Icons 기반 79+ 아이콘셋</td></tr>
+        <tr><td>컬러</td><td>Brand Color (🔥 Fire Red 메인), Monochromatic Scale</td></tr>
+        <tr><td>타이포그래피</td><td>iOS SF Pro 기반</td></tr>
+        <tr><td>모서리</td><td>24px border-radius (카드/모달)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 8. GTM -->
+<section id="gtm" class="section">
+  <span class="section-number">08 — Go-to-Market</span>
+  <h2 class="section-title">런칭 & 수익화 전략</h2>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 24px;">Phase 1: 클로즈드 베타</h4>
+
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="tl-phase">M1: 핵심 루프</div>
+      <div class="tl-duration">POC — 1개월</div>
+      <div class="tl-desc">온보딩 → MBTI 선택 → 지도 → 피드 작성/조회. 컨셉대로 동작하나 출시할 수는 없는 상태.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-phase">M2: 인터랙션</div>
+      <div class="tl-duration">MVP — 3개월</div>
+      <div class="tl-desc">추천/비추천, 코멘트, 알림. 예쁘진 않아도 릴리즈 가능한 상태.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-phase">M3: 안전장치</div>
+      <div class="tl-duration">QA — 1개월</div>
+      <div class="tl-desc">신고, 콘텐츠 필터링, 탈퇴. 서비스 안정성 강화 & 비주얼 폴리싱.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-phase">다크 런칭</div>
+      <div class="tl-duration">테스트 빌드</div>
+      <div class="tl-desc">송파구 잠실(롯데월드–석촌호수–송리단길) 우선 오픈. 홍보 없이 소수 유저 관찰. 미오픈 지역에 "조르기" 기능으로 수요 측정.</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Phase 2: 오픈 베타</h4>
+
+  <div class="timeline reveal">
+    <div class="timeline-item future">
+      <div class="tl-phase">M4: 지역 확장</div>
+      <div class="tl-desc">서비스 지역 추가, 조르기 데이터 기반 우선순위</div>
+    </div>
+    <div class="timeline-item future">
+      <div class="tl-phase">M5: 피드 고도화</div>
+      <div class="tl-desc">해시태그 검색, 인기 피드 큐레이션</div>
+    </div>
+    <div class="timeline-item future">
+      <div class="tl-phase">M6: 성장 기능</div>
+      <div class="tl-desc">공유, 초대, Android 버전</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">수익화 방향 (PMF 검증 후)</h4>
+  <div class="money-grid reveal">
+    <div class="money-card">
+      <h4>📍 로컬 비즈니스 광고</h4>
+      <p>사장님이 자기 가게 위치에 상시 핀을 유지. 당근 비즈프로필과 유사한 구조.</p>
+    </div>
+    <div class="money-card">
+      <h4>🎪 이벤트 프로모션 핀</h4>
+      <p>페스티벌·팝업스토어 주최자가 이벤트 핀을 사전 등록.</p>
+    </div>
+    <div class="money-card">
+      <h4>✨ 프리미엄 프로필</h4>
+      <p>아바타 꾸미기, 특별 이모지 등 소액 인앱 구매.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 9. QUESTIONS -->
+<section id="questions" class="section">
+  <span class="section-number">09 — Open Questions</span>
+  <h2 class="section-title">미해결 질문</h2>
+
+  <div class="question-list reveal">
+    <div class="question-item">
+      <span class="q-num">01</span>
+      <span class="q-text">피드 만료 시간은 고정(6시간)인가, 반응 수에 따라 연장되는가?</span>
+      <span class="q-owner">PM</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">02</span>
+      <span class="q-text">지도 핀 컬러 체계의 정확한 카테고리 분류 기준은?</span>
+      <span class="q-owner">Design</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">03</span>
+      <span class="q-text">서비스 오픈 지역 확장 기준 (조르기 N건 이상 시 오픈 등)</span>
+      <span class="q-owner">PM / Ops</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">04</span>
+      <span class="q-text">MBTI 변경 불가 정책의 예외 처리 방안 (잘못 선택 시)</span>
+      <span class="q-owner">PM</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">05</span>
+      <span class="q-text">신고 처리 프로세스 및 제재 기준</span>
+      <span class="q-owner">PM / Ops</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">06</span>
+      <span class="q-text">푸시 알림 지원 여부 및 범위</span>
+      <span class="q-owner">Dev</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">07</span>
+      <span class="q-text">Android 버전 개발 시점</span>
+      <span class="q-owner">PM / Dev</span>
+    </div>
+    <div class="question-item">
+      <span class="q-num">08</span>
+      <span class="q-text">피드 텍스트 필터링(욕설, 개인정보 등) 기준</span>
+      <span class="q-owner">PM / Legal</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- 10. BACKLOG -->
+<section id="backlog" class="section">
+  <span class="section-number">10 — Backlog</span>
+  <h2 class="section-title">백로그</h2>
+
+  <div class="screen-section reveal" data-screen="B-01 · Phase 2" style="border-color: rgba(255,69,0,0.25);">
+    <h3>사용자 ID 체계 재설계</h3>
+    <p class="desc">현재 MBTI 기반 ID(ENFJ#0130)는 <strong style="color: var(--ash-100);">MVP용 임시 설계</strong>입니다. MBTI 트렌드 소퇴 시 서비스 아이덴티티와 동반 노후화될 리스크가 있습니다.</p>
+    <h4>배경</h4>
+    <p class="desc" style="margin-bottom: 12px;">MBTI는 2023~2024 피크 이후 관심 하락 추세. ID 체계는 온보딩 경험과 커뮤니티 문화에 직결되므로, 트렌드 의존도를 낮추면서 반익명 특성을 유지하는 방향으로 오픈 베타 전 재검토가 필요합니다.</p>
+    <h4>검토 대안</h4>
+    <ul style="list-style: none; padding: 0;">
+      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 형용사 + 동물 조합 (ex. "용감한고양이#42")</li>
+      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 랜덤 별명 생성 (서비스 자체 생성기)</li>
+      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 아바타 중심 ID (비주얼 아이덴티티 우선)</li>
+      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> MBTI 유지하되 선택사항으로 전환 (프로필 태그 중 하나로 격하)</li>
+    </ul>
+  </div>
+
+  <div class="table-wrap reveal" style="margin-top: 24px;">
+    <table>
+      <thead><tr><th>#</th><th>항목</th><th>시점</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr><td class="td-fire">B-01</td><td>사용자 ID 체계 재설계 (상세 위 참조)</td><td>Phase 2 (오픈 베타 전)</td><td>PM</td></tr>
+        <tr><td>B-02</td><td>채팅방 피쳐 — 사진/동영상 공유</td><td>Phase 2+</td><td>PM / Dev</td></tr>
+        <tr><td>B-03</td><td>업체 광고 목적 위치 선점 기능</td><td>Phase 2+</td><td>PM / Biz</td></tr>
+        <tr><td>B-04</td><td>목적 기반 파티 구인 (스터디카페, 배달 파티 등)</td><td>Phase 2+</td><td>PM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- APPENDIX -->
+<section class="section">
+  <span class="section-number">Appendix</span>
+  <h2 class="section-title">화면 인벤토리</h2>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>#</th><th>화면명</th><th>Figma Node</th><th>Variants</th><th>우선순위</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>튜토리얼</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">685:147</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>2</td><td>로그인/MBTI 선택</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">405:141</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>3</td><td>메인 지도 화면</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">512:185</td><td>18</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>4</td><td>피드 목록/상세</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">514:1277</td><td>36</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>5</td><td>글쓰기</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">762:1788</td><td>2</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>6</td><td>서비스 미오픈 안내</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">734:229</td><td>1</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+        <tr><td>7</td><td>알림</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+        <tr><td>8</td><td>마이페이지</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-title">🔥 BoomBim</div>
+  <div class="f-sub">오프라인의 복작거림을 온라인에서도</div>
+  <div class="f-author">Product Requirements Document — 최대호 (PM)</div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
