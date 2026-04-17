@@ -144,7 +144,7 @@ const contacts = [
               <span class="contact-label">{c.label}</span>
               <span class="contact-value">{c.value}</span>
             </span>
-            <span class="contact-go" aria-hidden="true">→</span>
+            <span class="contact-go" aria-hidden="true">{c.external ? '↗' : '→'}</span>
           </a>
         ))
       }
