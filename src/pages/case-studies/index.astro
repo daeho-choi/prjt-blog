@@ -25,9 +25,7 @@ const base = import.meta.env.BASE_URL;
             href={`${base}case-studies/${cs.slug}/`}
             style={`--accent: ${cs.accent}`}
           >
-            <span class="card-meta">
-              {cs.year} · {cs.role}
-            </span>
+            <span class="card-meta">{cs.year}</span>
             <h3>{cs.title}</h3>
             <p>{cs.subtitle}</p>
             <span class="arrow">Read →</span>
