@@ -29,7 +29,7 @@ export const caseStudies: CaseStudy[] = [
     title: 'LOKIT',
     subtitle: '잠긴 선물카드를 링크로 주고받는 모바일 웹. 이벤트를 게임으로.',
     role: 'PM · 기획',
-    year: '2025',
+    year: '2026',
     accent: '#00FFD1',
   },
 ];
