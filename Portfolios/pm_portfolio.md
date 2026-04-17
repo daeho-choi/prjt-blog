@@ -28,7 +28,7 @@ C O N T E N T S
 
 7 Years in Production PUBG Studios · NAVER Z · 콩스튜디오코리아 · EA Korea · NCSoft
 
-email@example.com Seoul, South Korea
+classyh7@gmail.com Seoul, South Korea
 
 ###### E D U C AT I O N
 
@@ -375,7 +375,7 @@ R E S U L T
 
 ###### P R O D U C T
 
-email@example.com
+classyh7@gmail.com
 
 tikit.day
 
