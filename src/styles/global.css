@@ -47,6 +47,8 @@ body {
   font-size: 16px;
   line-height: 1.65;
   font-feature-settings: "ss06", "tnum";
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
