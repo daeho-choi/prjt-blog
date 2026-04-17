@@ -46,8 +46,8 @@ const contacts = [
   <section class="about-hero">
     <p class="landing-kicker">ABOUT</p>
     <h1>
-      제품을 만드는 PM,<br />
-      최대호 입니다.
+      <span class="headline-lead">제품을 만드는 PM,</span>
+      <span class="headline-subject">최대호 입니다.</span>
     </h1>
     <p class="about-hero-sub">
       디자인 사고와 공학적 이해를 바탕으로 기획부터 런칭 이후의 학습까지
@@ -234,6 +234,9 @@ const contacts = [
     color: var(--text-dim);
     margin-bottom: 0.85rem;
   }
+
+  .bio-label::before { content: "[ "; }
+  .bio-label::after { content: " ]"; }
 
   .bio-list {
     list-style: none;
