@@ -294,7 +294,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
   <h2 class="section-title">받는 사람을 위한<br>잠긴 선물카드</h2>
 
   <p style="color: var(--obsidian-300); margin-bottom: 24px;">
-    LOKIT은 보내는 사람이 <strong style="color: var(--obsidian-100);">비밀번호·단서·선물</strong>을 묶어 카드를 만들고, 받는 사람이 단서를 풀어 잠금을 해제하는 모바일 웹입니다. 카드는 링크 하나로 전달되며, 가입·설치 없이 0-마찰로 주고받을 수 있습니다.
+    LOKIT은 보내는 사람이 <strong style="color: var(--obsidian-100);">비밀번호·단서·선물</strong>을 묶어 카드를 만들고, 받는 사람이 단서를 풀어 잠금을 해제하는 모바일 웹입니다. 카드는 링크 하나로 전달되며, 가입이나 설치 없이 주고받을 수 있도록 설계했습니다.
   </p>
 
   <div class="quote-block">
@@ -327,7 +327,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
   <h2 class="section-title">기존 선물·이벤트 도구의 한계</h2>
 
   <p style="color: var(--obsidian-300); margin-bottom: 24px;">
-    온라인 이벤트/기브어웨이 도구는 <strong style="color: var(--obsidian-100);">참여자에게 재미가 없고, 운영자에게 차별화 수단이 없습니다.</strong> 카톡 기프티콘 직송도 받는 순간이 밋밋합니다.
+    기존 이벤트/기브어웨이 도구는 <strong style="color: var(--obsidian-100);">참여 자체에 재미가 약하고, 운영자 입장에서도 차별화가 쉽지 않습니다.</strong> 카톡 기프티콘 직송 역시 받는 순간이 비교적 밋밋합니다.
   </p>
 
   <div class="table-wrap reveal">
@@ -574,7 +574,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
     <ul>
       <li><strong style="color: var(--obsidian-200);">포함</strong>: id, name, sender_name, password_type, reward_type, reward_limit, reward_title, hint_point_cost, total_clues, base_clue, status, claim_count, active_players</li>
       <li><strong style="color: var(--danger);">제외</strong>: final_password, reward_content, reward_description, 힌트 본문, reward_file_url</li>
-      <li>성공한 <code>VerifyResult</code>에서만 <code>reward_*</code> 본문 노출 — <strong style="color: var(--cyan-400);">이 경계가 보안 1차 방어선</strong></li>
+      <li>성공한 <code>VerifyResult</code>에서만 <code>reward_*</code> 본문 노출 — <strong style="color: var(--cyan-400);">공개/비공개 경계를 여기서 분리</strong></li>
     </ul>
   </div>
 
