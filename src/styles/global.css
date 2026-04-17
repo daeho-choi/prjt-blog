@@ -2,16 +2,26 @@
 :root {
   --bg: #0a0a0b;
   --bg-soft: #111113;
+  --bg-elev: #17171c;
   --card: #16161a;
   --border: #26262b;
+  --border-strong: #353540;
   --text: #f4f4f5;
   --text-muted: #a1a1aa;
   --text-dim: #71717a;
   --accent: #818cf8;
+  --accent-soft: #6366f1;
+  --accent-warm: #e879f9;
   --link: #c7d2fe;
   --radius: 14px;
+  --radius-lg: 20px;
   --max: 960px;
   --gap: clamp(1rem, 2vw, 1.5rem);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 10px 40px -10px color-mix(in srgb, var(--accent) 45%, transparent);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 
   color-scheme: dark;
 }
@@ -40,6 +50,35 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient background glow — soft indigo/fuchsia aurora at the top */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20% -10% auto -10%;
+  height: 70vh;
+  background:
+    radial-gradient(60% 60% at 20% 20%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%),
+    radial-gradient(50% 50% at 80% 10%, color-mix(in srgb, var(--accent-warm) 14%, transparent) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: -2;
+  filter: blur(40px);
+}
+
+/* Subtle dotted grid */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: -1;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
 }
 
 main {
@@ -58,6 +97,7 @@ h3 {
   line-height: 1.2;
   letter-spacing: -0.02em;
   font-weight: 700;
+  text-wrap: balance;
 }
 
 h1 {
@@ -79,16 +119,23 @@ h3 {
 p {
   color: var(--text-muted);
   margin: 0 0 1em;
+  text-wrap: pretty;
 }
 
 a {
   color: var(--link);
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: color 0.15s var(--ease);
 }
 
 a:hover {
   color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 small {
@@ -96,21 +143,48 @@ small {
   font-size: 0.875rem;
 }
 
+::selection {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--text);
+}
+
 /* --- Header / footer --- */
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: var(--max);
   width: 100%;
   margin: 0 auto;
-  padding: 1.25rem;
+  padding: 1rem 1.25rem;
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  background: color-mix(in srgb, var(--bg) 65%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+/* Widen the header hit area beyond the max-width */
+@supports (backdrop-filter: blur(1px)) {
+  .site-header {
+    max-width: 100%;
+    padding-left: max(1.25rem, calc((100vw - var(--max)) / 2 + 1.25rem));
+    padding-right: max(1.25rem, calc((100vw - var(--max)) / 2 + 1.25rem));
+  }
+}
+
+.site-header:hover {
+  border-bottom-color: var(--border);
 }
 
 .site-header .brand {
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
+  font-size: 0.9375rem;
 }
 
 .site-header .brand-dot {
@@ -119,23 +193,33 @@ small {
 
 .site-header nav {
   display: flex;
-  gap: 1.25rem;
+  gap: 0.25rem;
   font-size: 0.9375rem;
 }
 
 .site-header nav a {
   color: var(--text-muted);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  transition: color 0.15s var(--ease), background 0.15s var(--ease);
 }
 
 .site-header nav a:hover {
   color: var(--text);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.site-header nav a[aria-current="page"] {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .site-footer {
   border-top: 1px solid var(--border);
-  padding: 1.5rem 1.25rem;
+  padding: 2rem 1.25rem;
   text-align: center;
   color: var(--text-dim);
+  margin-top: 4rem;
 }
 
 .site-footer a {
@@ -156,10 +240,14 @@ small {
 /* --- Landing (home) --- */
 .landing {
   padding: clamp(3rem, 10vw, 7rem) 0 clamp(2rem, 6vw, 4rem);
-  max-width: 40rem;
+  max-width: 42rem;
+  position: relative;
 }
 
 .landing-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
   font-size: 0.6875rem;
   font-weight: 700;
@@ -167,6 +255,25 @@ small {
   text-transform: uppercase;
   color: var(--text-dim);
   margin: 0 0 1.5rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-soft) 80%, transparent);
+}
+
+.landing-kicker::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulse 2s var(--ease) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .landing h1 {
@@ -197,38 +304,87 @@ small {
   gap: 0.75rem;
 }
 
+/* --- Section header (label + title + optional link) --- */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: clamp(3rem, 6vw, 4.5rem) 0 1.25rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.section-head .section-label {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.section-head .section-link {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.section-head .section-link:hover {
+  color: var(--accent);
+}
+
 /* --- Buttons --- */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.8rem 1.35rem;
   border-radius: 999px;
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: -0.005em;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  border: 1px solid transparent;
+  transition: transform 0.2s var(--ease), background 0.2s var(--ease),
+    border-color 0.2s var(--ease), color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+  will-change: transform;
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn-primary {
   background: var(--text);
   color: var(--bg);
+  box-shadow: 0 4px 20px -4px color-mix(in srgb, var(--text) 30%, transparent);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   color: var(--bg);
+  box-shadow: 0 10px 30px -6px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .btn-ghost {
-  background: transparent;
+  background: color-mix(in srgb, var(--bg-soft) 60%, transparent);
   color: var(--text-muted);
-  border: 1px solid var(--border);
+  border-color: var(--border);
 }
 
 .btn-ghost:hover {
+  transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
   color: var(--text);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-soft));
 }
 
 /* --- Card meta kicker (case-studies index) --- */
@@ -255,14 +411,18 @@ small {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.5rem;
-  background: var(--card);
+  padding: 1.75rem 1.5rem 1.5rem;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent) 4%, var(--card)) 0%,
+    var(--card) 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  isolation: isolate;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
 }
 
 .card::before {
@@ -273,16 +433,36 @@ small {
   height: 100%;
   background: var(--accent);
   opacity: 0.6;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s var(--ease), width 0.25s var(--ease);
+}
+
+/* Soft accent glow blob on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: auto -40% -40% auto;
+  width: 75%;
+  height: 75%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .card:hover {
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 .card:hover::before {
   opacity: 1;
+  width: 4px;
+}
+
+.card:hover::after {
+  opacity: 0.7;
 }
 
 .card h3 {
@@ -301,6 +481,14 @@ small {
   padding-top: 1rem;
   color: var(--accent);
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: gap 0.2s var(--ease);
+}
+
+.card:hover .arrow {
+  gap: 0.6rem;
 }
 
 /* Featured card — standalone portfolio CTA, larger padding + gradient tint */
@@ -309,7 +497,7 @@ small {
   margin-top: 1.5rem;
   padding: 2rem 1.75rem;
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
     var(--card);
   gap: 0.75rem;
 }
@@ -358,6 +546,14 @@ small {
   padding-left: 1.25rem;
 }
 
+.prose li {
+  margin-bottom: 0.35em;
+}
+
+.prose li::marker {
+  color: var(--accent);
+}
+
 .prose code {
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
   font-size: 0.875em;
@@ -402,4 +598,16 @@ small {
 
 .prose th {
   background: var(--bg-soft);
+}
+
+/* --- Motion preferences --- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
