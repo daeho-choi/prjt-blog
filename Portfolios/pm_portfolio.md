@@ -379,11 +379,7 @@ classyh7@gmail.com
 
 tikit.day
 
-###### P H O N E
-
 ###### L I N K E D I N
-
-010-2207-3434
 
 linkedin.com/in/daeho-choi
 
