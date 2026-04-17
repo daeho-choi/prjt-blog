@@ -15,13 +15,19 @@
 
   <style>
     :root {
-      --bg: #0a0a0b;
-      --bg-soft: #111113;
-      --card: #17171a;
-      --border: #26262b;
-      --text: #f4f4f5;
-      --text-muted: #a1a1aa;
-      --text-dim: #71717a;
+      /* Base palette — aliased from canonical tokens in /prjt-blog/tokens.css
+       * (injected by the content copy script). Keeps the page's existing
+       * --bg / --card / --text vocabulary while pulling values from the
+       * single site-wide source of truth. */
+      --bg: var(--color-bg);
+      --bg-soft: var(--color-surface-soft);
+      --card: var(--color-surface);
+      --border: var(--color-border);
+      --text: var(--color-text);
+      --text-muted: var(--color-text-muted);
+      --text-dim: var(--color-text-dim);
+
+      /* Project-signature accents — stay unique to TIKIT */
       --accent: #818CF8;
       --accent-2: #E879F9;
       --accent-3: #FF8C42;
