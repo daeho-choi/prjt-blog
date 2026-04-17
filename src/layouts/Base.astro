@@ -1,6 +1,7 @@
 ---
 import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import '../styles/global.css';
+import { caseStudies } from '../data/case-studies';
 
 interface Props {
   title?: string;
@@ -43,7 +44,46 @@ const isAbout = path.startsWith(`${basePath}/about`);
       <a class="brand" href={base}>daeho-choi<span class="brand-dot">.</span></a>
       <nav>
         <a href={base} aria-current={isHome ? 'page' : undefined}>Home</a>
-        <a href={`${base}case-studies/`} aria-current={isCaseStudies ? 'page' : undefined}>Case Studies</a>
+        <div class="nav-dropdown">
+          <a
+            href={`${base}case-studies/`}
+            class="nav-dropdown-trigger"
+            aria-current={isCaseStudies ? 'page' : undefined}
+            aria-haspopup="true"
+          >
+            Case Studies
+            <svg
+              class="nav-chev"
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              aria-hidden="true"
+            >
+              <path d="M2 4l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <div class="nav-dropdown-menu" role="menu">
+            {
+              caseStudies.map((cs) => (
+                <a
+                  class="nav-dropdown-item"
+                  href={`${base}case-studies/${cs.slug}/`}
+                  role="menuitem"
+                  style={`--accent: ${cs.accent}`}
+                >
+                  <span class="nav-dropdown-dot" aria-hidden="true" />
+                  <span class="nav-dropdown-text">
+                    <span class="nav-dropdown-title">{cs.title}</span>
+                    <span class="nav-dropdown-sub">{cs.year} · {cs.role}</span>
+                  </span>
+                </a>
+              ))
+            }
+            <a class="nav-dropdown-all" href={`${base}case-studies/`} role="menuitem">
+              All case studies →
+            </a>
+          </div>
+        </div>
         <a href={`${base}portfolio/`} aria-current={isPortfolio ? 'page' : undefined}>CV</a>
         <a href={`${base}about/`} aria-current={isAbout ? 'page' : undefined}>About</a>
       </nav>

@@ -2,46 +2,302 @@
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL;
+
+const companies = [
+  'PUBG Studios',
+  'NAVER Z',
+  '콩스튜디오코리아',
+  'EA Korea',
+  'NCSoft',
+];
+
+const contacts = [
+  {
+    label: 'Email',
+    value: 'classyh7@gmail.com',
+    href: 'mailto:classyh7@gmail.com',
+    symbol: '@',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'linkedin.com/in/daeho-choi',
+    href: 'https://linkedin.com/in/daeho-choi',
+    symbol: 'in',
+    external: true,
+  },
+  {
+    label: 'GitHub',
+    value: '@daeho-choi',
+    href: 'https://github.com/daeho-choi',
+    symbol: '{ }',
+    external: true,
+  },
+  {
+    label: 'Product',
+    value: 'tikit.day',
+    href: 'https://tikit.day',
+    symbol: '↗',
+    external: true,
+  },
+];
 ---
 
-<Base title="About · daeho-choi" description="About this site and daeho-choi — PM.">
-  <section class="hero">
-    <h1>About</h1>
-    <p class="tagline">이 블로그와 저에 대해서.</p>
+<Base title="About · 최대호 (daeho-choi)" description="개발 PM 최대호 — 커리어, 작업물, 연락처.">
+  <section class="about-hero">
+    <p class="landing-kicker">ABOUT</p>
+    <h1>
+      제품을 만드는 PM,<br />
+      <span class="landing-accent">최대호</span> 입니다.
+    </h1>
+    <p class="about-hero-sub">
+      디자인 사고와 공학적 이해를 바탕으로 기획부터 런칭 이후의 학습까지
+      한 사이클로 이어가는 개발 PM. 라이브 게임 운영, 대규모 로드맵 체계,
+      IP 제휴 WBS, 0→1 서비스 빌딩까지 다섯 프로덕션의 경험을 이곳에 정리합니다.
+    </p>
+    <div class="about-meta">
+      <span class="about-meta-item"><span class="about-meta-k">Role</span>Development PM</span>
+      <span class="about-meta-sep" aria-hidden="true">·</span>
+      <span class="about-meta-item"><span class="about-meta-k">Base</span>Seoul, KR</span>
+      <span class="about-meta-sep" aria-hidden="true">·</span>
+      <span class="about-meta-item"><span class="about-meta-k">Since</span>2017</span>
+    </div>
   </section>
 
-  <section class="prose">
-    <h2>이 블로그는</h2>
-    <p>
-      daeho-choi의 PM 커리어와 개인 작업물을 모아 두는 공간입니다. 크게 두 갈래로 나눠 두었습니다.
-    </p>
-    <ul>
-      <li>
-        <a href={`${base}portfolio/`}><b>CV</b></a> — 5개 프로덕션에서의 PM 경험을 한 페이지에 정리한 포트폴리오입니다. PDF도 같은 페이지에서 내려받을 수 있습니다.
-      </li>
-      <li>
-        <a href={`${base}case-studies/`}><b>Case Studies</b></a> — 혼자 또는 소규모로 만든 사이드 프로젝트의 기획서와 케이스 스터디입니다. 각 프로젝트 고유의 디자인을 유지한 문서들입니다.
-      </li>
-    </ul>
+  <section>
+    <div class="section-head">
+      <span class="section-label">THIS SITE</span>
+    </div>
+    <div class="grid about-grid">
+      <a class="card" href={`${base}portfolio/`}>
+        <span class="card-meta">CV · ONE-PAGER</span>
+        <h3>CV</h3>
+        <p>5개 프로덕션에서의 PM 경험을 한 페이지에 정리했습니다. 같은 페이지에서 PDF도 내려받을 수 있어요.</p>
+        <span class="arrow">Open CV →</span>
+      </a>
+      <a class="card" href={`${base}case-studies/`} style="--accent: #e879f9">
+        <span class="card-meta">SIDE PROJECTS</span>
+        <h3>Case Studies</h3>
+        <p>혼자 또는 소규모로 만든 사이드 프로젝트의 기획·구현·런칭 기록입니다. 각 프로젝트 고유의 디자인을 유지했습니다.</p>
+        <span class="arrow">Browse →</span>
+      </a>
+    </div>
+  </section>
 
-    <h2>저는</h2>
-    <p>
-      <b>최대호 (Daeho Choi)</b> — 디자인 사고와 공학적 이해를 바탕으로 일하는 개발 PM입니다.
-      PUBG Studios · NAVER Z · 콩스튜디오코리아 · EA Korea · NCSoft에서 라이브 게임 운영,
-      신규 프로젝트 로드맵 설계, IP 제휴 콘텐츠 WBS 표준화, 0→1 서비스 빌딩 등 다양한
-      환경의 프로덕션을 거쳐 왔습니다.
-    </p>
-    <p>
-      서울시립대 산업디자인(공업디자인 전공) 졸업. Korean (Native) / English (TOEIC 905,
-      IELTS 6.5, 2017년 기준).
-    </p>
+  <section>
+    <div class="section-head">
+      <span class="section-label">BIO</span>
+    </div>
+    <div class="prose about-prose">
+      <p>
+        <b>최대호 (Daeho Choi)</b> — 디자인 사고와 공학적 이해를 바탕으로 일하는
+        개발 PM입니다. 라이브 게임 운영, 신규 프로젝트 로드맵 설계,
+        IP 제휴 콘텐츠 WBS 표준화, 0→1 서비스 빌딩 등 다양한 환경의
+        프로덕션을 거쳐 왔습니다.
+      </p>
+      <p class="about-edu">
+        서울시립대 산업디자인(공업디자인 전공) 졸업 ·
+        Korean (Native) · English (TOEIC 905 / IELTS 6.5, 2017 기준)
+      </p>
+      <div class="about-chips" aria-label="경력 회사">
+        {companies.map((c) => <span class="about-chip">{c}</span>)}
+      </div>
+    </div>
+  </section>
 
-    <h2>연락</h2>
-    <ul>
-      <li>LinkedIn: <a href="https://linkedin.com/in/daeho-choi" target="_blank" rel="noopener">linkedin.com/in/daeho-choi</a></li>
-      <li>Email: <a href="mailto:email@example.com">email@example.com</a></li>
-      <li>GitHub: <a href="https://github.com/daeho-choi" target="_blank" rel="noopener">@daeho-choi</a></li>
-      <li>Product: <a href="https://tikit.day" target="_blank" rel="noopener">tikit.day</a></li>
-    </ul>
+  <section>
+    <div class="section-head">
+      <span class="section-label">CONTACT</span>
+    </div>
+    <div class="contact-grid">
+      {
+        contacts.map((c) => (
+          <a
+            class="contact-cell"
+            href={c.href}
+            target={c.external ? '_blank' : undefined}
+            rel={c.external ? 'noopener' : undefined}
+          >
+            <span class="contact-symbol" aria-hidden="true">{c.symbol}</span>
+            <span class="contact-body">
+              <span class="contact-label">{c.label}</span>
+              <span class="contact-value">{c.value}</span>
+            </span>
+            <span class="contact-go" aria-hidden="true">→</span>
+          </a>
+        ))
+      }
+    </div>
   </section>
 </Base>
+
+<style>
+  .about-hero {
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
+    max-width: 44rem;
+  }
+
+  .about-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-hero-sub {
+    font-size: clamp(1rem, 1.4vw, 1.0625rem);
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-width: 40rem;
+    margin: 0 0 1.75rem;
+  }
+
+  .about-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .about-meta-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .about-meta-k {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .about-meta-sep {
+    color: var(--text-dim);
+  }
+
+  .about-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .about-prose {
+    max-width: 42rem;
+  }
+
+  .about-prose p {
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .about-prose p b {
+    color: var(--text);
+  }
+
+  .about-edu {
+    color: var(--text-muted) !important;
+    font-size: 0.9375rem;
+  }
+
+  .about-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+  }
+
+  .about-chip {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-soft) 80%, transparent);
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+      background 0.2s var(--ease);
+  }
+
+  .about-chip:hover {
+    color: var(--text);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    background: color-mix(in srgb, var(--accent) 8%, var(--bg-soft));
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .contact-cell {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease),
+      background 0.2s var(--ease);
+  }
+
+  .contact-cell:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent) 6%, var(--card));
+    color: var(--text);
+  }
+
+  .contact-symbol {
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .contact-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .contact-label {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .contact-value {
+    font-size: 0.9375rem;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .contact-go {
+    color: var(--text-dim);
+    transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+
+  .contact-cell:hover .contact-go {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+</style>

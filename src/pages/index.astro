@@ -1,34 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import { caseStudies } from '../data/case-studies';
 
 const base = import.meta.env.BASE_URL;
-
-const featured = [
-  {
-    slug: 'tikit',
-    title: 'TIKIT',
-    subtitle: '티켓처럼 공유하는 한국어 이벤트 초대장.',
-    role: '기획 · 개발 · 디자인',
-    year: '2026',
-    accent: '#818CF8',
-  },
-  {
-    slug: 'boombim',
-    title: '붐빔 BoomBim',
-    subtitle: '오프라인의 복작거림을 온라인에서도.',
-    role: 'PM · 기획',
-    year: '2025',
-    accent: '#FF6B35',
-  },
-  {
-    slug: 'lokit',
-    title: 'LOKIT',
-    subtitle: '잠긴 선물카드를 링크로 주고받는 모바일 웹.',
-    role: 'PM · 기획',
-    year: '2025',
-    accent: '#00FFD1',
-  },
-];
 ---
 
 <Base title="daeho-choi · PM portfolio">
@@ -36,7 +10,7 @@ const featured = [
     <p class="landing-kicker">DEVELOPMENT PM · 7 YEARS</p>
     <h1>
       제품을 만드는 PM,<br />
-      <span class="landing-accent">daeho-choi.</span>
+      <span class="landing-accent">최대호</span> 입니다.
     </h1>
     <p class="landing-tagline">
       기획부터 실행, 그리고 런칭 이후의 학습까지 —<br />
@@ -55,7 +29,7 @@ const featured = [
     </div>
     <div class="grid">
       {
-        featured.map((cs) => (
+        caseStudies.map((cs) => (
           <a
             class="card"
             href={`${base}case-studies/${cs.slug}/`}

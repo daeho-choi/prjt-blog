@@ -39,6 +39,8 @@ body {
   color: var(--obsidian-200);
   line-height: 1.7;
   overflow-x: hidden;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 body::before {
@@ -263,10 +265,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
     <a href="#users">Users</a>
     <a href="#metrics">Metrics</a>
     <a href="#features">Flow</a>
-    <a href="#spec">Spec</a>
-    <a href="#data">Data</a>
     <a href="#design">Design</a>
-    <a href="#tech">Tech</a>
     <a href="#risks">Risks</a>
     <a href="#gtm">GTM</a>
     <a href="#roadmap">Roadmap</a>
@@ -538,110 +537,9 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 <div class="section-divider"></div>
 
 <!-- 7. SPEC -->
-<section id="spec" class="section">
-  <span class="section-number">07 — Functional Spec</span>
-  <h2 class="section-title">핵심 동작 명세</h2>
-
-  <div class="spec-list reveal">
-    <h4>Password verification <span class="badge">verifyPassword</span></h4>
-    <p style="color: var(--obsidian-400); font-size: 0.85rem; margin-bottom: 10px;">순서가 중요하다 (코드 주석 기준):</p>
-    <ol>
-      <li><code>claims</code>에 <code>(locker_id, player_id)</code> 존재 확인 → 있으면 <code>already_claimed</code></li>
-      <li><code>lockers</code> 조회. 없으면 <code>not_found</code>, <code>status='exhausted'</code>면 <code>exhausted</code></li>
-      <li>비밀번호 불일치 → <code>wrong_password</code></li>
-      <li><code>claims.count</code>로 새 <code>rank</code> 계산</li>
-      <li>FCFS 가득 찼는지 <strong style="color: var(--obsidian-200);">삽입 전에도</strong> 체크 → 차면 <code>exhausted</code> 처리</li>
-      <li><code>claims.insert({locker_id, player_id, rank})</code></li>
-      <li>삽입 후 <code>rank &gt;= reward_limit</code>면 <code>status='exhausted'</code>로 플립</li>
-      <li>성공 응답에 <code>reward_*</code> 본문 포함</li>
-    </ol>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>Hints <span class="badge">useHint</span></h4>
-    <ul>
-      <li>인덱스 규약: <code>hintIndex = 0</code> → <code>clues[1]</code> (기본 단서 제외 순서)</li>
-      <li>세션 lazy-create: 없으면 <code>player_sessions</code>에 <code>hint_points=3</code>으로 삽입</li>
-      <li>이미 연 힌트면 <strong style="color: var(--obsidian-200);">포인트 재차감 없이</strong> 동일 content 반환</li>
-      <li>포인트 부족(<code>hint_points &lt; cost</code>) → <code>insufficient_points</code></li>
-      <li>성공 시 <code>hint_points -= cost</code>, <code>hints_unlocked</code> 배열에 인덱스 추가</li>
-      <li>재충전: 클라 타이머만 (서버 자동 재충전 미구현 — <code>last_point_recharge</code> 컬럼만 존재)</li>
-    </ul>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>Public DTO 경계 <span class="badge">getLockerPublic</span></h4>
-    <ul>
-      <li><strong style="color: var(--obsidian-200);">포함</strong>: id, name, sender_name, password_type, reward_type, reward_limit, reward_title, hint_point_cost, total_clues, base_clue, status, claim_count, active_players</li>
-      <li><strong style="color: var(--danger);">제외</strong>: final_password, reward_content, reward_description, 힌트 본문, reward_file_url</li>
-      <li>성공한 <code>VerifyResult</code>에서만 <code>reward_*</code> 본문 노출 — <strong style="color: var(--cyan-400);">공개/비공개 경계를 여기서 분리</strong></li>
-    </ul>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>레지스트리 확장 규약 <span class="badge">PASSWORD_TYPES · CLUE_TYPES</span></h4>
-    <ul>
-      <li>새 비밀번호 타입 추가 → <code>PASSWORD_TYPES</code>에 한 줄 + <code>schema.sql</code>의 check 제약 alter</li>
-      <li>현재 password types: <code>numeric</code> / <code>text</code> / <code>date</code></li>
-      <li>현재 clue types: <code>text</code>만. 미래 후보 <code>image</code>, <code>audio</code> 자리 준비</li>
-      <li>레거시 row 호환: <code>type</code> 없는 row는 <code>normalizeClueType()</code>로 <code>'text'</code> 기본</li>
-    </ul>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- 8. DATA MODEL -->
-<section id="data" class="section">
-  <span class="section-number">08 — Data Model</span>
-  <h2 class="section-title">데이터 구조</h2>
-
-  <div class="spec-list reveal">
-    <h4>lockers <span class="badge">main</span></h4>
-    <ul>
-      <li><code>id uuid pk</code>, <code>name</code>, <code>description</code>, <code>sender_name</code></li>
-      <li><code>password_type</code> (numeric/text/date), <code>final_password</code> <strong style="color: var(--danger);">(평문)</strong></li>
-      <li><code>reward_type</code> (unlimited/fcfs), <code>reward_limit</code></li>
-      <li><code>reward_title</code>, <code>reward_description</code>, <code>reward_content</code>, <code>reward_image_url</code>, <code>reward_file_url</code></li>
-      <li><code>clues jsonb</code> — <code>[{id, type, content, order}]</code></li>
-      <li><code>hint_point_cost</code>, <code>status</code> (active/exhausted/expired), <code>visibility</code></li>
-      <li><code>created_by text</code> (익명 UID, indexed)</li>
-    </ul>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>claims <span class="badge">picked</span></h4>
-    <ul>
-      <li><code>(locker_id, player_id)</code> unique</li>
-      <li><code>rank int</code> — claim 순번 (FCFS "몇 번째로 풀었나")</li>
-      <li><code>claimed_at timestamptz</code></li>
-    </ul>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>player_sessions <span class="badge">hints state</span></h4>
-    <ul>
-      <li><code>(locker_id, player_id)</code> unique</li>
-      <li><code>hint_points int default 3</code>, <code>hints_used</code>, <code>hints_unlocked int[]</code></li>
-      <li><code>last_point_recharge</code> (서버 로직 미구현), <code>joined_at</code></li>
-    </ul>
-  </div>
-
-  <div class="spec-list reveal">
-    <h4>Storage & RLS</h4>
-    <ul>
-      <li>버킷 <code>rewards</code> (public). 경로 <code>${creatorId}/${ts}-${filename}</code></li>
-      <li>RLS: 세 테이블 모두 enabled <strong style="color: var(--warning);">but policy = all-allow</strong> ("tighten later" 코멘트)</li>
-      <li>마이그레이션: <code>schema.sql</code> 하단에 <code>alter table ... if not exists</code> 누적, Supabase SQL Editor 수동 실행</li>
-    </ul>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
 <!-- 9. DESIGN -->
 <section id="design" class="section">
-  <span class="section-number">09 — Design & UX</span>
+  <span class="section-number">07 — Design & UX</span>
   <h2 class="section-title">디자인 원칙</h2>
 
   <div class="design-grid reveal">
@@ -655,7 +553,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
   <div class="history-note">
     <strong>히스토리 노트 — 디자인 피벗</strong>
-    초기 컨셉은 "Obsidian Vault — 다크 모드 + 네온 사이언" 이었으나, 일상 선물 시나리오의 대중성을 위해 <strong style="color: var(--cyan-400);">밝고 부드러운 글래스모피즘</strong>으로 피벗. 본 문서의 다크 테마는 포트폴리오 프레젠테이션 용도이며, 실제 제품 UI는 라이트 글래스 기반. (원안 Obsidian 테마는 §11 로드맵 Phase 5 프리미엄 테마 옵션으로 회귀 검토)
+    초기 컨셉은 "Obsidian Vault — 다크 모드 + 네온 사이언" 이었으나, 일상 선물 시나리오의 대중성을 위해 <strong style="color: var(--cyan-400);">밝고 부드러운 글래스모피즘</strong>으로 피벗. 본 문서의 다크 테마는 포트폴리오 프레젠테이션 용도이며, 실제 제품 UI는 라이트 글래스 기반. (원안 Obsidian 테마는 §10 로드맵 Phase 5 프리미엄 테마 옵션으로 회귀 검토)
   </div>
 
   <div class="history-note">
@@ -668,40 +566,9 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
 <div class="section-divider"></div>
 
-<!-- 10. TECH -->
-<section id="tech" class="section">
-  <span class="section-number">10 — Technical Architecture</span>
-  <h2 class="section-title">기술 스택</h2>
-
-  <div class="design-grid reveal">
-    <div class="design-item"><div class="d-label">Framework</div><div class="d-value">Next.js 15 App Router</div><div class="d-desc">React 19, TypeScript strict. Server Components + Server Actions.</div></div>
-    <div class="design-item"><div class="d-label">Styling</div><div class="d-value">Tailwind v4</div><div class="d-desc">@tailwindcss/postcss + tailwind-merge + clsx → cn().</div></div>
-    <div class="design-item"><div class="d-label">Animation</div><div class="d-value">Framer Motion 11</div></div>
-    <div class="design-item"><div class="d-label">Icons</div><div class="d-value">lucide-react</div></div>
-    <div class="design-item"><div class="d-label">Backend</div><div class="d-value">Supabase Postgres + Storage</div><div class="d-desc">@supabase/ssr 3 factory (client/server/middleware).</div></div>
-    <div class="design-item"><div class="d-label">Mutations</div><div class="d-value">Server Actions only</div><div class="d-desc">API route 없음. 모든 쓰기는 'use server' 또는 createClient() 직접.</div></div>
-  </div>
-
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--obsidian-100); margin: 36px 0 16px;">핵심 설계 결정</h4>
-  <div class="table-wrap reveal">
-    <table>
-      <thead><tr><th>결정</th><th>이유</th></tr></thead>
-      <tbody>
-        <tr><td>SPA-유사 몰입 플로우</td><td>로커 접속 → 해독까지 페이지 전환 없이 단일 phase machine. 몰입 유지</td></tr>
-        <tr><td>비회원 모델</td><td>Player·Host 모두 익명 UID만으로 식별. 0-마찰 공유</td></tr>
-        <tr><td>포인트 기반 힌트</td><td>(구안 시간 기반 단서 공개 대신) 받는 사람이 능동적으로 힌트 소비. 비동기/언제든 풀이 우선</td></tr>
-        <tr><td>Public DTO 경계</td><td>비밀번호·보상 본문은 verify 성공 시점에만 클라이언트로 흘림</td></tr>
-        <tr><td>Fail-loud 정책</td><td>업로드/삽입 실패 시 throw + alert. 가짜 UUID로 fallback 링크 생성 금지 (D-20260414-03)</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
 <!-- 11. RISKS -->
 <section id="risks" class="section">
-  <span class="section-number">11 — Risks & Constraints</span>
+  <span class="section-number">08 — Risks & Constraints</span>
   <h2 class="section-title">알려진 리스크</h2>
 
   <div class="table-wrap reveal">
@@ -735,7 +602,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
 <!-- 12. GTM -->
 <section id="gtm" class="section">
-  <span class="section-number">12 — Go-to-Market</span>
+  <span class="section-number">09 — Go-to-Market</span>
   <h2 class="section-title">런칭 & 수익화 전략</h2>
 
   <div class="timeline reveal">
@@ -764,7 +631,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
 <!-- 13. ROADMAP -->
 <section id="roadmap" class="section">
-  <span class="section-number">13 — Roadmap</span>
+  <span class="section-number">10 — Roadmap</span>
   <h2 class="section-title">단계별 로드맵</h2>
 
   <p style="color: var(--obsidian-400); font-size: 0.9rem; margin-bottom: 24px;">

@@ -28,7 +28,7 @@ C O N T E N T S
 
 7 Years in Production PUBG Studios · NAVER Z · 콩스튜디오코리아 · EA Korea · NCSoft
 
-email@example.com Seoul, South Korea
+classyh7@gmail.com Seoul, South Korea
 
 ###### E D U C AT I O N
 
@@ -240,7 +240,7 @@ R E S U L T
 
 ## ZEPETO IP 제휴 콘텐츠 WBS 표준화
 
-20+건의 IP 제휴 프로젝트를 A-Z 스케줄링하는 WBS 템플릿을 처음부터 설계
+글로벌 IP 제휴 프로젝트를 A-Z 스케줄링하는 WBS 템플릿을 처음부터 설계
 
 역할 콘텐츠 PM 기간 2022.06 — 2023.01 회사 NAVER Z
 
@@ -282,7 +282,7 @@ QA 기능 테스트 → 수정 → 최종 확인 —
 
 R E S U L T
 
-> "어디까지 됐어요?" 커뮤니케이션 비용 대폭 감소 — 수치적으로 진행률과 일정을 볼 수 있는 현황판 확보 > 20+건의 제휴 프로젝트에 동일 템플릿 적용, 프로세스 안정화
+> "어디까지 됐어요?" 커뮤니케이션 비용 대폭 감소 — 수치적으로 진행률과 일정을 볼 수 있는 현황판 확보 > 여러 제휴 프로젝트에 동일 템플릿 적용, 프로세스 안정화
 
 ###### > 새 프로젝트 착수 시 스케줄링 소요 시간 단축
 
@@ -375,7 +375,7 @@ R E S U L T
 
 ###### P R O D U C T
 
-email@example.com
+classyh7@gmail.com
 
 tikit.day
 
