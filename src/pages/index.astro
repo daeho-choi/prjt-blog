@@ -3,6 +3,14 @@ import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL;
 
+const portfolio = {
+  href: `${base}portfolio/`,
+  kicker: 'OVERVIEW',
+  title: 'PM Portfolio',
+  subtitle: '7년, 5개 프로덕션 — 라이브 게임부터 0→1 빌딩까지 한 장으로. 각 케이스의 Situation · Task · Action · Result을 한 번에.',
+  accent: '#818CF8',
+};
+
 const caseStudies = [
   {
     slug: 'tikit',
@@ -34,6 +42,20 @@ const caseStudies = [
   </section>
 
   <section>
+    <h2>Portfolio</h2>
+    <a
+      class="card card-featured"
+      href={portfolio.href}
+      style={`--accent: ${portfolio.accent}`}
+    >
+      <span class="kicker">{portfolio.kicker}</span>
+      <h3>{portfolio.title}</h3>
+      <p>{portfolio.subtitle}</p>
+      <span class="arrow">Read →</span>
+    </a>
+  </section>
+
+  <section>
     <h2>Case Studies</h2>
     <div class="grid">
       {
@@ -50,12 +72,5 @@ const caseStudies = [
         ))
       }
     </div>
-  </section>
-
-  <section>
-    <h2>Portfolio</h2>
-    <p>
-      PM 포트폴리오 전문은 <a href={`${base}portfolio/`}>여기</a>에서 섹션별로 읽을 수 있습니다.
-    </p>
   </section>
 </Base>
