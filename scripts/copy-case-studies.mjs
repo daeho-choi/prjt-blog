@@ -6,9 +6,12 @@
  *   - Single source of truth: Portfolios/ holds the authored content.
  *   - Keeps public/ generated (gitignored) so we never have to sync two trees.
  *
- * While copying, the shared site bar (blog-level navigation) is replaced
- * with a standard template so every page — Astro routes or standalone PRDs —
- * shares the same Case Studies hover dropdown.
+ * While copying, this script also:
+ *   - Replaces each page's inline site bar with a shared template so every
+ *     page shares the same Case Studies hover dropdown + mobile hamburger
+ *   - Publishes src/styles/tokens.css to public/tokens.css and injects a
+ *     matching <link> into each standalone page, so both the Astro layer
+ *     and the PRD/CV pages can pull from a single canonical token file
  */
 import { mkdir, copyFile, readFile, writeFile, rm } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -19,6 +22,8 @@ const ROOT = resolve(__dirname, '..');
 const SRC = join(ROOT, 'Portfolios');
 const CASE_DEST = join(ROOT, 'public', 'case-studies');
 const PORTFOLIO_DEST = join(ROOT, 'public', 'portfolio');
+const TOKENS_SRC = join(ROOT, 'src', 'styles', 'tokens.css');
+const TOKENS_DEST = join(ROOT, 'public', 'tokens.css');
 
 const caseStudies = JSON.parse(
   await readFile(join(ROOT, 'src', 'data', 'case-studies.json'), 'utf8'),
@@ -36,10 +41,14 @@ const binaryTargets = [
 ];
 
 const BASE = '/prjt-blog/';
+const TOKENS_LINK_MARKER = '<!-- canonical-tokens-link -->';
+const TOKENS_LINK = `${TOKENS_LINK_MARKER}<link rel="stylesheet" href="${BASE}tokens.css">`;
 
 /**
  * Build the shared site bar HTML (styles + markup) for standalone pages.
  * `active` marks the current page so the matching link highlights.
+ * Below 720px the inline pill flips into a full-height hamburger overlay
+ * with a tiny inline script to toggle it — keeps parity with Base.astro.
  */
 function renderSiteBar({ active }) {
   const items = caseStudies
@@ -80,12 +89,59 @@ function renderSiteBar({ active }) {
 .site-bar-sub { font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: 0.1em; color: #71717a; text-transform: uppercase; }
 .site-bar-all { margin-top: 4px; padding: 10px 12px; border-top: 1px solid rgba(255,255,255,0.06); border-radius: 0 0 10px 10px; color: #a1a1aa; font-size: 13px; text-align: right; text-decoration: none; }
 .site-bar-all:hover { color: #818cf8; }
-@media (max-width: 640px) { .site-bar-menu, .site-bar-chev { display: none; } }
+
+/* Hamburger toggle — hidden above 720px */
+.site-bar-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 40px; height: 40px; padding: 0; background: none; border: 0; cursor: pointer; border-radius: 10px; transition: background 0.15s ease; }
+.site-bar-toggle:hover { background: rgba(255,255,255,0.06); }
+.site-bar-toggle span { display: block; width: 22px; height: 2px; margin: 0 auto; background: #f4f4f5; border-radius: 2px; transition: transform 0.25s ease, opacity 0.15s ease; }
+.site-bar-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.site-bar-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.site-bar-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  .site-bar-menu, .site-bar-chev { display: none; }
+  .site-bar-toggle { display: flex; }
+
+  .site-bar-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
+    background: rgba(10,10,11,0.97);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .site-bar-nav[data-open] { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  .site-bar-nav > a, .site-bar-nav .site-bar-trigger {
+    font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: #f4f4f5;
+    padding: 1.15rem 0; border-radius: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: space-between;
+    background: transparent;
+  }
+  .site-bar-nav > a::after, .site-bar-nav .site-bar-trigger::after {
+    content: "↗"; font-size: 1rem; font-weight: 500; color: #71717a; margin-left: 0.75rem;
+  }
+  .site-bar-nav > a.is-active::after, .site-bar-nav .site-bar-trigger.is-active::after { color: #818cf8; }
+  .site-bar-dropdown { display: contents; }
+}
 </style>
 <div class="site-bar">
   <div class="site-bar-inner">
     <a class="site-bar-brand" href="${BASE}">daeho-choi<span>.</span></a>
-    <nav class="site-bar-nav">
+    <button class="site-bar-toggle" type="button" aria-controls="site-bar-nav" aria-expanded="false" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-bar-nav" class="site-bar-nav">
       <a href="${BASE}"${isActive('home')}>Home</a>
       <div class="site-bar-dropdown">
         <a class="site-bar-trigger${isActive('cases') ? ' is-active' : ''}" href="${BASE}case-studies/" aria-haspopup="true">
@@ -102,6 +158,18 @@ ${items}
     </nav>
   </div>
 </div>
+<script>
+(function(){
+  var btn = document.querySelector('.site-bar-toggle');
+  var nav = document.getElementById('site-bar-nav');
+  if (!btn || !nav) return;
+  function close(){ nav.removeAttribute('data-open'); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-label','메뉴 열기'); document.body.style.overflow=''; }
+  function open(){ nav.setAttribute('data-open',''); btn.setAttribute('aria-expanded','true'); btn.setAttribute('aria-label','메뉴 닫기'); document.body.style.overflow='hidden'; }
+  btn.addEventListener('click', function(){ nav.hasAttribute('data-open') ? close() : open(); });
+  nav.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('a')) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && nav.hasAttribute('data-open')) close(); });
+})();
+</script>
 <!-- ═════ /SITE BAR ═════ -->`;
 }
 
@@ -133,6 +201,21 @@ function injectSiteBar(html, { active }) {
   return html;
 }
 
+/**
+ * Add a <link> to the canonical tokens stylesheet just before the
+ * closing </head> tag so standalone pages can consume the same design
+ * tokens Astro does. Idempotent via a marker comment.
+ */
+function injectTokensLink(html) {
+  if (html.includes(TOKENS_LINK_MARKER)) return html;
+  return html.replace(/<\/head>/i, `  ${TOKENS_LINK}\n</head>`);
+}
+
+// --- Publish canonical tokens to public/ ---
+await mkdir(dirname(TOKENS_DEST), { recursive: true });
+await copyFile(TOKENS_SRC, TOKENS_DEST);
+console.log(`copied src/styles/tokens.css -> public/tokens.css`);
+
 // --- HTML: case studies + portfolio one-pager ---
 await rm(CASE_DEST, { recursive: true, force: true });
 await rm(PORTFOLIO_DEST, { recursive: true, force: true });
@@ -141,8 +224,9 @@ for (const { from, to, active } of htmlTargets) {
   const src = join(SRC, from);
   await mkdir(dirname(to), { recursive: true });
   const raw = await readFile(src, 'utf8');
-  const transformed = injectSiteBar(raw, { active });
-  await writeFile(to, transformed, 'utf8');
+  const withBar = injectSiteBar(raw, { active });
+  const withTokens = injectTokensLink(withBar);
+  await writeFile(to, withTokens, 'utf8');
   console.log(`copied ${from} -> ${to.replace(ROOT + '/', '')}`);
 }
 
@@ -154,5 +238,5 @@ for (const { from, to } of binaryTargets) {
 }
 
 console.log(
-  `done: ${htmlTargets.length} HTML pages + ${binaryTargets.length} binary file(s) placed under public/`,
+  `done: ${htmlTargets.length} HTML pages + ${binaryTargets.length} binary file(s) + tokens.css placed under public/`,
 );

@@ -42,7 +42,16 @@ const isAbout = path.startsWith(`${basePath}/about`);
   <body>
     <header class="site-header">
       <a class="brand" href={base}>daeho-choi<span class="brand-dot">.</span></a>
-      <nav>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label="메뉴 열기"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav">
         <a href={base} aria-current={isHome ? 'page' : undefined}>Home</a>
         <div class="nav-dropdown">
           <a
@@ -88,6 +97,33 @@ const isAbout = path.startsWith(`${basePath}/about`);
         <a href={`${base}about/`} aria-current={isAbout ? 'page' : undefined}>About</a>
       </nav>
     </header>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+      const nav = document.getElementById('site-nav');
+      if (toggle && nav) {
+        const close = () => {
+          nav.removeAttribute('data-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', '메뉴 열기');
+          document.body.style.overflow = '';
+        };
+        const open = () => {
+          nav.setAttribute('data-open', '');
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.setAttribute('aria-label', '메뉴 닫기');
+          document.body.style.overflow = 'hidden';
+        };
+        toggle.addEventListener('click', () => {
+          nav.hasAttribute('data-open') ? close() : open();
+        });
+        nav.addEventListener('click', (e) => {
+          if ((e.target as HTMLElement)?.closest('a')) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && nav.hasAttribute('data-open')) close();
+        });
+      }
+    </script>
     <main>
       <slot />
     </main>

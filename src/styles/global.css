@@ -240,6 +240,46 @@ small {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
+/* --- Mobile hamburger toggle --- */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.15s var(--ease);
+}
+
+.nav-toggle:hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.25s var(--ease), opacity 0.15s var(--ease);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* --- Nav dropdown --- */
 .nav-dropdown {
   position: relative;
@@ -363,12 +403,81 @@ small {
 }
 
 /* On small screens: drop the menu, let the link just navigate */
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .nav-dropdown-menu {
     display: none;
   }
   .nav-chev {
     display: none;
+  }
+
+  /* Show the hamburger, hide the inline pill nav until opened */
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-header nav {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+  }
+
+  .site-header nav[data-open] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  /* Inside the overlay: full-width stacked rows with big type */
+  .site-header nav > a,
+  .site-header nav .nav-dropdown-trigger {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    padding: 1.15rem 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+  }
+
+  .site-header nav > a::after,
+  .site-header nav .nav-dropdown-trigger::after {
+    content: "↗";
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-left: 0.75rem;
+  }
+
+  .site-header nav > a[aria-current="page"],
+  .site-header nav .nav-dropdown-trigger[aria-current="page"] {
+    background: transparent;
+    color: var(--text);
+  }
+
+  .site-header nav > a[aria-current="page"]::after,
+  .site-header nav .nav-dropdown-trigger[aria-current="page"]::after {
+    color: var(--accent);
+  }
+
+  .nav-dropdown {
+    display: contents;
   }
 }
 
