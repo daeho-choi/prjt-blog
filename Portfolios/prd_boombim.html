@@ -70,7 +70,7 @@ body::before {
 /* ─── NAV ─── */
 .nav {
   position: fixed;
-  top: 0;
+  top: 42px;
   left: 0;
   right: 0;
   z-index: 100;
@@ -1024,6 +1024,19 @@ td:first-child {
 </style>
 </head>
 <body>
+
+<!-- ═════ SITE BAR (blog-level navigation) ═════ -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,10,11,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:13px;">
+    <a href="/prjt-blog/" style="color:#fff;font-weight:700;text-decoration:none;letter-spacing:-0.01em;">daeho-choi<span style="color:#818CF8;">.</span></a>
+    <nav style="display:flex;gap:18px;">
+      <a href="/prjt-blog/" style="color:#a1a1aa;text-decoration:none;">Home</a>
+      <a href="/prjt-blog/case-studies/" style="color:#fff;text-decoration:none;">Case Studies</a>
+      <a href="/prjt-blog/portfolio/" style="color:#a1a1aa;text-decoration:none;">CV</a>
+      <a href="/prjt-blog/about/" style="color:#a1a1aa;text-decoration:none;">About</a>
+    </nav>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="nav">

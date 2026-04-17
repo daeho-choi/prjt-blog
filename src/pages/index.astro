@@ -2,75 +2,22 @@
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL;
-
-const portfolio = {
-  href: `${base}portfolio/`,
-  kicker: 'OVERVIEW',
-  title: 'PM Portfolio',
-  subtitle: '7년, 5개 프로덕션 — 라이브 게임부터 0→1 빌딩까지 한 장으로. 각 케이스의 Situation · Task · Action · Result을 한 번에.',
-  accent: '#818CF8',
-};
-
-const caseStudies = [
-  {
-    slug: 'tikit',
-    title: 'TIKIT',
-    subtitle: '티켓처럼 공유하는 한국어 이벤트 초대장. 3주 만에 혼자 런칭한 웹 서비스.',
-    accent: '#818CF8',
-  },
-  {
-    slug: 'boombim',
-    title: '붐빔 BoomBim',
-    subtitle: '오프라인의 복작거림을 온라인에서도 — 실시간 혼잡도 공유.',
-    accent: '#FF6B35',
-  },
-  {
-    slug: 'lokit',
-    title: 'LOKIT',
-    subtitle: '잠긴 선물카드를 링크로 주고받는 모바일 웹. 이벤트를 게임으로.',
-    accent: '#00FFD1',
-  },
-];
 ---
 
 <Base title="daeho-choi · PM portfolio">
-  <section class="hero">
-    <h1>daeho-choi</h1>
-    <p class="tagline">
-      제품을 만드는 PM. 기획부터 실행, 그리고 런칭 이후의 학습까지 기록합니다.
+  <section class="landing">
+    <p class="landing-kicker">DEVELOPMENT PM · 7 YEARS</p>
+    <h1>
+      제품을 만드는 PM,<br />
+      <span class="landing-accent">daeho-choi.</span>
+    </h1>
+    <p class="landing-tagline">
+      기획부터 실행, 그리고 런칭 이후의 학습까지 —<br />
+      라이브 게임 · 플랫폼 · 0→1 서비스에서 검증한 프로덕션 매니지먼트 기록.
     </p>
-  </section>
-
-  <section>
-    <h2>Portfolio</h2>
-    <a
-      class="card card-featured"
-      href={portfolio.href}
-      style={`--accent: ${portfolio.accent}`}
-    >
-      <span class="kicker">{portfolio.kicker}</span>
-      <h3>{portfolio.title}</h3>
-      <p>{portfolio.subtitle}</p>
-      <span class="arrow">Read →</span>
-    </a>
-  </section>
-
-  <section>
-    <h2>Case Studies</h2>
-    <div class="grid">
-      {
-        caseStudies.map((cs) => (
-          <a
-            class="card"
-            href={`${base}case-studies/${cs.slug}/`}
-            style={`--accent: ${cs.accent}`}
-          >
-            <h3>{cs.title}</h3>
-            <p>{cs.subtitle}</p>
-            <span class="arrow">Read →</span>
-          </a>
-        ))
-      }
+    <div class="landing-cta">
+      <a class="btn btn-primary" href={`${base}portfolio/`}>View CV →</a>
+      <a class="btn btn-ghost" href={`${base}case-studies/`}>Case Studies</a>
     </div>
   </section>
 </Base>

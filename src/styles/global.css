@@ -113,6 +113,10 @@ small {
   letter-spacing: -0.01em;
 }
 
+.site-header .brand-dot {
+  color: var(--accent);
+}
+
 .site-header nav {
   display: flex;
   gap: 1.25rem;
@@ -147,6 +151,95 @@ small {
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   color: var(--text-muted);
   max-width: 40ch;
+}
+
+/* --- Landing (home) --- */
+.landing {
+  padding: clamp(3rem, 10vw, 7rem) 0 clamp(2rem, 6vw, 4rem);
+  max-width: 40rem;
+}
+
+.landing-kicker {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 1.5rem;
+}
+
+.landing h1 {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  text-wrap: balance;
+}
+
+.landing-accent {
+  background: linear-gradient(135deg, #818cf8 0%, #e879f9 60%, #ff8c42 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing-tagline {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  color: var(--text-muted);
+  max-width: 36rem;
+  margin: 0 0 2.5rem;
+  line-height: 1.7;
+}
+
+.landing-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  color: var(--bg);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+  color: var(--text);
+}
+
+/* --- Card meta kicker (case-studies index) --- */
+.card .card-meta {
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
 }
 
 /* --- Cards / grid --- */

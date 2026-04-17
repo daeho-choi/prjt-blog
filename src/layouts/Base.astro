@@ -33,10 +33,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString(
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href={base}>daeho-choi</a>
+      <a class="brand" href={base}>daeho-choi<span class="brand-dot">.</span></a>
       <nav>
         <a href={base}>Home</a>
-        <a href={`${base}portfolio/`}>Portfolio</a>
+        <a href={`${base}case-studies/`}>Case Studies</a>
+        <a href={`${base}portfolio/`}>CV</a>
         <a href={`${base}about/`}>About</a>
       </nav>
     </header>

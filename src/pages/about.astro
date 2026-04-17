@@ -1,23 +1,47 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
-<Base title="About · daeho-choi" description="About daeho-choi — PM.">
+<Base title="About · daeho-choi" description="About this site and daeho-choi — PM.">
   <section class="hero">
     <h1>About</h1>
-    <p class="tagline">PM daeho-choi. 제품 기획과 런칭을 반복하며 기록합니다.</p>
+    <p class="tagline">이 블로그와 저에 대해서.</p>
   </section>
 
   <section class="prose">
+    <h2>이 블로그는</h2>
     <p>
-      이 블로그는 제가 혼자 또는 팀으로 만든 제품들의 케이스 스터디와, PM으로서의
-      학습을 모은 공간입니다. 각 케이스는 목차 페이지가 아니라 독립된 제품 페이지
-      형태로 보관되어 있습니다.
+      daeho-choi의 PM 커리어와 개인 작업물을 모아두는 공간입니다. 주요 콘텐츠는 두 갈래입니다.
+    </p>
+    <ul>
+      <li>
+        <a href={`${base}portfolio/`}><b>CV</b></a> — 7년간 5개 프로덕션에서 쌓은 PM 경험을 한 장으로 정리한 포트폴리오. PDF 다운로드도 여기서.
+      </li>
+      <li>
+        <a href={`${base}case-studies/`}><b>Case Studies</b></a> — 혼자 또는 소규모 팀으로 만든 사이드 프로젝트의 기획서와 케이스 스터디. 각 프로젝트마다 고유 디자인을 유지한 standalone 문서.
+      </li>
+    </ul>
+
+    <h2>저는</h2>
+    <p>
+      <b>최대호 (Daeho Choi)</b> — 디자인 사고와 공학적 이해를 기반으로 제품을 굴러가게 만드는
+      개발 PM입니다. PUBG Studios · NAVER Z · 콩스튜디오코리아 · EA Korea · NCSoft에서
+      라이브 게임 운영, 대규모 프로젝트 로드맵 설계, IP 제휴 콘텐츠 WBS 표준화, 0→1 서비스
+      빌딩까지 다양한 환경의 프로덕션을 경험했습니다.
+    </p>
+    <p>
+      서울시립대 산업디자인(공업디자인 전공) 졸업. Korean (Native) / English (TOEIC 905,
+      IELTS 6.5).
     </p>
 
     <h2>연락</h2>
     <ul>
-      <li>GitHub: <a href="https://github.com/daeho-choi">@daeho-choi</a></li>
+      <li>LinkedIn: <a href="https://linkedin.com/in/daeho-choi" target="_blank" rel="noopener">linkedin.com/in/daeho-choi</a></li>
+      <li>Email: <a href="mailto:email@example.com">email@example.com</a></li>
+      <li>GitHub: <a href="https://github.com/daeho-choi" target="_blank" rel="noopener">@daeho-choi</a></li>
+      <li>Product: <a href="https://tikit.day" target="_blank" rel="noopener">tikit.day</a></li>
     </ul>
   </section>
 </Base>
