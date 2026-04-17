@@ -1,27 +1,37 @@
-/* --- Design tokens --- */
+@import "./tokens.css";
+
+/* --- Astro-scoped design tokens ---
+ * These are page-local names that map onto the canonical tokens in
+ * tokens.css. They exist so the rest of this stylesheet stays terse
+ * (`var(--bg)` vs `var(--color-bg)`) and the accent, shadow and
+ * layout knobs stay grouped with the rest of the Astro styling.
+ */
 :root {
-  --bg: #0a0a0b;
-  --bg-soft: #111113;
-  --bg-elev: #17171c;
-  --card: #16161a;
-  --border: #26262b;
-  --border-strong: #353540;
-  --text: #f4f4f5;
-  --text-muted: #a1a1aa;
-  --text-dim: #71717a;
+  /* Canonical aliases */
+  --bg: var(--color-bg);
+  --bg-soft: var(--color-surface-soft);
+  --bg-elev: var(--color-surface-elev);
+  --card: var(--color-surface);
+  --border: var(--color-border);
+  --border-strong: var(--color-border-strong);
+  --text: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --text-dim: var(--color-text-dim);
+  --radius: var(--radius-panel);
+  --radius-lg: var(--radius-panel-lg);
+  --ease: var(--ease-standard);
+
+  /* Astro-only accent & layout knobs (not in canonical set) */
   --accent: #818cf8;
   --accent-soft: #6366f1;
   --accent-warm: #e879f9;
   --link: #c7d2fe;
-  --radius: 14px;
-  --radius-lg: 20px;
   --max: 960px;
   --gap: clamp(1rem, 2vw, 1.5rem);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
   --shadow-glow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
     0 10px 40px -10px color-mix(in srgb, var(--accent) 45%, transparent);
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 
   color-scheme: dark;
 }
@@ -42,8 +52,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  font-family: var(--font-body);
   font-size: 17px;
   line-height: 1.7;
   font-feature-settings: "ss06", "tnum";
@@ -332,7 +341,7 @@ small {
 }
 
 .nav-dropdown-sub {
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -440,7 +449,7 @@ small {
 
 .landing-kicker {
   display: inline-block;
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -493,7 +502,7 @@ small {
 }
 
 .section-head .section-label {
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -561,7 +570,7 @@ small {
 
 /* --- Card meta kicker (case-studies index) --- */
 .card .card-meta {
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -685,7 +694,7 @@ small {
 }
 
 .card-featured .kicker {
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -732,7 +741,7 @@ small {
 }
 
 .prose code {
-  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.875em;
   padding: 0.125em 0.375em;
   background: var(--bg-soft);
