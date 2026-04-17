@@ -420,13 +420,6 @@ small {
   text-wrap: balance;
 }
 
-.landing-accent {
-  background: linear-gradient(135deg, #818cf8 0%, #e879f9 60%, #ff8c42 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 .landing-tagline {
   font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
   color: var(--text-muted);
