@@ -28,9 +28,9 @@
   --pin-blue: #3B82F6;
   --pin-yellow: #F59E0B;
   --pin-cyan: #06B6D4;
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'Noto Sans KR', sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --bm-font-display: 'Outfit', sans-serif;
+  --bm-font-body: 'Noto Sans KR', sans-serif;
+  --bm-font-mono: 'Space Mono', monospace;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +41,7 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--bm-font-body);
   background: var(--ash-900);
   color: var(--ash-200);
   line-height: 1.7;
@@ -87,7 +87,7 @@ body::before {
 }
 
 .nav-logo {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 900;
   font-size: 1.2rem;
   color: var(--fire-500);
@@ -107,7 +107,7 @@ body::before {
 }
 
 .nav-links a {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--ash-400);
   text-decoration: none;
@@ -155,7 +155,7 @@ body::before {
 }
 
 .hero-badge {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--fire-400);
   text-transform: uppercase;
@@ -167,7 +167,7 @@ body::before {
 }
 
 .hero-title {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 900;
   font-size: clamp(3.5rem, 10vw, 8rem);
   color: #fff;
@@ -218,7 +218,7 @@ body::before {
 }
 
 .hero-meta-item .label {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   color: var(--ash-500);
   text-transform: uppercase;
@@ -226,7 +226,7 @@ body::before {
 }
 
 .hero-meta-item .value {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--ash-200);
@@ -251,7 +251,7 @@ body::before {
 }
 
 .section-number {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--fire-500);
   letter-spacing: 3px;
@@ -261,7 +261,7 @@ body::before {
 }
 
 .section-title {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 800;
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #fff;
@@ -311,7 +311,7 @@ body::before {
 }
 
 .power-block .highlight {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 800;
   font-size: 1.4rem;
   color: var(--fire-400);
@@ -352,7 +352,7 @@ body::before {
 }
 
 .principle-card h3 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 700;
   font-size: 1rem;
   color: #fff;
@@ -384,7 +384,7 @@ thead {
 }
 
 th {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--ash-300);
@@ -445,7 +445,7 @@ td:first-child {
 }
 
 .persona-card .tag {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   color: var(--fire-400);
   text-transform: uppercase;
@@ -454,7 +454,7 @@ td:first-child {
 }
 
 .persona-card h3 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 700;
   font-size: 1.3rem;
   color: #fff;
@@ -500,7 +500,7 @@ td:first-child {
 }
 
 .metric-card .metric-value {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 800;
   font-size: 1.6rem;
   color: var(--fire-400);
@@ -513,7 +513,7 @@ td:first-child {
 }
 
 .metric-card .metric-how {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   color: var(--ash-500);
   margin-top: 8px;
@@ -564,7 +564,7 @@ td:first-child {
 .concept-table .ct-label {
   background: var(--ash-800);
   padding: 14px 20px;
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--ash-400);
   text-transform: uppercase;
@@ -586,7 +586,7 @@ td:first-child {
 }
 
 .feature-block h3 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 700;
   font-size: 1.15rem;
   color: #fff;
@@ -597,7 +597,7 @@ td:first-child {
 }
 
 .feature-block h3 .num {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--fire-500);
   background: rgba(255,69,0,0.1);
@@ -638,7 +638,7 @@ td:first-child {
 }
 
 .flow-block pre {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.75rem;
   color: var(--ash-300);
   line-height: 1.6;
@@ -660,7 +660,7 @@ td:first-child {
   position: absolute;
   top: -12px;
   left: 24px;
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   color: var(--fire-400);
   background: var(--ash-800);
@@ -672,7 +672,7 @@ td:first-child {
 }
 
 .screen-section h3 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 700;
   font-size: 1.2rem;
   color: #fff;
@@ -681,7 +681,7 @@ td:first-child {
 }
 
 .screen-section .figma-ref {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--ash-500);
   margin-bottom: 16px;
@@ -695,7 +695,7 @@ td:first-child {
 }
 
 .screen-section h4 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--ash-100);
@@ -705,7 +705,7 @@ td:first-child {
 /* ─── PRIORITY BADGE ─── */
 .priority {
   display: inline-block;
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -737,7 +737,7 @@ td:first-child {
 }
 
 .feed-mock .feed-header .author {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   color: var(--fire-400);
   font-weight: 700;
   font-size: 0.75rem;
@@ -760,7 +760,7 @@ td:first-child {
 }
 
 .feed-mock .feed-timer {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--fire-300);
   margin: 12px 0 8px;
@@ -786,7 +786,7 @@ td:first-child {
 }
 
 .feed-mock .comment .c-author {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--ash-200);
   font-weight: 700;
@@ -836,7 +836,7 @@ td:first-child {
 }
 
 .tech-item .tech-label {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.6rem;
   color: var(--ash-500);
   text-transform: uppercase;
@@ -890,7 +890,7 @@ td:first-child {
 }
 
 .timeline-item .tl-phase {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 700;
   font-size: 1rem;
   color: #fff;
@@ -898,7 +898,7 @@ td:first-child {
 }
 
 .timeline-item .tl-duration {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--fire-400);
   margin-bottom: 8px;
@@ -926,7 +926,7 @@ td:first-child {
 }
 
 .money-card h4 {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--ash-100);
@@ -954,7 +954,7 @@ td:first-child {
 }
 
 .question-item .q-num {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--ash-500);
   text-align: center;
@@ -966,7 +966,7 @@ td:first-child {
 }
 
 .question-item .q-owner {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.65rem;
   color: var(--ash-500);
   white-space: nowrap;
@@ -980,7 +980,7 @@ td:first-child {
 }
 
 .footer .f-title {
-  font-family: var(--font-display);
+  font-family: var(--bm-font-display);
   font-weight: 900;
   font-size: 2rem;
   color: var(--fire-500);
@@ -994,7 +994,7 @@ td:first-child {
 }
 
 .footer .f-author {
-  font-family: var(--font-mono);
+  font-family: var(--bm-font-mono);
   font-size: 0.7rem;
   color: var(--ash-600);
   margin-top: 24px;
@@ -1124,7 +1124,7 @@ td:first-child {
   </div>
 
   <!-- 설계 원칙 -->
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">핵심 설계 원칙</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">핵심 설계 원칙</h4>
   <div class="principles-grid">
     <div class="principle-card reveal">
       <div class="icon">⚡</div>
@@ -1247,14 +1247,14 @@ td:first-child {
   <span class="section-number">04 — Objectives & Metrics</span>
   <h2 class="section-title">목표 & 성공 지표</h2>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 12px;">Goals</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 12px;">Goals</h4>
   <ul class="goals-list">
     <li>서울 송파구 일대 초기 사용자 확보 및 활성 커뮤니티 형성</li>
     <li>위치 기반 실시간 피드의 PMF(Product-Market Fit) 검증</li>
     <li>MBTI 기반 익명 시스템의 사용자 수용도 확인</li>
   </ul>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 28px 0 12px;">Non-Goals</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 28px 0 12px;">Non-Goals</h4>
   <ul class="goals-list non-goals">
     <li>전국 단위 서비스 확장</li>
     <li>DM/채팅 기능</li>
@@ -1262,7 +1262,7 @@ td:first-child {
     <li>실명 인증 또는 소셜 로그인</li>
   </ul>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Success Metrics</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Success Metrics</h4>
   <div class="metrics-grid reveal">
     <div class="metric-card">
       <div class="metric-value">500+</div>
@@ -1286,7 +1286,7 @@ td:first-child {
     </div>
   </div>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">지표 산출 근거</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">지표 산출 근거</h4>
   <div class="table-wrap reveal">
     <table>
       <thead><tr><th>Metric</th><th>Target</th><th>근거</th></tr></thead>
@@ -1599,7 +1599,7 @@ td:first-child {
     </div>
   </div>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">핵심 설계 결정</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">핵심 설계 결정</h4>
   <div class="table-wrap reveal">
     <table>
       <thead><tr><th>결정</th><th>이유</th></tr></thead>
@@ -1613,7 +1613,7 @@ td:first-child {
     </table>
   </div>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">디자인 시스템</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">디자인 시스템</h4>
   <div class="table-wrap">
     <table>
       <thead><tr><th>요소</th><th>사양</th></tr></thead>
@@ -1634,7 +1634,7 @@ td:first-child {
   <span class="section-number">08 — Go-to-Market</span>
   <h2 class="section-title">런칭 & 수익화 전략</h2>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 24px;">Phase 1: 클로즈드 베타</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 24px;">Phase 1: 클로즈드 베타</h4>
 
   <div class="timeline reveal">
     <div class="timeline-item">
@@ -1659,7 +1659,7 @@ td:first-child {
     </div>
   </div>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Phase 2: 오픈 베타</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Phase 2: 오픈 베타</h4>
 
   <div class="timeline reveal">
     <div class="timeline-item future">
@@ -1676,7 +1676,7 @@ td:first-child {
     </div>
   </div>
 
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">수익화 방향 (PMF 검증 후)</h4>
+  <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">수익화 방향 (PMF 검증 후)</h4>
   <div class="money-grid reveal">
     <div class="money-card">
       <h4>📍 로컬 비즈니스 광고</h4>
@@ -1789,14 +1789,14 @@ td:first-child {
     <table>
       <thead><tr><th>#</th><th>화면명</th><th>Figma Node</th><th>Variants</th><th>우선순위</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>튜토리얼</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">685:147</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
-        <tr><td>2</td><td>로그인/MBTI 선택</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">405:141</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
-        <tr><td>3</td><td>메인 지도 화면</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">512:185</td><td>18</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
-        <tr><td>4</td><td>피드 목록/상세</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">514:1277</td><td>36</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
-        <tr><td>5</td><td>글쓰기</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">762:1788</td><td>2</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
-        <tr><td>6</td><td>서비스 미오픈 안내</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">734:229</td><td>1</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
-        <tr><td>7</td><td>알림</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
-        <tr><td>8</td><td>마이페이지</td><td style="font-family: var(--font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+        <tr><td>1</td><td>튜토리얼</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">685:147</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>2</td><td>로그인/MBTI 선택</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">405:141</td><td>1</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>3</td><td>메인 지도 화면</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">512:185</td><td>18</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>4</td><td>피드 목록/상세</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">514:1277</td><td>36</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>5</td><td>글쓰기</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">762:1788</td><td>2</td><td><span class="priority p0" style="margin: 0;">P0</span></td></tr>
+        <tr><td>6</td><td>서비스 미오픈 안내</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">734:229</td><td>1</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+        <tr><td>7</td><td>알림</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
+        <tr><td>8</td><td>마이페이지</td><td style="font-family: var(--bm-font-mono); font-size: 0.75rem;">Feed variant</td><td>—</td><td><span class="priority p1" style="margin: 0;">P1</span></td></tr>
       </tbody>
     </table>
   </div>
