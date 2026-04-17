@@ -36,3 +36,6 @@ public/portfolio/
 
 # Generated case studies (copied from Portfolios/ at build)
 public/case-studies/
+
+# Generated canonical tokens stylesheet (copied from src/styles/tokens.css at build)
+public/tokens.css
