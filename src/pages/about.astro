@@ -44,22 +44,26 @@ const contacts = [
 
 <Base title="About · 최대호 (daeho-choi)" description="개발 PM 최대호 — 커리어, 작업물, 연락처.">
   <section class="about-hero">
-    <p class="landing-kicker">ABOUT</p>
-    <h1>
-      <span class="headline-lead">제품을 만드는 PM,</span>
-      <span class="headline-subject">최대호 입니다.</span>
-    </h1>
-    <p class="about-hero-sub">
-      디자인 사고와 공학적 이해를 바탕으로 기획부터 런칭 이후의 학습까지
-      한 사이클로 이어가는 개발 PM. 라이브 게임 운영, 대규모 로드맵 체계,
-      IP 제휴 WBS, 0→1 서비스 빌딩까지 다섯 프로덕션의 경험을 이곳에 정리합니다.
-    </p>
-    <div class="about-meta">
-      <span class="about-meta-item"><span class="about-meta-k">Role</span>Development PM</span>
-      <span class="about-meta-sep" aria-hidden="true">·</span>
-      <span class="about-meta-item"><span class="about-meta-k">Base</span>Seoul, KR</span>
-      <span class="about-meta-sep" aria-hidden="true">·</span>
-      <span class="about-meta-item"><span class="about-meta-k">Since</span>2017</span>
+    <div class="about-hero-head">
+      <p class="landing-kicker">ABOUT</p>
+      <h1>
+        <span class="headline-lead">제품을 만드는 PM,</span>
+        <span class="headline-subject">최대호 입니다.</span>
+      </h1>
+    </div>
+    <div class="about-hero-body">
+      <p class="about-hero-sub">
+        디자인 사고와 공학적 이해를 바탕으로 기획부터 런칭 이후의 학습까지
+        한 사이클로 이어가는 개발 PM. 라이브 게임 운영, 대규모 로드맵 체계,
+        IP 제휴 WBS, 0→1 서비스 빌딩까지 다섯 프로덕션의 경험을 이곳에 정리합니다.
+      </p>
+      <div class="about-meta">
+        <span class="about-meta-item"><span class="about-meta-k">Role</span>Development PM</span>
+        <span class="about-meta-sep" aria-hidden="true">·</span>
+        <span class="about-meta-item"><span class="about-meta-k">Base</span>Seoul, KR</span>
+        <span class="about-meta-sep" aria-hidden="true">·</span>
+        <span class="about-meta-item"><span class="about-meta-k">Since</span>2017</span>
+      </div>
     </div>
   </section>
 
@@ -150,22 +154,47 @@ const contacts = [
 
 <style>
   .about-hero {
-    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem);
-    max-width: 44rem;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: end;
   }
 
   .about-hero h1 {
     font-size: clamp(2rem, 5vw, 3.25rem);
     line-height: 1.1;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0;
+  }
+
+  .about-hero-head {
+    min-width: 0;
+  }
+
+  .about-hero-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 0.35rem;
   }
 
   .about-hero-sub {
     font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
     color: var(--text-muted);
     line-height: 1.8;
-    max-width: 42rem;
-    margin: 0 0 1.75rem;
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .about-hero {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .about-hero-body {
+      padding-bottom: 0;
+    }
   }
 
   .about-meta {
