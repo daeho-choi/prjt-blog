@@ -87,19 +87,37 @@ const contacts = [
     <div class="section-head">
       <span class="section-label">BIO</span>
     </div>
-    <div class="prose about-prose">
-      <p>
-        <b>최대호 (Daeho Choi)</b> — 디자인 사고와 공학적 이해를 바탕으로 일하는
-        개발 PM입니다. 라이브 게임 운영, 신규 프로젝트 로드맵 설계,
-        IP 제휴 콘텐츠 WBS 표준화, 0→1 서비스 빌딩 등 다양한 환경의
-        프로덕션을 거쳐 왔습니다.
+    <div class="about-bio">
+      <p class="bio-lead">
+        <b>최대호 (Daeho Choi)</b> — 디자인 사고와 공학적 이해를 바탕으로 일하는 개발 PM입니다.
       </p>
-      <p class="about-edu">
-        서울시립대 산업디자인(공업디자인 전공) 졸업 ·
-        Korean (Native) · English (TOEIC 905 / IELTS 6.5, 2017 기준)
-      </p>
-      <div class="about-chips" aria-label="경력 회사">
-        {companies.map((c) => <span class="about-chip">{c}</span>)}
+
+      <div class="bio-block">
+        <span class="bio-label">Production Experience</span>
+        <ul class="bio-list">
+          <li>라이브 게임 운영</li>
+          <li>신규 프로젝트 로드맵 설계</li>
+          <li>IP 제휴 콘텐츠 WBS 표준화</li>
+          <li>0→1 서비스 빌딩</li>
+        </ul>
+      </div>
+
+      <dl class="bio-facts">
+        <div class="bio-fact">
+          <dt>학력</dt>
+          <dd>서울시립대 산업디자인 — 공업디자인 전공</dd>
+        </div>
+        <div class="bio-fact">
+          <dt>언어</dt>
+          <dd>Korean (Native) · English (TOEIC 905 · IELTS 6.5, 2017 기준)</dd>
+        </div>
+      </dl>
+
+      <div class="bio-block">
+        <span class="bio-label">Teams</span>
+        <div class="about-chips" aria-label="거쳐 온 팀">
+          {companies.map((c) => <span class="about-chip">{c}</span>)}
+        </div>
       </div>
     </div>
   </section>
@@ -182,29 +200,116 @@ const contacts = [
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
 
-  .about-prose {
+  .about-bio {
     max-width: 42rem;
   }
 
-  .about-prose p {
+  .bio-lead {
+    font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
     color: var(--text);
-    line-height: 1.8;
+    line-height: 1.75;
+    margin: 0 0 1.75rem;
   }
 
-  .about-prose p b {
+  .bio-lead b {
     color: var(--text);
   }
 
-  .about-edu {
-    color: var(--text-muted) !important;
+  .bio-block + .bio-facts,
+  .bio-facts + .bio-block {
+    margin-top: 1.75rem;
+  }
+
+  .bio-block {
+    margin-top: 1.5rem;
+  }
+
+  .bio-label {
+    display: block;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+  }
+
+  .bio-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border-top: 1px solid var(--border);
+  }
+
+  .bio-list li {
+    position: relative;
+    padding: 0.7rem 0 0.7rem 1.25rem;
+    color: var(--text);
     font-size: 1rem;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bio-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+
+  .bio-facts {
+    margin: 1.75rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .bio-fact {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bio-fact dt {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  .bio-fact dd {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 520px) {
+    .bio-fact {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
   }
 
   .about-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
-    margin-top: 1.5rem;
+    margin-top: 0;
   }
 
   .about-chip {
