@@ -44,8 +44,8 @@ body {
   color: var(--text);
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.7;
   font-feature-settings: "ss06", "tnum";
   word-break: keep-all;
   overflow-wrap: anywhere;
@@ -142,7 +142,7 @@ a:hover {
 
 small {
   color: var(--text-dim);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
 ::selection {
@@ -186,7 +186,7 @@ small {
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .site-header .brand-dot {
@@ -197,6 +197,7 @@ small {
   display: flex;
   gap: 0.25rem;
   font-size: 0.9375rem;
+  font-weight: 500;
 }
 
 .site-header nav a {
@@ -311,14 +312,14 @@ small {
 
 .nav-dropdown-title {
   color: var(--text);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .nav-dropdown-sub {
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -326,11 +327,11 @@ small {
 
 .nav-dropdown-all {
   margin-top: 0.25rem;
-  padding: 0.625rem 0.75rem;
+  padding: 0.7rem 0.75rem;
   border-top: 1px solid var(--border);
   border-radius: 0 0 10px 10px;
   color: var(--text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   text-align: right;
 }
 
@@ -350,10 +351,11 @@ small {
 
 .site-footer {
   border-top: 1px solid var(--border);
-  padding: 2rem 1.25rem;
+  padding: 2.25rem 1.25rem;
   text-align: center;
   color: var(--text-dim);
   margin-top: 4rem;
+  font-size: 0.9375rem;
 }
 
 .site-footer a {
@@ -366,9 +368,10 @@ small {
 }
 
 .hero .tagline {
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
   color: var(--text-muted);
-  max-width: 40ch;
+  max-width: 52ch;
+  line-height: 1.7;
 }
 
 /* --- Landing (home) --- */
@@ -383,13 +386,13 @@ small {
   align-items: center;
   gap: 0.5rem;
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-dim);
   margin: 0 0 1.5rem;
-  padding: 0.35rem 0.7rem;
+  padding: 0.4rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: color-mix(in srgb, var(--bg-soft) 80%, transparent);
@@ -425,11 +428,11 @@ small {
 }
 
 .landing-tagline {
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
   color: var(--text-muted);
-  max-width: 36rem;
+  max-width: 40rem;
   margin: 0 0 2.5rem;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .landing-cta {
@@ -451,7 +454,7 @@ small {
 
 .section-head h2 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--text);
   letter-spacing: -0.01em;
@@ -459,15 +462,15 @@ small {
 
 .section-head .section-label {
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-dim);
 }
 
 .section-head .section-link {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--text-muted);
 }
 
@@ -480,9 +483,9 @@ small {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.8rem 1.35rem;
+  padding: 0.85rem 1.45rem;
   border-radius: 999px;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.005em;
   border: 1px solid transparent;
@@ -524,12 +527,12 @@ small {
 /* --- Card meta kicker (case-studies index) --- */
 .card .card-meta {
   font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 /* --- Cards / grid --- */
@@ -545,7 +548,7 @@ small {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1.75rem 1.5rem 1.5rem;
+  padding: 1.75rem 1.65rem 1.65rem;
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--accent) 4%, var(--card)) 0%,
     var(--card) 100%);
@@ -601,13 +604,15 @@ small {
 
 .card h3 {
   color: var(--text);
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  letter-spacing: -0.015em;
 }
 
 .card p {
   color: var(--text-muted);
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  line-height: 1.65;
 }
 
 .card .arrow {

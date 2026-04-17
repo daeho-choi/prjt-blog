@@ -266,7 +266,6 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
     <a href="#metrics">Metrics</a>
     <a href="#features">Flow</a>
     <a href="#design">Design</a>
-    <a href="#risks">Risks</a>
     <a href="#gtm">GTM</a>
     <a href="#roadmap">Roadmap</a>
   </div>
@@ -553,7 +552,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
   <div class="history-note">
     <strong>히스토리 노트 — 디자인 피벗</strong>
-    초기 컨셉은 "Obsidian Vault — 다크 모드 + 네온 사이언" 이었으나, 일상 선물 시나리오의 대중성을 위해 <strong style="color: var(--cyan-400);">밝고 부드러운 글래스모피즘</strong>으로 피벗. 본 문서의 다크 테마는 포트폴리오 프레젠테이션 용도이며, 실제 제품 UI는 라이트 글래스 기반. (원안 Obsidian 테마는 §10 로드맵 Phase 5 프리미엄 테마 옵션으로 회귀 검토)
+    초기 컨셉은 "Obsidian Vault — 다크 모드 + 네온 사이언" 이었으나, 일상 선물 시나리오의 대중성을 위해 <strong style="color: var(--cyan-400);">밝고 부드러운 글래스모피즘</strong>으로 피벗. 본 문서의 다크 테마는 포트폴리오 프레젠테이션 용도이며, 실제 제품 UI는 라이트 글래스 기반. (원안 Obsidian 테마는 §09 로드맵 Phase 5 프리미엄 테마 옵션으로 회귀 검토)
   </div>
 
   <div class="history-note">
@@ -566,43 +565,9 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
 <div class="section-divider"></div>
 
-<!-- 11. RISKS -->
-<section id="risks" class="section">
-  <span class="section-number">08 — Risks & Constraints</span>
-  <h2 class="section-title">알려진 리스크</h2>
-
-  <div class="table-wrap reveal">
-    <table>
-      <thead><tr><th>항목</th><th>리스크</th><th>단기 대응</th></tr></thead>
-      <tbody>
-        <tr><td class="td-danger">RLS all-allow</td><td>익명 키로 남의 locker 수정/삭제 가능</td><td>created_by 기반 owner check 정책 도입</td></tr>
-        <tr><td class="td-danger">평문 final_password</td><td>DB 유출 시 즉시 모든 정답 노출</td><td>해시(bcrypt/argon2) 전환 + 서버 측 검증만 허용</td></tr>
-        <tr><td class="td-warn">공개 rewards 버킷</td><td>무관 파일 업로드·대역폭 남용</td><td>UID 스코프 경로 + size/type 제한, 스캔 큐</td></tr>
-        <tr><td class="td-warn">hint_points 재충전</td><td>클라 타이머만 — 새로고침·다른 기기에서 편차</td><td>last_point_recharge 기반 서버 계산으로 이전</td></tr>
-        <tr><td class="td-warn">status='expired'</td><td>컬럼은 있으나 트랜지션 로직 없음 → expires_at 무시됨</td><td>조회 시 서버에서 만료 판정 or cron</td></tr>
-        <tr><td>세션 복원 엣지</td><td>첫 방문 시 claim 없는데 세션 생성 → active_players 과대 계산</td><td>풀이 시작 시점으로 session insert 지연</td></tr>
-        <tr><td>Demo 모듈 스코프</td><td>demoHintIndex 모듈 스코프 — 탭 전환 시 카운터 누적</td><td>컴포넌트 로컬 state로 이전</td></tr>
-        <tr><td>README 오염</td><td>Gemini AI Studio 템플릿 잔재 — 신규 기여자 오해</td><td>업데이트 또는 삭제</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h4 style="font-family: var(--font-display); font-weight: 600; color: var(--obsidian-100); margin: 40px 0 16px;">Open Questions</h4>
-  <div class="reveal">
-    <div class="q-item"><span class="q-num">01</span><span class="q-text">Maker 인증 도입 시점 — 스팸 로커 방지 vs 가입 마찰 트레이드오프</span><span class="q-owner">PM</span></div>
-    <div class="q-item"><span class="q-num">02</span><span class="q-text">선착순 보상 동시 접속 경합(Race condition) — 현재 pre-insert 체크가 충분한가?</span><span class="q-owner">Dev</span></div>
-    <div class="q-item"><span class="q-num">03</span><span class="q-text">단서 개수/길이의 최소·최대 가이드라인 (난이도 30~60% 적정 구간 유지)</span><span class="q-owner">PM</span></div>
-    <div class="q-item"><span class="q-num">04</span><span class="q-text">오프라인 이벤트(QR → 현장 참여) 시나리오의 UX 최적화 시점</span><span class="q-owner">PM / Design</span></div>
-    <div class="q-item"><span class="q-num">05</span><span class="q-text">부적절한 보상 내용(사기 링크 등) 필터링/신고 체계</span><span class="q-owner">PM / Ops</span></div>
-    <div class="q-item"><span class="q-num">06</span><span class="q-text">시간 기반 단서 공개(원안)를 옵션으로 부활시킬 가치가 있는가?</span><span class="q-owner">PM</span></div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
 <!-- 12. GTM -->
 <section id="gtm" class="section">
-  <span class="section-number">09 — Go-to-Market</span>
+  <span class="section-number">08 — Go-to-Market</span>
   <h2 class="section-title">런칭 & 수익화 전략</h2>
 
   <div class="timeline reveal">
@@ -631,7 +596,7 @@ td:first-child { font-weight: 500; color: var(--obsidian-100); white-space: nowr
 
 <!-- 13. ROADMAP -->
 <section id="roadmap" class="section">
-  <span class="section-number">10 — Roadmap</span>
+  <span class="section-number">09 — Roadmap</span>
   <h2 class="section-title">단계별 로드맵</h2>
 
   <p style="color: var(--obsidian-400); font-size: 0.9rem; margin-bottom: 24px;">
