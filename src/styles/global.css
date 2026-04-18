@@ -416,16 +416,27 @@ small {
     display: flex;
   }
 
+  /* Kill the header's backdrop-filter on mobile: it creates a containing
+   * block for position:fixed descendants, trapping the nav overlay
+   * inside the header box instead of the viewport. */
+  .site-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   .site-header nav {
     position: fixed;
-    inset: 0;
-    z-index: 90;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    z-index: 100;
     display: flex;
     flex-direction: column;
     gap: 0;
     align-items: stretch;
     padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
-    background: var(--bg);
+    background-color: #0a0a0b;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-8px);
