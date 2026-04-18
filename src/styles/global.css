@@ -425,9 +425,7 @@ small {
     gap: 0;
     align-items: stretch;
     padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
-    background: color-mix(in srgb, var(--bg) 96%, transparent);
-    backdrop-filter: saturate(180%) blur(18px);
-    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    background: var(--bg);
     opacity: 0;
     pointer-events: none;
     transform: translateY(-8px);
