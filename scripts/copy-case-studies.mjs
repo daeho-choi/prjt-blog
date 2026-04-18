@@ -99,18 +99,25 @@ function renderSiteBar({ active }) {
 .site-bar-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 @media (max-width: 720px) {
-  .site-bar-menu, .site-bar-chev { display: none; }
+  .site-menu, .site-bar-menu, .site-bar-chev { display: none; }
   .site-bar-toggle { display: flex; }
+
+  /* Kill the bar's backdrop-filter on mobile so the fixed overlay
+   * escapes the containing-block trap and covers the viewport. */
+  .site-bar { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
   .site-bar-nav {
     position: fixed;
-    inset: 0;
-    z-index: 190;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    z-index: 210;
     flex-direction: column;
     gap: 0;
     align-items: stretch;
     padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
-    background: #0a0a0b;
+    background-color: #0a0a0b;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-8px);
