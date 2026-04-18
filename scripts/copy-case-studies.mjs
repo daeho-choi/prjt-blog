@@ -110,9 +110,7 @@ function renderSiteBar({ active }) {
     gap: 0;
     align-items: stretch;
     padding: clamp(4.5rem, 14vw, 6rem) 1.5rem 2.5rem;
-    background: rgba(10,10,11,0.97);
-    backdrop-filter: saturate(180%) blur(18px);
-    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    background: #0a0a0b;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-8px);
