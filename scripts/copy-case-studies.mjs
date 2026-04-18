@@ -64,7 +64,7 @@ function renderSiteBar({ active }) {
 
   return `<!-- ═════ SITE BAR (blog-level navigation) ═════ -->
 <style>
-.site-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: rgba(10,10,11,0.88); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+.site-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 99998; background: rgba(10,10,11,0.88); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
 .site-bar-inner { max-width: 1100px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
 .site-bar-brand { color: #fff; font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
 .site-bar-brand span { color: #818CF8; }
@@ -112,7 +112,9 @@ function renderSiteBar({ active }) {
     left: 0;
     width: 100vw;
     height: 100dvh;
-    z-index: 210;
+    /* Sits above PRD-level fixed decor like body::before noise overlays
+     * (z-index 9999 on boombim/lokit). */
+    z-index: 99999;
     flex-direction: column;
     gap: 0;
     align-items: stretch;
