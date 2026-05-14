@@ -3,9 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>붐빔 BoomBim — Product Requirements Document</title>
+<title>붐빔 BoomBim — Case Study</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['Space Grotesk', 'sans-serif'],
+        body: ['Noto Sans KR', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      colors: {
+        f50:  '#FFF3EE',
+        f200: '#FFB799',
+        f300: '#FF8A5E',
+        f400: '#FF6A36',
+        f500: '#FF4722',
+        f600: '#E53214',
+        f700: '#B8240A',
+        d900: '#0B0B0E',
+        d700: '#17171B',
+        d600: '#1F1F24',
+        i100: '#F5F5F7',
+        i200: '#D0D0D6',
+        i300: '#9A9AA2',
+        i400: '#6B6B73',
+      }
+    }
+  }
+}
+</script>
 <style>
 :root {
   --fire-500: #FF4500;
@@ -33,12 +64,9 @@
   --bm-font-mono: 'Space Mono', monospace;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
+html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--bm-font-body);
@@ -50,15 +78,9 @@ body {
   overflow-wrap: anywhere;
 }
 
-/* ─── NOISE OVERLAY ─── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-}
+/* ── Typography ─────────────────────────────────── */
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-mono    { font-family: 'JetBrains Mono', monospace; }
 
 /* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar { width: 6px; }
@@ -109,44 +131,87 @@ body::before {
 .nav-links a {
   font-family: var(--bm-font-mono);
   font-size: 0.65rem;
-  color: var(--ash-400);
-  text-decoration: none;
-  padding: 4px 10px;
-  border-radius: 4px;
-  transition: all 0.2s;
-  border: 1px solid transparent;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
-.nav-links a:hover {
-  color: var(--fire-400);
-  border-color: rgba(255,69,0,0.2);
-  background: rgba(255,69,0,0.05);
+/* ── Fire gradient divider ─────────────────────── */
+.fire-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--f500), var(--f400), transparent);
+  border: none;
 }
 
-/* ─── HERO ─── */
-.hero {
+.fire-divider-full {
+  height: 2px;
+  background: linear-gradient(90deg, var(--f700), var(--f500), var(--f400), var(--f300));
+}
+
+/* ── Animations ─────────────────────────────────── */
+@keyframes heat-pulse {
+  0%,100% { transform: translate(-50%,-50%) scale(0.8); opacity: 0.55; }
+  50%      { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+}
+
+@keyframes fab-pulse {
+  0%,100% { transform: scale(1); opacity: 0.65; }
+  50%      { transform: scale(1.32); opacity: 1; }
+}
+
+@keyframes fire-flicker {
+  0%   { transform: scale(1) rotate(-2deg); }
+  100% { transform: scale(1.16) rotate(2deg); }
+}
+
+@keyframes timer-blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.18; }
+}
+
+@keyframes grad-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes hero-breathe {
+  0%,100% { opacity: 0.07; transform: scale(1); }
+  50%      { opacity: 0.13; transform: scale(1.04); }
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scroll reveal ──────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Hero ───────────────────────────────────────── */
+.hero-section {
+  background: var(--d900);
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  position: relative;
-  overflow: hidden;
 }
 
-.hero::before {
-  content: '';
+.hero-bg-glow {
   position: absolute;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(circle, rgba(255,69,0,0.12) 0%, transparent 70%);
-  pointer-events: none;
-  animation: pulse-glow 4s ease-in-out infinite;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 55% at 50% 40%, rgba(255,71,34,0.18) 0%, transparent 70%);
+  animation: hero-breathe 5s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
@@ -183,38 +248,107 @@ body::before {
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 3s ease infinite;
+  background-clip: text;
+  animation: grad-shift 4s ease infinite;
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.hero-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--i200);
+  font-weight: 400;
 }
 
-.hero-subtitle {
-  font-size: 1.3rem;
-  color: var(--ash-300);
-  font-weight: 300;
-  max-width: 500px;
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fade-up 0.8s ease forwards 0.6s;
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,71,34,0.4);
+  color: var(--f400);
+  background: rgba(255,71,34,0.08);
 }
 
-.hero-meta {
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-  justify-content: center;
-  opacity: 0;
-  animation: fade-up 0.8s ease forwards 0.8s;
+/* ── Section skins ─────────────────────────────── */
+.section-light { background: #FAFAFA; color: var(--d900); }
+.section-dark  { background: var(--d900); color: var(--i100); }
+
+/* ── Cards ──────────────────────────────────────── */
+.card-light {
+  background: #fff;
+  border: 1px solid #E8E8EC;
+  border-radius: 16px;
 }
 
-.hero-meta-item {
+.card-dark {
+  background: var(--d700);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+}
+
+.card-fire {
+  background: linear-gradient(135deg, var(--f600), var(--f500));
+  border-radius: 16px;
+  color: #fff;
+}
+
+/* ── Metric big ─────────────────────────────────── */
+.metric-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 700;
+  color: var(--f500);
+  line-height: 1;
+}
+
+/* ── Map mock ───────────────────────────────────── */
+.map-mock {
+  background: #1A2E20;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  height: 340px;
+}
+
+.map-road {
+  position: absolute;
+  background: #2A3E30;
+}
+
+.map-road-h { height: 7px; left: 0; right: 0; }
+.map-road-v { width: 7px; top: 0; bottom: 0; }
+
+.map-block {
+  position: absolute;
+  background: #243028;
+  border-radius: 3px;
+}
+
+.map-park {
+  position: absolute;
+  background: #2D4A35;
+  border-radius: 4px;
+}
+
+.map-water {
+  position: absolute;
+  background: #1B3A4B;
+  border-radius: 6px;
+}
+
+/* HOT pin */
+.map-pin {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
 .hero-meta-item .label {
@@ -298,7 +432,6 @@ body::before {
   padding: 40px;
   margin: 40px 0;
   position: relative;
-  overflow: hidden;
 }
 
 .power-block::before {
@@ -437,6 +570,224 @@ td:first-child {
 .persona-card::before {
   content: '';
   position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,71,34,0.45) 0%, rgba(255,71,34,0.1) 55%, transparent 75%);
+  animation: heat-pulse 2.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+.map-pin-inner {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.map-pin-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--f400);
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.map-pin-cool .map-pin-dot    { background: linear-gradient(135deg, #60A5FA, #3B82F6); box-shadow: 0 4px 14px rgba(59,130,246,0.5); }
+.map-pin-cool .map-pin-label  { color: #60A5FA; }
+.map-pin-green .map-pin-dot   { background: linear-gradient(135deg, #34D399, #10B981); box-shadow: 0 4px 14px rgba(16,185,129,0.5); }
+.map-pin-green .map-pin-label { color: #34D399; }
+
+/* ── BOOM FAB ───────────────────────────────────── */
+.bottom-nav-mock {
+  background: var(--d700);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 16px;
+  padding-bottom: 14px;
+  position: relative;
+}
+
+.fab-container {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  margin-top: -26px;
+}
+
+.fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--f400), var(--f600));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(255,71,34,0.7);
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.fab::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,71,34,0.5), transparent 70%);
+  animation: fab-pulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+.fab-icon {
+  font-size: 1.4rem;
+  animation: fire-flicker 0.7s ease-in-out infinite alternate;
+}
+
+.nav-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.1rem;
+  opacity: 0.45;
+}
+
+.nav-icon-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  color: var(--i300);
+}
+
+/* ── MBTI avatars ───────────────────────────────── */
+.mbti-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.mbti-cool  { background: linear-gradient(135deg, #60A5FA, #3B82F6); box-shadow: 0 4px 16px rgba(59,130,246,0.4); }
+.mbti-warm  { background: linear-gradient(135deg, #FBBF24, #F59E0B); box-shadow: 0 4px 16px rgba(245,158,11,0.4); }
+.mbti-fresh { background: linear-gradient(135deg, #34D399, #10B981); box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
+.mbti-cyan  { background: linear-gradient(135deg, #22D3EE, #06B6D4); box-shadow: 0 4px 16px rgba(6,182,212,0.4); }
+.mbti-fire  { background: linear-gradient(135deg, #FF6A36, #E53214); box-shadow: 0 4px 16px rgba(255,71,34,0.5); }
+
+/* ── Feed card ──────────────────────────────────── */
+.feed-card {
+  background: var(--d700);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--i200);
+}
+
+.timer-pill.urgent {
+  border-color: rgba(255,71,34,0.5);
+  background: rgba(255,71,34,0.1);
+  color: var(--f400);
+}
+
+.timer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--f500);
+  animation: timer-blink 1s ease-in-out infinite;
+}
+
+.reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--i300);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reaction-btn.active {
+  background: rgba(255,71,34,0.15);
+  border-color: rgba(255,71,34,0.4);
+  color: var(--f400);
+}
+
+/* ── Onboarding steps ───────────────────────────── */
+.onboard-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--f500);
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Jorgi button ───────────────────────────────── */
+.jorgi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: rgba(255,71,34,0.12);
+  border: 1px solid rgba(255,71,34,0.35);
+  color: var(--f400);
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+/* ── Site nav ───────────────────────────────────── */
+.site-nav {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -732,15 +1083,15 @@ td:first-child {
 .feed-mock .feed-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 0.8rem;
 }
 
 .feed-mock .feed-header .author {
   font-family: var(--bm-font-mono);
   color: var(--fire-400);
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 1.1rem;
+  color: #fff;
+  text-decoration: none;
 }
 
 .feed-mock .feed-header .meta {
@@ -803,9 +1154,8 @@ td:first-child {
 .pin-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--ash-300);
+  gap: 28px;
+  list-style: none;
 }
 
 .pin-dot {
@@ -848,23 +1198,32 @@ td:first-child {
   color: var(--ash-100);
   font-size: 0.9rem;
   font-weight: 500;
+  color: var(--i200);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-/* ─── TIMELINE ─── */
-.timeline {
-  margin: 32px 0;
-  position: relative;
-  padding-left: 32px;
+.nav-links a:hover { color: #fff; }
+.nav-links a.active { color: var(--f400); }
+
+/* ── Chip / tag ─────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255,71,34,0.1);
+  color: var(--f400);
+  border: 1px solid rgba(255,71,34,0.25);
 }
 
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 6px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--fire-500), var(--ash-700));
+.tag-dark {
+  background: rgba(255,255,255,0.06);
+  color: var(--i300);
+  border-color: rgba(255,255,255,0.1);
 }
 
 .timeline-item {
@@ -929,8 +1288,6 @@ td:first-child {
   font-family: var(--bm-font-display);
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--ash-100);
-  margin-bottom: 8px;
 }
 
 .money-card p {
@@ -1002,91 +1359,33 @@ td:first-child {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
-  .nav { padding: 12px 20px; }
   .nav-links { display: none; }
-  .hero { padding: 100px 24px 60px; }
-  .section { padding: 60px 24px; }
-  .hero-meta { gap: 20px; }
-  .screen-section { padding: 24px 20px; }
-  .concept-table { grid-template-columns: 1fr; }
-  .feed-mock { max-width: 100%; }
-}
-
-/* ─── SCROLL ANIMATIONS ─── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+  .map-mock  { height: 240px; }
 }
 </style>
 </head>
 <body>
 
 <!-- ═════ SITE BAR (blog-level navigation) ═════ -->
-<div style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,10,11,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">
-  <div style="max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:13px;">
-    <a href="/prjt-blog/" style="color:#fff;font-weight:700;text-decoration:none;letter-spacing:-0.01em;">daeho-choi<span style="color:#818CF8;">.</span></a>
-    <nav style="display:flex;gap:18px;">
-      <a href="/prjt-blog/" style="color:#a1a1aa;text-decoration:none;">Home</a>
-      <a href="/prjt-blog/case-studies/" style="color:#fff;text-decoration:none;">Case Studies</a>
-      <a href="/prjt-blog/portfolio/" style="color:#a1a1aa;text-decoration:none;">CV</a>
-      <a href="/prjt-blog/about/" style="color:#a1a1aa;text-decoration:none;">About</a>
-    </nav>
-  </div>
-</div>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo"><span class="fire">🔥</span> BoomBim PRD</div>
-  <div class="nav-links">
-    <a href="#vision">Vision</a>
-    <a href="#problem">Problem</a>
-    <a href="#users">Users</a>
-    <a href="#metrics">Metrics</a>
-    <a href="#features">Features</a>
-    <a href="#screens">Screens</a>
-    <a href="#tech">Tech</a>
-    <a href="#gtm">GTM</a>
-    <a href="#questions">Questions</a>
-    <a href="#backlog">Backlog</a>
-  </div>
+<nav class="site-nav" role="navigation" aria-label="Site navigation">
+  <a href="/" class="nav-logo">Daeho Choi</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/portfolio">Portfolio</a></li>
+    <li><a href="/case-studies/boombim" class="active">BoomBim</a></li>
+    <li><a href="/case-studies/tikit">Tikit</a></li>
+    <li><a href="/case-studies/lokit">Lokit</a></li>
+  </ul>
 </nav>
+<!-- ═════ /SITE BAR ═════ -->
 
-<!-- HERO -->
-<header class="hero">
-  <div class="hero-badge">Product Requirements Document</div>
-  <h1 class="hero-title"><span class="fire-text">붐빔</span></h1>
-  <p class="hero-subtitle">오프라인의 복작거림을 온라인에서도</p>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="label">Author</span>
-      <span class="value">최대호 (PM)</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="label">Platform</span>
-      <span class="value">iOS (iPhone)</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="label">Status</span>
-      <span class="value" style="color: var(--fire-400);">Prototyping</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="label">Prototype</span>
-      <span class="value"><a href="https://www.figma.com/proto/PyL9tL4losO5RsQJD5jzaR/Project_boombim?node-id=735-429&t=GxK9goGuHBaXQXci-1" target="_blank">Figma →</a></span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="label">Domain</span>
-      <span class="value">boomb.im</span>
-    </div>
-  </div>
-</header>
+<!-- ════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section class="hero-section" aria-label="Hero">
+  <div class="hero-bg-glow"></div>
 
-<div class="section-divider"></div>
+  <div class="max-w-5xl mx-auto px-6 pt-24 pb-20 w-full relative z-10">
 
 <!-- 1. VISION -->
 <section id="vision" class="section">
@@ -1131,25 +1430,39 @@ td:first-child {
       <h3>퀵 & 인스턴트</h3>
       <p>동네 기반 공고한 커뮤니티가 목표가 아님. 이벤트가 있을 때 확 끓어올랐다가 확 꺼지는 형태.</p>
     </div>
-    <div class="principle-card reveal">
-      <div class="icon">👁️</div>
-      <h3>주목 효과</h3>
-      <p>지도에서 다 조용한데 어디 한군데가 불타오른다 — 이로 인한 주목 효과가 가장 큰 힘.</p>
-    </div>
-    <div class="principle-card reveal">
-      <div class="icon">🌱</div>
-      <h3>점진적 오픈</h3>
-      <p>어뷰징 방지를 위해 특정 지역부터 코어유저를 키우며 확장. 자정작용 기대.</p>
+
+    <h1 class="hero-wordmark mb-4">붐빔<br>BoomBim</h1>
+
+    <p class="hero-sub mb-8 max-w-xl">오프라인 복작거림을<br>온라인에서도</p>
+
+    <div class="fire-divider w-24 mb-10" style="margin-left:0;"></div>
+
+    <p class="text-base leading-relaxed text-gray-300 max-w-2xl mb-10" style="font-family:'Noto Sans KR',sans-serif;">
+      지금 내 주변 100m 안에서 무슨 일이 일어나고 있을까?<br>
+      붐빔은 오프라인의 생생한 열기를 실시간으로 공유하는 하이퍼로컬 소셜 플랫폼입니다.
+      MBTI 기반 익명 정체성, 6시간 자동 소멸 콘텐츠, 그리고 HOT 핀이 만들어 내는
+      도시의 리듬을 경험하세요.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <span class="tag">하이퍼로컬</span>
+      <span class="tag">익명 SNS</span>
+      <span class="tag">100m 반경</span>
+      <span class="tag">6시간 소멸</span>
+      <span class="tag">MBTI 정체성</span>
+      <span class="tag">HOT 핀</span>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- fire divider -->
+<div class="fire-divider-full"></div>
 
-<!-- 2. PROBLEM -->
-<section id="problem" class="section">
-  <span class="section-number">02 — Problem Definition</span>
-  <h2 class="section-title">경쟁 서비스 비교</h2>
+<!-- ════════════════════════════════════════════════
+     §1 VISION — light
+════════════════════════════════════════════════ -->
+<section class="section-light py-20 px-6" aria-labelledby="vision-title">
+  <div class="max-w-5xl mx-auto">
 
   <div class="table-wrap reveal">
     <table>
@@ -1415,189 +1728,121 @@ td:first-child {
 <pre>[권한 안내] → [MBTI 선택: E/I → S/N → T/F → J/P] → [이용약관 동의] → [메인 지도 진입]</pre>
     </div>
 
-    <span class="priority p0">P0 — Must Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>R-01</td><td>앱 사용에 필요한 권한을 명확히 안내받고 동의하고 싶다</td><td>위치/카메라 "선택" 명시 / 권한 거부해도 이용 가능</td></tr>
-          <tr><td>R-02</td><td>MBTI 4글자를 선택하여 익명 아이디를 생성하고 싶다</td><td>4개 모두 선택 시 버튼 활성화 / MBTI + 랜덤 번호로 ID 생성</td></tr>
-          <tr><td>R-03</td><td>이용약관에 동의한 후 서비스를 시작하고 싶다</td><td>체크박스 필수 / 약관 링크 제공</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <h2 id="vision-title" class="font-display text-4xl md:text-5xl font-bold mb-6 reveal" style="font-family:'Space Grotesk',sans-serif; color:var(--d900);">
+      지금 이 순간,<br>여기서만 통하는 이야기
+    </h2>
 
-  <!-- Screen 3 -->
-  <div class="screen-section reveal" data-screen="Screen 3">
-    <h3>메인 지도 화면 (Main Map)</h3>
-    <div class="figma-ref">Figma Node: 512:185 — 18 variants</div>
-    <p class="desc">앱의 핵심 화면. 전체 화면 지도 위에 주변의 활성 피드가 색상별 핀으로 표시된다.</p>
+    <p class="text-lg leading-relaxed text-gray-600 max-w-2xl mb-12 reveal" style="font-family:'Noto Sans KR',sans-serif;">
+      SNS는 넘쳐나지만, "지금 내 옆에 있는 사람들"과 연결되는 공간은 없었습니다.
+      붐빔은 위치·시간·감정을 교차시켜 지금 이 장소의 살아있는 에너지를 포착합니다.
+    </p>
 
-    <h4>지도 핀 컬러 체계</h4>
-    <div class="pin-grid">
-      <div class="pin-item"><span class="pin-dot red"></span> 일반 피드</div>
-      <div class="pin-item"><span class="pin-dot blue"></span> 정보성 피드</div>
-      <div class="pin-item"><span class="pin-dot yellow"></span> 이벤트/축제</div>
-      <div class="pin-item"><span class="pin-dot cyan"></span> 질문/궁금</div>
-    </div>
+    <!-- Vision pillars -->
+    <div class="grid md:grid-cols-3 gap-6 reveal">
 
-    <h4>서비스 미오픈 지역</h4>
-    <div class="flow-block" style="margin: 12px 0;">
-<pre>[미오픈 지역 접근] → [🚧 안내 팝업] → [오픈 조르기 👍] or [닫기]</pre>
-    </div>
-
-    <span class="priority p0">P0 — Must Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>M-01</td><td>지도에서 주변 활성 피드를 핀으로 확인하고 싶다</td><td>현재 위치 기반 중심 설정 / 컬러 핀 표시 / 핀 탭 시 상세로 이동</td></tr>
-          <tr><td>M-02</td><td>현재 내 위치(동 단위)를 확인하고 싶다</td><td>상단에 동 이름 표시 / 위치 변경 시 실시간 갱신</td></tr>
-          <tr><td>M-03</td><td>🔥 BOOM 버튼을 탭하여 새 피드를 작성하고 싶다</td><td>FAB 버튼 → 글쓰기 플로우 / 항상 노출</td></tr>
-          <tr><td>M-04</td><td>하단 탭으로 지도/피드/마이페이지를 전환하고 싶다</td><td>3개 탭 / 현재 탭 하이라이트</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <span class="priority p1">P1 — Should Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>M-05</td><td>미오픈 지역에서 오픈 요청("조르기")하고 싶다</td><td>안내 팝업 / 중복 요청 시 안내</td></tr>
-          <tr><td>M-06</td><td>인기 해시태그를 확인하고 싶다</td><td>HOT 뱃지 + 트렌딩 태그 / 탭 시 필터링</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Screen 4 -->
-  <div class="screen-section reveal" data-screen="Screen 4">
-    <h3>피드 목록 & 상세 (Feed)</h3>
-    <div class="figma-ref">Figma Node: 514:1277 — 36 variants</div>
-
-    <div class="feed-mock">
-      <div class="feed-header">
-        <span class="author">ENFJ#0130</span>
-        <span class="meta">삼전동, 13시간 전</span>
+      <div class="card-light p-6">
+        <div class="text-3xl mb-3">📍</div>
+        <h3 class="font-display font-bold text-lg mb-2" style="font-family:'Space Grotesk',sans-serif;">하이퍼로컬</h3>
+        <p class="text-sm text-gray-500 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">반경 100m 이내의 콘텐츠만 노출. 전국 피드가 아닌 지금 내 주변의 현장감.</p>
       </div>
-      <div class="feed-text">오랜만에 밥 먹으러 왔는데, 장사 안하시나 보네요. 혹시 <span class="feed-tag">#대왕타꼬야끼</span> 어디로 이전 하셨는지 아시는분? 😢😢</div>
-      <div class="feed-timer">⏳ 03:28 남음</div>
-      <div class="feed-reactions">
-        <span>👍 1730</span>
-        <span>🔥 32</span>
-        <span>💬 14</span>
+
+      <div class="card-light p-6">
+        <div class="text-3xl mb-3">⏱</div>
+        <h3 class="font-display font-bold text-lg mb-2" style="font-family:'Space Grotesk',sans-serif;">6시간 소멸</h3>
+        <p class="text-sm text-gray-500 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">모든 게시물은 6시간 후 자동 삭제. 과거를 쌓는 SNS가 아닌, 지금을 살아가는 플랫폼.</p>
       </div>
-      <div class="feed-comments">
-        <div class="comment"><span class="c-author">ISFP#0003</span> 아 여기 전에 확장 이전 하신다고...</div>
-        <div class="comment"><span class="c-author">INFJ#0023</span> 아 그렇군요 감사합니다</div>
-        <div class="comment"><span class="c-author">ENFJ#0130</span> 아 찾았습니다!! 감사합니다!!</div>
+
+      <div class="card-light p-6">
+        <div class="text-3xl mb-3">🔥</div>
+        <h3 class="font-display font-bold text-lg mb-2" style="font-family:'Space Grotesk',sans-serif;">실시간 HOT</h3>
+        <p class="text-sm text-gray-500 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">반응이 폭발한 장소는 지도 위 HOT 핀으로 가시화. 도시의 맥박을 실시간으로.</p>
       </div>
+
     </div>
 
-    <span class="priority p0">P0 — Must Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>F-01</td><td>주변 피드를 시간순으로 목록 형태로 보고 싶다</td><td>최신순 정렬 / 스크롤 로드 / 타이머 표시</td></tr>
-          <tr><td>F-02</td><td>피드에 추천/비추천으로 반응하고 싶다</td><td>카운트 증가 / 중복 방지 / 실시간 갱신</td></tr>
-          <tr><td>F-03</td><td>피드에 코멘트를 작성하고 싶다</td><td>즉시 반영 / MBTI ID 자동 표시</td></tr>
-          <tr><td>F-04</td><td>작성자 MBTI ID와 위치/시간을 확인하고 싶다</td><td>모든 피드에 표시</td></tr>
-          <tr><td>F-05</td><td>피드의 남은 시간(타이머)을 확인하고 싶다</td><td>실시간 카운트다운 / 만료 시 비노출</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <span class="priority p1">P1 — Should Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>F-06</td><td>특정 동의 전체 피드를 모아보고 싶다</td><td>"모아보기" 탭 시 해당 동 전체 피드</td></tr>
-          <tr><td>F-07</td><td>부적절한 피드를 신고하고 싶다</td><td>신고 옵션 / 확인 팝업 / 사유 선택</td></tr>
-          <tr><td>F-08</td><td>코멘트 작성 중 실수로 나가지 않도록 확인</td><td>뒤로가기 시 확인 팝업</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Screen 5 -->
-  <div class="screen-section reveal" data-screen="Screen 5">
-    <h3>글쓰기 (Post Creation)</h3>
-    <div class="figma-ref">Figma Node: 762:1788</div>
-    <p class="desc">2단계 플로우: (1) 지도 드래그로 위치 지정 → (2) 텍스트 및 사진 입력</p>
-
-    <div class="flow-block" style="margin: 12px 0;">
-<pre>[🔥 BOOM 탭] → [위치 지정: 지도 드래그 100m] → [텍스트 140자 + 사진 5장 + 해시태그] → [게시 → 메인 복귀]</pre>
-    </div>
-
-    <span class="priority p0">P0 — Must Have</span>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>User Story</th><th>Acceptance Criteria</th></tr></thead>
-        <tbody>
-          <tr><td>W-01</td><td>지도를 드래그하여 게시 위치를 지정하고 싶다</td><td>중심 핀 변경 / 현재 위치 기본 설정</td></tr>
-          <tr><td>W-02</td><td>140자 이내 텍스트로 피드를 작성하고 싶다</td><td>실시간 카운터 / 초과 시 제한</td></tr>
-          <tr><td>W-03</td><td>사진을 첨부하고 싶다 (선택)</td><td>카메라/갤러리 / 최대 5장</td></tr>
-          <tr><td>W-04</td><td>해시태그를 추가하고 싶다</td><td># 자동 접두사</td></tr>
-          <tr><td>W-05</td><td>게시 완료 피드백을 받고 싶다</td><td>"등록 완료" / 새 핀 표시</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Screen 6 & 7 -->
-  <div class="screen-section reveal" data-screen="Screen 6-7">
-    <h3>알림 & 마이페이지</h3>
-
-    <h4>알림 (Notifications)</h4>
-    <p class="desc">피드에 발생한 반응(추천, 비추천, 코멘트)을 시간순으로 표시. 탭 시 해당 피드로 딥링크.</p>
-    <div style="display: flex; gap: 24px; flex-wrap: wrap; margin: 12px 0; font-size: 0.85rem; color: var(--ash-300);">
-      <span>👍 추천 알림</span>
-      <span>👎 비추천 알림</span>
-      <span>💬 코멘트 알림</span>
-    </div>
-
-    <h4 style="margin-top: 28px;">마이페이지 (My Page)</h4>
-    <p class="desc">MBTI ID + 성향 태그, 내가 쓴 피드 목록, 팀 응원 메시지, 서비스 탈퇴 기능 제공.</p>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- ════════════════════════════════════════════════
+     §2 PROBLEM — dark
+════════════════════════════════════════════════ -->
+<section class="section-dark py-20 px-6" aria-labelledby="problem-title">
+  <div class="max-w-5xl mx-auto">
 
-<!-- 7. TECH -->
-<section id="tech" class="section">
-  <span class="section-number">07 — Technical Architecture</span>
-  <h2 class="section-title">기술 스택 & 설계 결정</h2>
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f400);">// 02 · PROBLEM</span>
+    </div>
 
-  <div class="tech-grid reveal">
-    <div class="tech-item">
-      <div class="tech-label">Client</div>
-      <div class="tech-value">iOS Native (Swift/SwiftUI)</div>
+    <h2 id="problem-title" class="font-display text-4xl md:text-5xl font-bold mb-10 reveal" style="font-family:'Space Grotesk',sans-serif; color:#fff;">
+      오프라인은 붐비는데,<br>온라인은 텅 비어 있다
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+
+      <div class="reveal">
+        <div class="pull-quote mb-6">
+          "지금 혜화에 사람 많아?" 카톡에 물어봤더니 2시간 뒤에 답장이 왔다.
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+          기존 SNS는 정제된 과거를 공유합니다. 인스타그램은 잘 찍은 사진, 트위터는 이미 정리된 생각.
+          하지만 "지금 이 순간 여기서 무슨 일이 일어나고 있나?"를 아는 방법은 없었습니다.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <div class="space-y-4">
+          <div class="card-dark p-4 flex items-start gap-4">
+            <span class="text-2xl">😶</span>
+            <div>
+              <p class="font-display font-semibold text-sm mb-1" style="font-family:'Space Grotesk',sans-serif; color:#fff;">실명 SNS의 피로감</p>
+              <p class="text-xs text-gray-400" style="font-family:'Noto Sans KR',sans-serif;">팔로워를 의식한 자기검열. 솔직한 현장 반응을 올릴 수 없다.</p>
+            </div>
+          </div>
+          <div class="card-dark p-4 flex items-start gap-4">
+            <span class="text-2xl">🌍</span>
+            <div>
+              <p class="font-display font-semibold text-sm mb-1" style="font-family:'Space Grotesk',sans-serif; color:#fff;">위치 무관한 글로벌 피드</p>
+              <p class="text-xs text-gray-400" style="font-family:'Noto Sans KR',sans-serif;">서울에 있어도 LA 소식이 더 잘 보인다. 지역 기반 콘텐츠가 없다.</p>
+            </div>
+          </div>
+          <div class="card-dark p-4 flex items-start gap-4">
+            <span class="text-2xl">📸</span>
+            <div>
+              <p class="font-display font-semibold text-sm mb-1" style="font-family:'Space Grotesk',sans-serif; color:#fff;">기록 중심 → 현재 소외</p>
+              <p class="text-xs text-gray-400" style="font-family:'Noto Sans KR',sans-serif;">인스타, 틱톡 모두 영구 저장이 기본. 휘발적인 현장감을 담을 공간이 없다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="tech-item">
-      <div class="tech-label">Map</div>
-      <div class="tech-value">Apple Maps / Naver Maps API</div>
+
+    <!-- HMW -->
+    <div class="reveal">
+      <div class="card-fire p-6 md:p-8 text-center">
+        <p class="font-mono text-xs mb-3" style="color:rgba(255,255,255,0.65); letter-spacing:0.12em;">HOW MIGHT WE</p>
+        <p class="font-display text-xl md:text-2xl font-bold" style="font-family:'Space Grotesk',sans-serif;">
+          "지금 내 주변에서 일어나는 일을<br>가볍고 솔직하게 공유할 수 있다면?"
+        </p>
+      </div>
     </div>
-    <div class="tech-item">
-      <div class="tech-label">Server</div>
-      <div class="tech-value">REST API</div>
-    </div>
-    <div class="tech-item">
-      <div class="tech-label">Realtime</div>
-      <div class="tech-value">WebSocket (타이머, 알림)</div>
-    </div>
-    <div class="tech-item">
-      <div class="tech-label">Auth</div>
-      <div class="tech-value">Device UID + MBTI (비회원)</div>
-    </div>
-    <div class="tech-item">
-      <div class="tech-label">Storage</div>
-      <div class="tech-value">피드 DB + 이미지 스토리지</div>
-    </div>
+
   </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     §3 IDENTITY — light
+════════════════════════════════════════════════ -->
+<section class="section-light py-20 px-6" aria-labelledby="identity-title">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f500);">// 03 · IDENTITY SYSTEM</span>
+    </div>
+
+    <h2 id="identity-title" class="font-display text-4xl md:text-5xl font-bold mb-4 reveal" style="font-family:'Space Grotesk',sans-serif;">
+      MBTI 기반 익명 정체성
+    </h2>
 
   <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">핵심 설계 결정</h4>
   <div class="table-wrap reveal">
@@ -1627,54 +1872,30 @@ td:first-child {
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- ════════════════════════════════════════════════
+     §4 MAP UX — dark
+════════════════════════════════════════════════ -->
+<section class="section-dark py-20 px-6" aria-labelledby="map-title">
+  <div class="max-w-5xl mx-auto">
 
-<!-- 8. GTM -->
-<section id="gtm" class="section">
-  <span class="section-number">08 — Go-to-Market</span>
-  <h2 class="section-title">런칭 & 수익화 전략</h2>
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f400);">// 04 · MAP UX</span>
+    </div>
 
   <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin-bottom: 24px;">Phase 1: 클로즈드 베타</h4>
 
-  <div class="timeline reveal">
-    <div class="timeline-item">
-      <div class="tl-phase">M1: 핵심 루프</div>
-      <div class="tl-duration">POC — 1개월</div>
-      <div class="tl-desc">온보딩 → MBTI 선택 → 지도 → 피드 작성/조회. 컨셉대로 동작하나 출시할 수는 없는 상태.</div>
-    </div>
-    <div class="timeline-item">
-      <div class="tl-phase">M2: 인터랙션</div>
-      <div class="tl-duration">MVP — 3개월</div>
-      <div class="tl-desc">추천/비추천, 코멘트, 알림. 예쁘진 않아도 릴리즈 가능한 상태.</div>
-    </div>
-    <div class="timeline-item">
-      <div class="tl-phase">M3: 안전장치</div>
-      <div class="tl-duration">QA — 1개월</div>
-      <div class="tl-desc">신고, 콘텐츠 필터링, 탈퇴. 서비스 안정성 강화 & 비주얼 폴리싱.</div>
-    </div>
-    <div class="timeline-item">
-      <div class="tl-phase">다크 런칭</div>
-      <div class="tl-duration">테스트 빌드</div>
-      <div class="tl-desc">송파구 잠실(롯데월드–석촌호수–송리단길) 우선 오픈. 홍보 없이 소수 유저 관찰. 미오픈 지역에 "조르기" 기능으로 수요 측정.</div>
-    </div>
-  </div>
+    <p class="text-gray-400 text-sm leading-relaxed max-w-xl mb-10 reveal" style="font-family:'Noto Sans KR',sans-serif;">
+      HOT 핀은 반응이 폭발한 장소를 지도 위에 시각화합니다. 핀의 색상·크기·펄스 강도가
+      현재 인기도를 반영하며, 주변 사람들의 시선을 자연스럽게 끌어당깁니다.
+    </p>
 
   <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 36px 0 16px;">Phase 2: 오픈 베타</h4>
 
-  <div class="timeline reveal">
-    <div class="timeline-item future">
-      <div class="tl-phase">M4: 지역 확장</div>
-      <div class="tl-desc">서비스 지역 추가, 조르기 데이터 기반 우선순위</div>
-    </div>
-    <div class="timeline-item future">
-      <div class="tl-phase">M5: 피드 고도화</div>
-      <div class="tl-desc">해시태그 검색, 인기 피드 큐레이션</div>
-    </div>
-    <div class="timeline-item future">
-      <div class="tl-phase">M6: 성장 기능</div>
-      <div class="tl-desc">공유, 초대, Android 버전</div>
-    </div>
-  </div>
+        <!-- Roads horizontal -->
+        <div class="map-road map-road-h" style="top:33%; background:#2A3E30;"></div>
+        <div class="map-road map-road-h" style="top:55%; background:#2A3E30; height:5px;"></div>
+        <div class="map-road map-road-h" style="top:72%; background:#2A3E30; height:4px;"></div>
+        <div class="map-road map-road-h" style="top:18%; background:#243028; height:4px;"></div>
 
   <h4 style="font-family: var(--bm-font-display); font-weight: 600; color: var(--ash-100); margin: 40px 0 16px;">수익화 방향 (PMF 검증 후)</h4>
   <div class="money-grid reveal">
@@ -1682,108 +1903,346 @@ td:first-child {
       <h4>📍 로컬 비즈니스 광고</h4>
       <p>사장님이 자기 가게 위치에 상시 핀을 유지. 당근 비즈프로필과 유사한 구조.</p>
     </div>
-    <div class="money-card">
-      <h4>🎪 이벤트 프로모션 핀</h4>
-      <p>페스티벌·팝업스토어 주최자가 이벤트 핀을 사전 등록.</p>
+
+    <!-- Pin system explanation -->
+    <div class="grid md:grid-cols-3 gap-4 reveal">
+
+      <div class="card-dark p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:12px;height:12px;border-radius:50%;background:var(--f500);"></div>
+          <span class="font-mono text-xs font-bold" style="color:var(--f400);">HOT PIN</span>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+          반응 수 임계치(기본 10개)를 넘은 게시물이 있는 장소. 핀 크기·펄스 속도가 인기도 비례.
+        </p>
+      </div>
+
+      <div class="card-dark p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:12px;height:12px;border-radius:50%;background:#3B82F6;"></div>
+          <span class="font-mono text-xs font-bold" style="color:#60A5FA;">LIVE PIN</span>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+          지금 이 순간 게시 중인 활성 유저가 있는 위치. 실시간 현장감을 지도 위에 표현.
+        </p>
+      </div>
+
+      <div class="card-dark p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div style="width:12px;height:12px;border-radius:50%;background:#10B981;"></div>
+          <span class="font-mono text-xs font-bold" style="color:#34D399;">EVENT PIN</span>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+          "조르기" 수요 게이지가 임계치를 넘어 이벤트가 확정된 장소. 참여 유도 CTA 포함.
+        </p>
+      </div>
+
     </div>
-    <div class="money-card">
-      <h4>✨ 프리미엄 프로필</h4>
-      <p>아바타 꾸미기, 특별 이모지 등 소액 인앱 구매.</p>
-    </div>
+
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- ════════════════════════════════════════════════
+     §5 FEED — light
+════════════════════════════════════════════════ -->
+<section class="section-light py-20 px-6" aria-labelledby="feed-title">
+  <div class="max-w-5xl mx-auto">
 
-<!-- 9. QUESTIONS -->
-<section id="questions" class="section">
-  <span class="section-number">09 — Open Questions</span>
-  <h2 class="section-title">미해결 질문</h2>
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f500);">// 05 · FEED SYSTEM</span>
+    </div>
 
-  <div class="question-list reveal">
-    <div class="question-item">
-      <span class="q-num">01</span>
-      <span class="q-text">피드 만료 시간은 고정(6시간)인가, 반응 수에 따라 연장되는가?</span>
-      <span class="q-owner">PM</span>
+    <h2 id="feed-title" class="font-display text-4xl md:text-5xl font-bold mb-4 reveal" style="font-family:'Space Grotesk',sans-serif;">
+      BOOM — 터지는 순간을 공유하다
+    </h2>
+
+    <p class="text-gray-500 text-base leading-relaxed max-w-xl mb-12 reveal" style="font-family:'Noto Sans KR',sans-serif;">
+      간단한 텍스트 한 줄로 시작되는 게시물이 HOT 핀의 씨앗이 됩니다.
+      반응, 타이머, 조르기 — 붐빔만의 피드 인터랙션을 살펴보세요.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+
+      <!-- Feed card mock -->
+      <div class="reveal">
+        <div class="feed-card p-5">
+
+          <!-- Card header -->
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="mbti-avatar mbti-fire" style="width:40px;height:40px;font-size:0.52rem;" aria-label="ENTP 사용자">ENTP</div>
+              <div>
+                <p class="font-mono text-xs font-bold text-white">불꽃-ENTP</p>
+                <p class="font-mono text-xs" style="color:var(--i400);">3분 전 · 22m</p>
+              </div>
+            </div>
+            <div class="timer-pill urgent" aria-label="5시간 22분 남음">
+              <div class="timer-dot" role="status" aria-label="긴급"></div>
+              5h 22m
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="mb-4 p-4 rounded-xl" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06);">
+            <p class="text-white text-sm leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+              여기 대기줄 엄청 길어요 🔥 오픈런이네 진짜...<br>
+              <span style="color:var(--f400);">#홍대 #카페 #오픈런</span>
+            </p>
+          </div>
+
+          <!-- BOOM FAB strip -->
+          <div class="bottom-nav-mock -mx-5 -mb-5 px-5">
+            <div class="nav-icon" aria-label="홈">
+              <span>🏠</span>
+              <span class="nav-icon-label">홈</span>
+            </div>
+            <div class="nav-icon" aria-label="지도">
+              <span>🗺</span>
+              <span class="nav-icon-label">지도</span>
+            </div>
+            <div class="fab-container" aria-label="BOOM 게시">
+              <div class="fab">
+                <span class="fab-icon" role="img" aria-label="불꽃">🔥</span>
+              </div>
+            </div>
+            <div class="nav-icon" aria-label="알림">
+              <span>🔔</span>
+              <span class="nav-icon-label">알림</span>
+            </div>
+            <div class="nav-icon" aria-label="프로필">
+              <span>👤</span>
+              <span class="nav-icon-label">나</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reaction system -->
+      <div class="reveal space-y-6">
+
+        <div>
+          <p class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">반응 시스템</p>
+          <p class="text-sm text-gray-500 mb-4" style="font-family:'Noto Sans KR',sans-serif;">
+            좋아요 대신 감정 반응. 게시물의 성격을 즉시 파악하고 HOT 핀 집계에 반영됩니다.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <button class="reaction-btn active" aria-pressed="true">👍 도움돼요 <span class="font-mono text-xs">34</span></button>
+            <button class="reaction-btn" aria-pressed="false">👎 아닌듯 <span class="font-mono text-xs">2</span></button>
+            <button class="reaction-btn active" aria-pressed="true">🔥 뜨겁다 <span class="font-mono text-xs">12</span></button>
+            <button class="reaction-btn" aria-pressed="false">💬 궁금해요 <span class="font-mono text-xs">7</span></button>
+          </div>
+        </div>
+
+        <div class="fire-divider"></div>
+
+        <div>
+          <p class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">조르기 (수요 게이지)</p>
+          <p class="text-sm text-gray-500 mb-4" style="font-family:'Noto Sans KR',sans-serif;">
+            아직 없는 콘텐츠나 이벤트에 수요를 표현. 임계치 도달 시 비즈니스에게 알림 발송.
+          </p>
+          <div class="card-light p-4 rounded-xl border border-gray-200">
+            <p class="text-sm font-medium mb-3 text-gray-700" style="font-family:'Noto Sans KR',sans-serif;">이 카페 스터디룸 예약 만들어줘!</p>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="flex-1 bg-gray-100 rounded-full" style="height:6px;">
+                <div class="bg-gradient-to-r from-orange-400 to-red-500 rounded-full" style="height:6px;width:68%;transition:width 0.4s;"></div>
+              </div>
+              <span class="font-mono text-xs font-bold" style="color:var(--f500);">68/100</span>
+            </div>
+            <button class="jorgi-btn" aria-label="조르기">🫳 조르기</button>
+          </div>
+        </div>
+
+        <div class="fire-divider"></div>
+
+        <div>
+          <p class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">6시간 타이머</p>
+          <p class="text-sm text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">
+            모든 게시물은 생성 후 6시간이 지나면 자동 소멸. 급한 타이머는 빨간 펄스로 강조.
+            긴박감이 반응률을 높이는 핵심 메커니즘.
+          </p>
+        </div>
+
+      </div>
+
     </div>
-    <div class="question-item">
-      <span class="q-num">02</span>
-      <span class="q-text">지도 핀 컬러 체계의 정확한 카테고리 분류 기준은?</span>
-      <span class="q-owner">Design</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">03</span>
-      <span class="q-text">서비스 오픈 지역 확장 기준 (조르기 N건 이상 시 오픈 등)</span>
-      <span class="q-owner">PM / Ops</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">04</span>
-      <span class="q-text">MBTI 변경 불가 정책의 예외 처리 방안 (잘못 선택 시)</span>
-      <span class="q-owner">PM</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">05</span>
-      <span class="q-text">신고 처리 프로세스 및 제재 기준</span>
-      <span class="q-owner">PM / Ops</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">06</span>
-      <span class="q-text">푸시 알림 지원 여부 및 범위</span>
-      <span class="q-owner">Dev</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">07</span>
-      <span class="q-text">Android 버전 개발 시점</span>
-      <span class="q-owner">PM / Dev</span>
-    </div>
-    <div class="question-item">
-      <span class="q-num">08</span>
-      <span class="q-text">피드 텍스트 필터링(욕설, 개인정보 등) 기준</span>
-      <span class="q-owner">PM / Legal</span>
-    </div>
+
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- ════════════════════════════════════════════════
+     §6 METRICS — dark
+════════════════════════════════════════════════ -->
+<section class="section-dark py-20 px-6" aria-labelledby="metrics-title">
+  <div class="max-w-5xl mx-auto">
 
-<!-- 10. BACKLOG -->
-<section id="backlog" class="section">
-  <span class="section-number">10 — Backlog</span>
-  <h2 class="section-title">백로그</h2>
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f400);">// 06 · METRICS &amp; SUCCESS</span>
+    </div>
 
-  <div class="screen-section reveal" data-screen="B-01 · Phase 2" style="border-color: rgba(255,69,0,0.25);">
-    <h3>사용자 ID 체계 재설계</h3>
-    <p class="desc">현재 MBTI 기반 ID(ENFJ#0130)는 <strong style="color: var(--ash-100);">MVP용 임시 설계</strong>입니다. MBTI 트렌드 소퇴 시 서비스 아이덴티티와 동반 노후화될 리스크가 있습니다.</p>
-    <h4>배경</h4>
-    <p class="desc" style="margin-bottom: 12px;">MBTI는 2023~2024 피크 이후 관심 하락 추세. ID 체계는 온보딩 경험과 커뮤니티 문화에 직결되므로, 트렌드 의존도를 낮추면서 반익명 특성을 유지하는 방향으로 오픈 베타 전 재검토가 필요합니다.</p>
-    <h4>검토 대안</h4>
-    <ul style="list-style: none; padding: 0;">
-      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 형용사 + 동물 조합 (ex. "용감한고양이#42")</li>
-      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 랜덤 별명 생성 (서비스 자체 생성기)</li>
-      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> 아바타 중심 ID (비주얼 아이덴티티 우선)</li>
-      <li style="padding: 6px 0 6px 20px; position: relative; color: var(--ash-300); font-size: 0.85rem;"><span style="position: absolute; left: 0; color: var(--ash-600);">—</span> MBTI 유지하되 선택사항으로 전환 (프로필 태그 중 하나로 격하)</li>
-    </ul>
-  </div>
+    <h2 id="metrics-title" class="font-display text-4xl md:text-5xl font-bold mb-12 reveal" style="font-family:'Space Grotesk',sans-serif; color:#fff;">
+      무엇으로 성공을 측정하는가
+    </h2>
 
-  <div class="table-wrap reveal" style="margin-top: 24px;">
-    <table>
-      <thead><tr><th>#</th><th>항목</th><th>시점</th><th>Owner</th></tr></thead>
-      <tbody>
-        <tr><td class="td-fire">B-01</td><td>사용자 ID 체계 재설계 (상세 위 참조)</td><td>Phase 2 (오픈 베타 전)</td><td>PM</td></tr>
-        <tr><td>B-02</td><td>채팅방 피쳐 — 사진/동영상 공유</td><td>Phase 2+</td><td>PM / Dev</td></tr>
-        <tr><td>B-03</td><td>업체 광고 목적 위치 선점 기능</td><td>Phase 2+</td><td>PM / Biz</td></tr>
-        <tr><td>B-04</td><td>목적 기반 파티 구인 (스터디카페, 배달 파티 등)</td><td>Phase 2+</td><td>PM</td></tr>
-      </tbody>
-    </table>
+    <!-- North Star -->
+    <div class="card-fire p-6 md:p-8 mb-10 reveal">
+      <p class="font-mono text-xs mb-2" style="color:rgba(255,255,255,0.65); letter-spacing:0.12em;">NORTH STAR METRIC</p>
+      <p class="font-display text-2xl md:text-3xl font-bold mb-1" style="font-family:'Space Grotesk',sans-serif;">
+        7일 내 재방문 유저 비율
+      </p>
+      <p class="text-sm" style="color:rgba(255,255,255,0.75); font-family:'Noto Sans KR',sans-serif;">
+        "붐빔은 습관이 되어야 한다" — 하이퍼로컬 특성상 동네를 방문할 때마다 앱을 여는 것이 목표
+      </p>
+    </div>
+
+    <!-- Metric grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 reveal">
+
+      <div class="card-dark p-5 text-center">
+        <p class="metric-num">D+7</p>
+        <p class="font-mono text-xs mt-2" style="color:var(--i400);">재방문율</p>
+        <p class="text-xs mt-1 text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">목표 40%</p>
+      </div>
+
+      <div class="card-dark p-5 text-center">
+        <p class="metric-num">3x</p>
+        <p class="font-mono text-xs mt-2" style="color:var(--i400);">주간 BOOM</p>
+        <p class="text-xs mt-1 text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">활성 유저 기준</p>
+      </div>
+
+      <div class="card-dark p-5 text-center">
+        <p class="metric-num">60s</p>
+        <p class="font-mono text-xs mt-2" style="color:var(--i400);">첫 게시까지</p>
+        <p class="text-xs mt-1 text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">온보딩 완료 후</p>
+      </div>
+
+      <div class="card-dark p-5 text-center">
+        <p class="metric-num">10+</p>
+        <p class="font-mono text-xs mt-2" style="color:var(--i400);">HOT 핀 임계치</p>
+        <p class="text-xs mt-1 text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">반응 수 기준</p>
+      </div>
+
+    </div>
+
+    <!-- Personas -->
+    <div class="reveal mb-4">
+      <span class="section-label" style="color:var(--f400);">페르소나</span>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 reveal">
+
+      <div class="card-dark p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="mbti-avatar mbti-fire" style="width:48px;height:48px;font-size:0.55rem;">ENTP</div>
+          <div>
+            <p class="font-display font-bold text-white" style="font-family:'Space Grotesk',sans-serif;">지은 (24, 대학생)</p>
+            <p class="font-mono text-xs" style="color:var(--f400);">ENTP · 콘텐츠 크리에이터</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed mb-3" style="font-family:'Noto Sans KR',sans-serif;">
+          홍대·연남에서 매주 새로운 핫플을 발굴하는 유저. 팔로워에게 보여주기 위한 인스타보다,
+          지금 이 순간 "여기 진짜 맛있어!"를 공유하는 것이 더 재밌다.
+        </p>
+        <div class="flex flex-wrap gap-1">
+          <span class="tag" style="font-size:0.55rem;">발굴형</span>
+          <span class="tag" style="font-size:0.55rem;">HOT 핀 생성자</span>
+          <span class="tag" style="font-size:0.55rem;">주 5회+ 방문</span>
+        </div>
+      </div>
+
+      <div class="card-dark p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="mbti-avatar mbti-cool" style="width:48px;height:48px;font-size:0.55rem;">INTJ</div>
+          <div>
+            <p class="font-display font-bold text-white" style="font-family:'Space Grotesk',sans-serif;">민준 (29, 직장인)</p>
+            <p class="font-mono text-xs" style="color:#60A5FA;">INTJ · 정보 수집가</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed mb-3" style="font-family:'Noto Sans KR',sans-serif;">
+          점심 시간 전 사무실 근처 맛집 대기 상황을 확인하려 붐빔을 열다.
+          직접 올리진 않지만 반응으로 기여. 위치 기반 실용 정보가 핵심 가치.
+        </p>
+        <div class="flex flex-wrap gap-1">
+          <span class="tag" style="font-size:0.55rem; background:rgba(59,130,246,0.1); color:#60A5FA; border-color:rgba(59,130,246,0.25);">소비형</span>
+          <span class="tag" style="font-size:0.55rem; background:rgba(59,130,246,0.1); color:#60A5FA; border-color:rgba(59,130,246,0.25);">반응 기여자</span>
+          <span class="tag" style="font-size:0.55rem; background:rgba(59,130,246,0.1); color:#60A5FA; border-color:rgba(59,130,246,0.25);">평일 점심 주 5회</span>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
-<div class="section-divider"></div>
+<!-- ════════════════════════════════════════════════
+     §7 GTM — light
+════════════════════════════════════════════════ -->
+<section class="section-light py-20 px-6" aria-labelledby="gtm-title">
+  <div class="max-w-5xl mx-auto">
 
-<!-- APPENDIX -->
-<section class="section">
-  <span class="section-number">Appendix</span>
-  <h2 class="section-title">화면 인벤토리</h2>
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f500);">// 07 · GO-TO-MARKET</span>
+    </div>
+
+    <h2 id="gtm-title" class="font-display text-4xl md:text-5xl font-bold mb-10 reveal" style="font-family:'Space Grotesk',sans-serif;">
+      시작은 하나의<br>핫플레이스
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+
+      <div class="card-light p-6 reveal">
+        <div class="section-label mb-3" style="color:var(--f500);">PHASE 1</div>
+        <h3 class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">씨앗 시장</h3>
+        <p class="text-sm text-gray-500 leading-relaxed mb-4" style="font-family:'Noto Sans KR',sans-serif;">
+          홍대·연남 1개 상권에 집중. 오프라인 커뮤니티와 협력해 초기 게시물 밀도를 인위적으로 만든다.
+          빈 피드는 붐빔의 적.
+        </p>
+        <div class="flex flex-wrap gap-1">
+          <span class="tag">홍대·연남</span>
+          <span class="tag">밀도 우선</span>
+        </div>
+      </div>
+
+      <div class="card-light p-6 reveal">
+        <div class="section-label mb-3" style="color:var(--f500);">PHASE 2</div>
+        <h3 class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">바이럴 확산</h3>
+        <p class="text-sm text-gray-500 leading-relaxed mb-4" style="font-family:'Noto Sans KR',sans-serif;">
+          HOT 핀을 SNS에 스크린샷 공유하는 자연 바이럴 유도. 지도 위 데이터가 콘텐츠가 된다.
+          "여기 지금 터지고 있음" 밈 형성.
+        </p>
+        <div class="flex flex-wrap gap-1">
+          <span class="tag">HOT 핀 스크린샷</span>
+          <span class="tag">SNS 바이럴</span>
+        </div>
+      </div>
+
+      <div class="card-light p-6 reveal">
+        <div class="section-label mb-3" style="color:var(--f500);">PHASE 3</div>
+        <h3 class="font-display font-bold text-lg mb-3" style="font-family:'Space Grotesk',sans-serif;">B2B 수익화</h3>
+        <p class="text-sm text-gray-500 leading-relaxed mb-4" style="font-family:'Noto Sans KR',sans-serif;">
+          조르기 수요 데이터를 로컬 비즈니스에 제공. HOT 핀 주변 상권 알림 구독 서비스.
+          유저 데이터를 팔지 않는 프라이버시 우선 수익 모델.
+        </p>
+        <div class="flex flex-wrap gap-1">
+          <span class="tag">수요 데이터</span>
+          <span class="tag">B2B SaaS</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cold start strategy -->
+    <div class="reveal card-light p-6 md:p-8 border-l-4" style="border-left-color:var(--f500);">
+      <p class="section-label mb-2" style="color:var(--f500);">콜드 스타트 전략</p>
+      <p class="font-display text-xl font-bold mb-3" style="font-family:'Space Grotesk',sans-serif;">
+        "빈 피드 문제"를 선점 유저로 해결한다
+      </p>
+      <p class="text-sm text-gray-500 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+        대학 동아리·오프라인 모임 단위로 초기 유저를 모집해 특정 상권에 게시물을 밀집 생성.
+        서비스 런칭 전 2주간 해당 상권에서 하루 50건 이상의 게시물을 유지하는 것이 목표.
+        HOT 핀이 생성되기 시작하면 자연 유입이 따라온다.
+      </p>
+    </div>
 
   <div class="table-wrap reveal">
     <table>
@@ -1802,22 +2261,223 @@ td:first-child {
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="f-title">🔥 BoomBim</div>
-  <div class="f-sub">오프라인의 복작거림을 온라인에서도</div>
-  <div class="f-author">Product Requirements Document — 최대호 (PM)</div>
+<!-- ════════════════════════════════════════════════
+     §8 BACKLOG + OPEN Q — dark
+════════════════════════════════════════════════ -->
+<section class="section-dark py-20 px-6" aria-labelledby="backlog-title">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f400);">// 08 · BACKLOG &amp; OPEN QUESTIONS</span>
+    </div>
+
+    <h2 id="backlog-title" class="font-display text-4xl md:text-5xl font-bold mb-10 reveal" style="font-family:'Space Grotesk',sans-serif; color:#fff;">
+      아직 열려있는 것들
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+
+      <!-- Backlog -->
+      <div class="reveal">
+        <p class="font-display font-bold text-lg mb-4 text-white" style="font-family:'Space Grotesk',sans-serif;">Product Backlog (v1.1+)</p>
+        <div class="space-y-3">
+
+          <div class="card-dark p-4 flex items-start gap-3">
+            <span class="font-mono text-xs font-bold mt-0.5" style="color:var(--f400);">P1</span>
+            <div>
+              <p class="text-sm font-medium text-white mb-1" style="font-family:'Noto Sans KR',sans-serif;">AR 핀 뷰 (카메라 모드)</p>
+              <p class="text-xs text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">카메라를 갖다 대면 주변 HOT 핀이 AR 오버레이로 보이는 기능</p>
+            </div>
+          </div>
+
+          <div class="card-dark p-4 flex items-start gap-3">
+            <span class="font-mono text-xs font-bold mt-0.5" style="color:var(--f400);">P1</span>
+            <div>
+              <p class="text-sm font-medium text-white mb-1" style="font-family:'Noto Sans KR',sans-serif;">조르기 → 이벤트 자동 연결</p>
+              <p class="text-xs text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">수요 임계치 달성 시 비즈니스 대시보드 알림 + 1클릭 이벤트 생성</p>
+            </div>
+          </div>
+
+          <div class="card-dark p-4 flex items-start gap-3">
+            <span class="font-mono text-xs font-bold mt-0.5" style="color:var(--i400);">P2</span>
+            <div>
+              <p class="text-sm font-medium text-white mb-1" style="font-family:'Noto Sans KR',sans-serif;">MBTI 매칭 채팅</p>
+              <p class="text-xs text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">같은 HOT 핀에 있는 유저와 익명 1:1 채팅. 오프라인 연결 촉진.</p>
+            </div>
+          </div>
+
+          <div class="card-dark p-4 flex items-start gap-3">
+            <span class="font-mono text-xs font-bold mt-0.5" style="color:var(--i400);">P2</span>
+            <div>
+              <p class="text-sm font-medium text-white mb-1" style="font-family:'Noto Sans KR',sans-serif;">핀 히스토리 (동네 기록)</p>
+              <p class="text-xs text-gray-500" style="font-family:'Noto Sans KR',sans-serif;">특정 장소의 HOT 히스토리를 타임라인으로 볼 수 있는 "장소 기억" 기능</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Open Questions -->
+      <div class="reveal">
+        <p class="font-display font-bold text-lg mb-4 text-white" style="font-family:'Space Grotesk',sans-serif;">Open Questions</p>
+        <div class="space-y-3">
+
+          <div class="card-dark p-4">
+            <p class="font-mono text-xs font-bold mb-2" style="color:var(--f400);">Q1 · 프라이버시</p>
+            <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+              "익명이지만 위치가 노출된다"는 불안을 어떻게 줄일 것인가?
+              정확한 좌표 대신 구역(block) 단위 표시를 검토 중.
+            </p>
+          </div>
+
+          <div class="card-dark p-4">
+            <p class="font-mono text-xs font-bold mb-2" style="color:var(--f400);">Q2 · 어뷰징</p>
+            <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+              가짜 HOT 핀 생성, 경쟁 상권 방해 등 악의적 사용을 어떻게 탐지하는가?
+              ML 기반 이상 패턴 탐지 + 커뮤니티 신고 시스템 병행 예정.
+            </p>
+          </div>
+
+          <div class="card-dark p-4">
+            <p class="font-mono text-xs font-bold mb-2" style="color:var(--f400);">Q3 · 콘텐츠 품질</p>
+            <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+              6시간 소멸이 "아무말 대잔치"를 유발할 수 있다.
+              반응률 낮은 게시물의 HOT 핀 기여도를 줄이는 알고리즘으로 자체 조절 예정.
+            </p>
+          </div>
+
+          <div class="card-dark p-4">
+            <p class="font-mono text-xs font-bold mb-2" style="color:var(--f400);">Q4 · 수익 모델</p>
+            <p class="text-xs text-gray-400 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+              B2B 조르기 데이터 판매 vs 광고 노출 vs 프리미엄 기능?
+              유저 신뢰를 해치지 않는 수익화 방식의 우선순위 결정이 필요.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     §9 REFLECTION — light
+════════════════════════════════════════════════ -->
+<section class="section-light py-20 px-6" aria-labelledby="reflection-title">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="reveal mb-3">
+      <span class="section-label" style="color:var(--f500);">// 09 · REFLECTION</span>
+    </div>
+
+    <h2 id="reflection-title" class="font-display text-4xl md:text-5xl font-bold mb-10 reveal" style="font-family:'Space Grotesk',sans-serif;">
+      배운 것들
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+
+      <div class="reveal space-y-6">
+
+        <div>
+          <p class="font-display font-bold text-base mb-2" style="font-family:'Space Grotesk',sans-serif; color:var(--f500);">위치 기반의 양면성</p>
+          <p class="text-sm text-gray-600 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+            위치는 붐빔의 핵심 가치이자 가장 큰 진입 장벽이다. "위치를 왜 줘야 하나?"라는 질문에
+            "지금 이 순간의 이야기를 보려면 필요하다"는 맥락 기반 설명이 수락률을 높인다는 것을 배웠다.
+            권한 요청은 타이밍이 전부다.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-display font-bold text-base mb-2" style="font-family:'Space Grotesk',sans-serif; color:var(--f500);">콜드 스타트는 가장 어렵고 가장 중요한 문제</p>
+          <p class="text-sm text-gray-600 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+            피드가 비어있으면 서비스는 죽는다. 특히 하이퍼로컬 플랫폼은 "내 주변에 아무것도 없다"는
+            순간 이탈률이 폭등한다. 씨앗 상권 집중 전략과 초기 커뮤니티 확보가 기술보다 우선이다.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="reveal space-y-6">
+
+        <div>
+          <p class="font-display font-bold text-base mb-2" style="font-family:'Space Grotesk',sans-serif; color:var(--f500);">6시간 소멸 — 부담 없는 공유의 심리</p>
+          <p class="text-sm text-gray-600 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+            "어차피 사라진다"는 사실이 게시 부담을 극적으로 낮춘다는 것을 스냅챗의 사례에서 확인했다.
+            SNS 피로 세대에게 영구 기록 없는 플랫폼은 해방감을 준다.
+            하지만 이것이 콘텐츠 품질 저하로 이어지지 않도록 반응 알고리즘으로 조절해야 한다.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-display font-bold text-base mb-2" style="font-family:'Space Grotesk',sans-serif; color:var(--f500);">MBTI는 서비스의 언어가 되어야 한다</p>
+          <p class="text-sm text-gray-600 leading-relaxed" style="font-family:'Noto Sans KR',sans-serif;">
+            한국 Z세대에게 MBTI는 단순 성격 분류가 아닌 자기표현 언어다.
+            이를 아바타 시스템에 녹이는 것은 "재밌는 기능"이 아니라
+            타깃 유저가 즉시 공감하는 정체성 구조를 만드는 것이었다.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Final CTA -->
+    <div class="reveal">
+      <div style="
+        background: var(--d900);
+        border-radius: 20px;
+        padding: 48px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      ">
+        <div style="
+          position:absolute; inset:0;
+          background: radial-gradient(ellipse 55% 55% at 50% 50%, rgba(255,71,34,0.12) 0%, transparent 70%);
+          pointer-events:none;
+        "></div>
+        <div class="relative z-10">
+          <p class="font-mono text-xs mb-3" style="color:var(--f400); letter-spacing:0.15em;">BOOM WITH US</p>
+          <p class="font-display text-2xl md:text-3xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif;">
+            지금 이 순간, 여기서만 통하는 이야기
+          </p>
+          <p class="text-gray-400 text-sm mb-8 max-w-md mx-auto" style="font-family:'Noto Sans KR',sans-serif;">
+            붐빔은 아직 만들어가는 중입니다. 이 케이스 스터디에 대해 더 이야기하고 싶다면 연락주세요.
+          </p>
+          <div class="flex flex-wrap gap-3 justify-center">
+            <a href="/" class="inline-flex items-center gap-2 font-display font-semibold text-sm px-6 py-3 rounded-xl text-white" style="font-family:'Space Grotesk',sans-serif; background:var(--f500); transition:background 0.2s;" aria-label="홈으로 돌아가기">← 홈으로</a>
+            <a href="/case-studies/tikit" class="inline-flex items-center gap-2 font-display font-semibold text-sm px-6 py-3 rounded-xl" style="font-family:'Space Grotesk',sans-serif; background:rgba(255,255,255,0.08); color:var(--i200); border:1px solid rgba(255,255,255,0.1); transition:background 0.2s;" aria-label="다음 케이스 스터디: Tikit">Tikit 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────── -->
+<footer style="background:var(--d900); border-top:1px solid rgba(255,255,255,0.06); padding:24px; text-align:center;">
+  <p class="font-mono text-xs" style="color:var(--i400);">
+    © 2025 Daeho Choi · PM Portfolio ·
+    <a href="mailto:classyh7@gmail.com" style="color:var(--f400); text-decoration:none;">classyh7@gmail.com</a>
+  </p>
 </footer>
 
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+// Scroll-reveal with IntersectionObserver
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.08, rootMargin: '0px 0px -36px 0px' }
+);
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>

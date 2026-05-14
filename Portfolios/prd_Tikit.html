@@ -50,13 +50,13 @@
       overflow-wrap: anywhere;
     }
 
-    .font-mono {
+    .font-mono-custom {
       font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, "Courier New", monospace;
       letter-spacing: 0;
     }
 
     .mono-label {
-      font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      font-family: "JetBrains Mono", "SF Mono", Menlo, "Courier New", monospace;
       font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.2em;
@@ -64,272 +64,647 @@
       color: var(--text-dim);
     }
 
-    .text-balance { text-wrap: balance; }
-    .text-pretty { text-wrap: pretty; }
+    .letterpress {
+      text-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 -1px 0 rgba(0,0,0,0.4);
+    }
 
-    /* Hero gradient orbs */
-    .orb {
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Scroll progress */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      z-index: 1000;
+      transition: width 0.1s linear;
+    }
+
+    /* Nav */
+    .nav-pill {
+      background: rgba(23,23,26,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active {
+      background: rgba(129,140,248,0.12);
+      color: var(--accent);
+    }
+
+    /* Grid background */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Blob background */
+    .blob-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
       position: absolute;
       border-radius: 50%;
       filter: blur(80px);
+      mix-blend-mode: plus-lighter;
       opacity: 0.45;
-      pointer-events: none;
     }
-    .orb-1 { width: 520px; height: 520px; background: #312E81; top: -140px; left: -120px; }
-    .orb-2 { width: 440px; height: 440px; background: #1E1B4B; top: 120px; right: -120px; }
-    .orb-3 { width: 360px; height: 360px; background: #818CF8; bottom: -120px; left: 30%; opacity: 0.3; }
 
-    /* Ticket card */
-    .ticket {
-      position: relative;
-      aspect-ratio: 3 / 4;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow:
-        0 40px 80px -20px rgba(0, 0, 0, 0.5),
-        0 20px 40px -10px rgba(129, 140, 248, 0.2),
-        0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-      background:
-        linear-gradient(135deg, #312E81 0%, #1E1B4B 50%, #0a0a0b 100%);
-      transform: perspective(1200px) rotateY(-8deg) rotateX(4deg);
-      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    .blob-1 {
+      width: 520px; height: 520px;
+      background: var(--accent);
+      top: -80px; left: -120px;
+      animation: drift1 32s ease-in-out infinite alternate;
     }
-    .ticket:hover {
-      transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) scale(1.02);
+    .blob-2 {
+      width: 440px; height: 440px;
+      background: var(--accent-2);
+      top: 60px; right: -100px;
+      animation: drift2 38s ease-in-out infinite alternate;
     }
-    .ticket::before {
-      content: "";
+    .blob-3 {
+      width: 360px; height: 360px;
+      background: var(--accent-3);
+      bottom: -60px; left: 30%;
+      animation: drift3 28s ease-in-out infinite alternate;
+    }
+    .blob-4 {
+      width: 300px; height: 300px;
+      background: var(--accent-4);
+      bottom: 40px; right: 20%;
+      animation: drift4 34s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(60px, 40px) scale(1.08); }
+      66%  { transform: translate(-30px, 80px) scale(0.95); }
+      100% { transform: translate(40px, -30px) scale(1.04); }
+    }
+    @keyframes drift2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(-70px, 50px) scale(1.06); }
+      66%  { transform: translate(40px, 90px) scale(0.92); }
+      100% { transform: translate(-50px, -40px) scale(1.1); }
+    }
+    @keyframes drift3 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(80px, -60px) scale(1.12); }
+      100% { transform: translate(-40px, 30px) scale(0.96); }
+    }
+    @keyframes drift4 {
+      0%   { transform: translate(0, 0) scale(1); }
+      40%  { transform: translate(-60px, -80px) scale(1.08); }
+      100% { transform: translate(50px, 40px) scale(0.94); }
+    }
+
+    /* Paper grain SVG noise */
+    .paper-grain {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(circle at 30% 20%, rgba(129, 140, 248, 0.35) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(232, 121, 249, 0.25) 0%, transparent 50%);
+      opacity: 0.06;
+      mix-blend-mode: multiply;
       pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+      border-radius: inherit;
     }
-    .ticket::after {
-      content: "";
+
+    /* Ticket 3D scene */
+    .ticket-scene {
+      perspective: 1200px;
+      width: 260px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ticket-flipper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .ticket-scene.is-flipped .ticket-flipper {
+      transform: rotateY(180deg);
+    }
+
+    .ticket-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+
+    .ticket-front {
+      background: linear-gradient(148deg, #312E81 0%, #4C1D95 28%, #6D28D9 52%, #701A75 72%, #1E1B4B 100%);
+      box-shadow:
+        0 0 0 1px rgba(129,140,248,0.2),
+        0 32px 64px rgba(0,0,0,0.6),
+        0 8px 24px rgba(129,140,248,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      transform: perspective(1200px) rotateY(-8deg) rotateX(4deg);
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .ticket-scene:not(.is-flipped):hover .ticket-front {
+      transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) scale(1.02);
+      box-shadow:
+        0 0 0 1px rgba(129,140,248,0.35),
+        0 48px 80px rgba(0,0,0,0.7),
+        0 12px 32px rgba(232,121,249,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .ticket-back {
+      background: #f7f7f8;
+      transform: rotateY(180deg);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+    }
+
+    /* Perforation dashed line */
+    .ticket-perf {
       position: absolute;
       left: 50%;
       top: 62%;
-      width: 110%;
+      width: calc(100% + 32px);
       height: 1px;
-      border-top: 2px dashed rgba(255, 255, 255, 0.15);
-      transform: translate(-50%, 0);
+      transform: translateX(-50%);
+      border-top: 2px dashed rgba(255,255,255,0.2);
     }
+
+    .ticket-perf-back {
+      border-top-color: rgba(0,0,0,0.12);
+    }
+
+    /* Notch circles */
     .ticket-notch {
       position: absolute;
       top: 62%;
-      width: 22px;
-      height: 22px;
-      background: var(--bg);
+      width: 20px; height: 20px;
       border-radius: 50%;
+      background: var(--bg);
       transform: translateY(-50%);
     }
-    .ticket-notch.left { left: -11px; }
-    .ticket-notch.right { right: -11px; }
+    .ticket-notch-left { left: -10px; }
+    .ticket-notch-right { right: -10px; }
 
-    /* Decorative shapes on ticket */
-    .deco {
+    /* Decorative orbs on ticket */
+    .t-deco-orb {
       position: absolute;
       border-radius: 50%;
-      mix-blend-mode: screen;
-      opacity: 0.6;
-    }
-    .deco-1 { width: 110px; height: 110px; background: #818CF8; top: 10%; right: 12%; }
-    .deco-2 { width: 60px; height: 60px; background: #E879F9; top: 30%; left: 15%; border-radius: 20%; }
-    .deco-3 { width: 36px; height: 36px; background: #22D3EE; top: 45%; right: 30%; }
-
-    /* Animated fade-in */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+      filter: blur(28px);
+      opacity: 0.5;
     }
 
     /* Section marker */
     .section-marker {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
+      gap: 8px;
+      margin-bottom: 16px;
     }
     .section-marker::before {
-      content: "";
-      display: inline-block;
-      width: 28px;
+      content: '';
+      display: block;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Gradient divider */
+    .grad-divider {
       height: 1px;
-      background: var(--text-dim);
+      background: linear-gradient(90deg, transparent, rgba(129,140,248,0.5) 20%, rgba(232,121,249,0.5) 50%, rgba(255,140,66,0.5) 80%, transparent);
+      border: none;
     }
 
-    /* Gradient text */
-    .gradient-text {
-      background: linear-gradient(135deg, #818CF8 0%, #E879F9 50%, #FF8C42 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    /* Section glow on scroll */
+    .section-glow {
+      position: relative;
+    }
+    .section-glow::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 300px; height: 120px;
+      background: radial-gradient(ellipse, rgba(129,140,248,0.08) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    /* Card hover */
-    .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      transition: border-color 0.3s, transform 0.3s, background 0.3s;
-    }
-    .feature-card:hover {
-      border-color: rgba(129, 140, 248, 0.4);
-      transform: translateY(-4px);
-      background: #1c1c21;
-    }
-
-    /* Nav */
-    .nav-pill {
-      background: rgba(10, 10, 11, 0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    /* Stack badges */
+    /* Badges */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 12px;
-      font-size: 12px;
-      font-weight: 500;
-      background: var(--card);
-      border: 1px solid var(--border);
+      padding: 3px 10px;
       border-radius: 999px;
-      color: var(--text-muted);
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .badge:hover {
-      border-color: rgba(129, 140, 248, 0.5);
-      color: var(--text);
-    }
-    .badge-accent {
-      background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(232, 121, 249, 0.08));
-      border-color: rgba(129, 140, 248, 0.35);
-      color: var(--text);
-    }
-
-    /* Table */
-    .tikit-table {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--card);
-    }
-    .tikit-table table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .tikit-table th {
-      text-align: left;
-      padding: 16px 20px;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      background: #131316;
-      border-bottom: 1px solid var(--border);
-    }
-    .tikit-table td {
-      padding: 18px 20px;
-      font-size: 14px;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-    .tikit-table td:first-child {
-      color: var(--text);
       font-weight: 600;
-      white-space: nowrap;
+      letter-spacing: 0.04em;
+      border: 1px solid;
     }
-    .tikit-table tr:last-child td { border-bottom: none; }
-
-    /* Subtle grid background */
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
+    .badge-indigo {
+      background: rgba(129,140,248,0.1);
+      border-color: rgba(129,140,248,0.3);
+      color: var(--accent);
+    }
+    .badge-magenta {
+      background: rgba(232,121,249,0.1);
+      border-color: rgba(232,121,249,0.3);
+      color: var(--accent-2);
+    }
+    .badge-orange {
+      background: rgba(255,140,66,0.1);
+      border-color: rgba(255,140,66,0.3);
+      color: var(--accent-3);
+    }
+    .badge-cyan {
+      background: rgba(34,211,238,0.1);
+      border-color: rgba(34,211,238,0.3);
+      color: var(--accent-4);
+    }
+    .badge-neutral {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--border);
+      color: var(--text-muted);
     }
 
-    /* Scroll progress */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #818CF8, #E879F9, #FF8C42);
-      z-index: 100;
-      width: 0%;
-      transition: width 0.1s linear;
-    }
-
-    /* Sprint card — timeline */
-    .sprint-card {
-      position: relative;
+    /* Feature cards */
+    .feature-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px 28px 28px 32px;
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(129,140,248,0.4);
+      transform: translateY(-2px);
+    }
+
+    .feat-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    /* Mood swatches */
+    .mood-swatch {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .mood-swatch:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .mood-chip {
+      height: 60px;
+    }
+    .mood-name {
+      padding: 8px 10px 6px;
+      background: rgba(10,10,11,0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Sprint cards */
+    .sprint-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
       overflow: hidden;
     }
     .sprint-card::before {
-      content: "";
+      content: '';
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: linear-gradient(180deg, var(--accent-color, #818CF8), transparent);
+      top: 0; left: 0; right: 0;
+      height: 2px;
     }
-    .sprint-1 { --accent-color: #818CF8; }
-    .sprint-2 { --accent-color: #E879F9; }
-    .sprint-3 { --accent-color: #FF8C42; }
+    .sprint-1::before { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .sprint-2::before { background: linear-gradient(90deg, var(--accent-2), var(--accent-3)); }
+    .sprint-3::before { background: linear-gradient(90deg, var(--accent-3), var(--accent-4)); }
 
-    @media (max-width: 768px) {
-      .orb-1 { width: 320px; height: 320px; }
-      .orb-2 { width: 280px; height: 280px; }
-      .ticket { transform: none; }
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* Accordion */
+    details summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      font-weight: 600;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary .arrow {
+      transition: transform 0.3s;
+      flex-shrink: 0;
+      color: var(--text-dim);
+    }
+    details[open] summary .arrow {
+      transform: rotate(180deg);
+    }
+    details .detail-body {
+      padding-bottom: 20px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .decision-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .decision-item:last-child { border-bottom: none; }
+
+    /* Callout */
+    .callout {
+      background: rgba(129,140,248,0.07);
+      border: 1px solid rgba(129,140,248,0.2);
+      border-radius: 10px;
+      padding: 16px 20px;
     }
 
-    /* Print-friendly (PDF export) */
-    @media print {
-      body { background: white; color: black; }
-      .orb, .scroll-progress, nav { display: none; }
-      .feature-card, .tikit-table { border-color: #e5e5e5; background: white; }
-      .ticket { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    /* Mobile */
+    @media (max-width: 640px) {
+      .ticket-scene { width: 200px; }
+      .blob-1 { width: 280px; height: 280px; }
+      .blob-2 { width: 240px; height: 240px; }
+      .blob-3 { width: 200px; height: 200px; }
+      .blob-4 { width: 180px; height: 180px; }
     }
   </style>
 </head>
-<body class="overflow-x-hidden">
+
+<body class="grid-bg min-h-screen">
+
+  <!-- Scroll progress -->
+  <div id="scroll-progress" style="width:0%"></div>
 
   <!-- ═════ SITE BAR (blog-level navigation) ═════ -->
-  <div style="position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,10,11,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">
-    <div style="max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:13px;">
-      <a href="/prjt-blog/" style="color:#fff;font-weight:700;text-decoration:none;letter-spacing:-0.01em;">daeho-choi<span style="color:#818CF8;">.</span></a>
-      <nav style="display:flex;gap:18px;">
-        <a href="/prjt-blog/" style="color:#a1a1aa;text-decoration:none;">Home</a>
-        <a href="/prjt-blog/case-studies/" style="color:#fff;text-decoration:none;">Case Studies</a>
-        <a href="/prjt-blog/portfolio/" style="color:#a1a1aa;text-decoration:none;">CV</a>
-        <a href="/prjt-blog/about/" style="color:#a1a1aa;text-decoration:none;">About</a>
-      </nav>
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 nav-pill flex items-center gap-1 px-3 py-2">
+    <a href="/prjt-blog/" class="nav-link">Home</a>
+    <a href="/prjt-blog/case-studies/" class="nav-link active">Case Studies</a>
+    <a href="/prjt-blog/about/" class="nav-link">About</a>
+  </nav>
+  <!-- ═════ /SITE BAR ═════ -->
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center pt-24 pb-20 overflow-hidden">
+
+    <!-- Blob background -->
+    <div class="blob-container">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="blob blob-4"></div>
+    </div>
+
+    <!-- Radial vignette overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 80% 60% at 50% 40%, transparent 30%, var(--bg) 85%);"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 w-full">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+
+        <!-- Hero text -->
+        <div class="flex-1 order-2 lg:order-1">
+          <div class="section-marker mono-label reveal">TIKIT · CASE STUDY</div>
+
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mb-6 letterpress reveal reveal-delay-1">
+            티켓처럼<br>
+            <span class="gradient-text">공유하는</span><br>
+            초대장
+          </h1>
+
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-xl mb-8 reveal reveal-delay-2">
+            링크 한 줄로 초대가 <em class="text-[var(--text)] not-italic font-medium">감상</em>이 되는 경험.
+            기획·디자인·개발 혼자, 3주 만에 런칭한 한국어 이벤트 초대장 서비스.
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-10 reveal reveal-delay-3">
+            <span class="badge badge-indigo">Next.js 15</span>
+            <span class="badge badge-magenta">Supabase</span>
+            <span class="badge badge-orange">Framer Motion</span>
+            <span class="badge badge-cyan">Cloudflare R2</span>
+            <span class="badge badge-neutral">Solo Project</span>
+            <span class="badge badge-neutral">3 Weeks</span>
+          </div>
+
+          <div class="flex flex-wrap gap-4 reveal reveal-delay-4">
+            <a href="https://tikit.life" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all"
+               style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; box-shadow: 0 4px 20px rgba(129,140,248,0.35);">
+              라이브 서비스 보기
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Ticket -->
+        <div class="order-1 lg:order-2 flex flex-col items-center gap-4 reveal reveal-delay-2">
+          <div class="ticket-scene" id="ticketScene" onclick="flipTicket()">
+            <div class="ticket-flipper" id="ticketFlipper">
+
+              <!-- Front face -->
+              <div class="ticket-face ticket-front" id="heroFront">
+                <!-- Paper grain -->
+                <div class="paper-grain"></div>
+                <!-- Deco orbs -->
+                <div class="t-deco-orb" style="width:160px;height:160px;background:#818CF8;top:-40px;right:-40px;"></div>
+                <div class="t-deco-orb" style="width:120px;height:120px;background:#E879F9;bottom:30%;left:-30px;"></div>
+
+                <!-- Content -->
+                <div class="relative z-10 h-full flex flex-col p-6">
+                  <!-- Top stub -->
+                  <div class="flex items-start justify-between mb-auto">
+                    <div>
+                      <p class="mono-label mb-1" style="color:rgba(255,255,255,0.4);">EVENT</p>
+                      <p class="text-white font-bold text-lg leading-snug letterpress">서울 재즈 페스티벌<br>2025</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="mono-label mb-1" style="color:rgba(255,255,255,0.4);">DATE</p>
+                      <p class="text-white font-semibold text-sm">MAY 24</p>
+                    </div>
+                  </div>
+
+                  <!-- Perforation zone -->
+                  <div style="position:relative; margin: 0 -24px;">
+                    <div class="ticket-perf"></div>
+                    <div class="ticket-notch ticket-notch-left"></div>
+                    <div class="ticket-notch ticket-notch-right"></div>
+                  </div>
+
+                  <!-- Bottom stub -->
+                  <div class="mt-auto pt-8 flex items-end justify-between">
+                    <div>
+                      <p class="font-bold text-white tracking-widest text-sm letterpress">TIKIT.</p>
+                      <p class="mono-label mt-0.5" style="color:rgba(255,255,255,0.35);">ADMIT ONE</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="mono-label" style="color:rgba(255,255,255,0.35);">TAP TO FLIP</p>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2" class="ml-auto mt-1"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back face -->
+              <div class="ticket-face ticket-back">
+                <div class="relative z-10 h-full flex flex-col p-6">
+                  <!-- Back top -->
+                  <div class="mb-4">
+                    <p class="mono-label mb-2" style="color:#71717a;">TICKET DETAILS</p>
+                    <div class="space-y-2">
+                      <div class="flex justify-between text-xs" style="color:#18181b;">
+                        <span class="font-medium">VENUE</span>
+                        <span style="color:#3f3f46;">올림픽공원 88잔디마당</span>
+                      </div>
+                      <div class="flex justify-between text-xs" style="color:#18181b;">
+                        <span class="font-medium">SEAT</span>
+                        <span style="color:#3f3f46;">자유석</span>
+                      </div>
+                      <div class="flex justify-between text-xs" style="color:#18181b;">
+                        <span class="font-medium">MOOD</span>
+                        <span style="color:#3f3f46;">Sunset</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- QR placeholder -->
+                  <div class="flex-1 flex items-center justify-center">
+                    <div style="width:80px;height:80px;background:#f4f4f5;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="2" fill="#18181b"/>
+                        <rect x="5" y="5" width="14" height="14" rx="1" fill="#f4f4f5"/>
+                        <rect x="7" y="7" width="10" height="10" rx="1" fill="#18181b"/>
+                        <rect x="38" y="2" width="20" height="20" rx="2" fill="#18181b"/>
+                        <rect x="41" y="5" width="14" height="14" rx="1" fill="#f4f4f5"/>
+                        <rect x="43" y="7" width="10" height="10" rx="1" fill="#18181b"/>
+                        <rect x="2" y="38" width="20" height="20" rx="2" fill="#18181b"/>
+                        <rect x="5" y="41" width="14" height="14" rx="1" fill="#f4f4f5"/>
+                        <rect x="7" y="43" width="10" height="10" rx="1" fill="#18181b"/>
+                        <rect x="28" y="28" width="4" height="4" fill="#18181b"/>
+                        <rect x="34" y="28" width="4" height="4" fill="#18181b"/>
+                        <rect x="40" y="28" width="4" height="4" fill="#18181b"/>
+                        <rect x="46" y="28" width="4" height="4" fill="#18181b"/>
+                        <rect x="52" y="28" width="6" height="4" fill="#18181b"/>
+                        <rect x="28" y="34" width="4" height="4" fill="#18181b"/>
+                        <rect x="36" y="34" width="6" height="4" fill="#18181b"/>
+                        <rect x="44" y="34" width="4" height="4" fill="#18181b"/>
+                        <rect x="28" y="40" width="4" height="4" fill="#18181b"/>
+                        <rect x="34" y="40" width="4" height="4" fill="#18181b"/>
+                        <rect x="40" y="42" width="6" height="4" fill="#18181b"/>
+                        <rect x="48" y="40" width="10" height="4" fill="#18181b"/>
+                        <rect x="28" y="46" width="4" height="4" fill="#18181b"/>
+                        <rect x="34" y="46" width="4" height="4" fill="#18181b"/>
+                        <rect x="40" y="48" width="4" height="4" fill="#18181b"/>
+                        <rect x="46" y="46" width="4" height="4" fill="#18181b"/>
+                        <rect x="52" y="46" width="6" height="6" fill="#18181b"/>
+                        <rect x="28" y="52" width="10" height="4" fill="#18181b"/>
+                        <rect x="40" y="54" width="4" height="4" fill="#18181b"/>
+                        <rect x="46" y="52" width="4" height="4" fill="#18181b"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <!-- Perf and bottom -->
+                  <div style="position:relative; margin: 0 -24px;">
+                    <div class="ticket-perf ticket-perf-back" style="border-top-color:rgba(0,0,0,0.1);"></div>
+                  </div>
+
+                  <div class="mt-6 flex items-end justify-between">
+                    <div>
+                      <p class="font-bold tracking-widest text-sm" style="color:#18181b;">TIKIT.</p>
+                      <p class="mono-label mt-0.5">SCAN TO ATTEND</p>
+                    </div>
+                    <p class="mono-label">#TKT-2025-0524</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <p class="mono-label text-center" style="color:rgba(255,255,255,0.2);">탭하면 뒤집혀요</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Meta strip -->
+  <div class="relative z-10 border-y" style="border-color: var(--border);">
+    <div class="max-w-6xl mx-auto px-6 py-6">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div class="reveal">
+          <p class="mono-label mb-2">ROLE</p>
+          <p class="text-sm font-semibold">Solo PM · Designer · Developer</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <p class="mono-label mb-2">TIMELINE</p>
+          <p class="text-sm font-semibold">2025년 4월 — 5월 (3주)</p>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <p class="mono-label mb-2">PLATFORM</p>
+          <p class="text-sm font-semibold">Web (모바일 우선)</p>
+        </div>
+        <div class="reveal reveal-delay-3">
+          <p class="mono-label mb-2">STATUS</p>
+          <p class="text-sm font-semibold" style="color:var(--accent-4);">● 라이브 운영 중</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="scroll-progress" id="scrollProgress" style="top:42px;"></div>
+  <!-- Main content -->
+  <main class="relative z-10 max-w-6xl mx-auto px-6 py-20 space-y-24">
 
   <!-- Nav -->
   <nav class="fixed top-14 left-1/2 -translate-x-1/2 z-50 nav-pill rounded-full px-5 py-3 hidden md:flex items-center gap-7 whitespace-nowrap max-w-[calc(100vw-2rem)] overflow-x-auto">
@@ -365,811 +740,620 @@
             기획 · 디자인 · 개발 · 배포까지<br>
             <span class="text-white font-medium">3주 만에 혼자 런칭한 웹 서비스</span>입니다.
           </p>
-          <div class="flex flex-wrap gap-3 mb-10">
-            <span class="badge badge-accent">🤖 AI 페어 프로그래밍</span>
-            <span class="badge">웹 · PC / Mobile</span>
-            <span class="badge">Next.js 16</span>
-            <span class="badge">Firebase</span>
-            <span class="badge">TypeScript</span>
+
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div class="feature-card reveal reveal-delay-1">
+              <div class="feat-icon" style="background:rgba(255,140,66,0.1); color:var(--accent-3);">📸</div>
+              <h3 class="font-semibold mb-1">이미지 카드</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">카카오톡 이미지로 보내지만 정보 수정이 불가능하고, 참석 여부를 확인할 방법이 없다.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+              <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">📋</div>
+              <h3 class="font-semibold mb-1">구글 폼</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">기능적이지만 차갑고 심심하다. 특별한 날의 초대장처럼 느껴지지 않는다.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+              <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">✍️</div>
+              <h3 class="font-semibold mb-1">직접 제작</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">Figma나 Canva로 만들면 이쁘지만, 링크 공유·RSVP·업데이트가 따로 따로 필요하다.</p>
+            </div>
           </div>
-          <div class="flex flex-wrap items-center gap-5 text-sm">
-            <a href="https://tikit.day" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-black font-semibold px-5 py-3 rounded-full hover:scale-[1.03] transition">
-              tikit.day 방문하기
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
-            </a>
-            <a href="#problem" class="text-[var(--text-muted)] hover:text-white transition">케이스 스터디 읽기 ↓</a>
+
+          <div class="callout reveal reveal-delay-4">
+            <p class="text-sm font-semibold mb-1 gradient-text">핵심 인사이트</p>
+            <p class="text-[var(--text-muted)] leading-relaxed">
+              초대장은 <strong class="text-[var(--text)]">감정적 경험</strong>이어야 한다. 정보 전달을 넘어 받는 사람이 "이 자리에 가고 싶다"고 느끼게 만드는 것.
+              그 경험을 링크 하나로 압축하면 어떨까?
+            </p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Ticket visual -->
-        <div class="relative flex justify-center">
-          <div class="ticket w-full max-w-[320px]">
-            <div class="deco deco-1"></div>
-            <div class="deco deco-2"></div>
-            <div class="deco deco-3"></div>
-            <div class="ticket-notch left"></div>
-            <div class="ticket-notch right"></div>
+    <!-- 02 Solution -->
+    <section class="section-glow reveal" id="solution">
+      <hr class="grad-divider mb-12">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <div class="section-marker mono-label">02 / SOLUTION</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">티켓이라는<br>메타포</h2>
+        </div>
+        <div class="lg:col-span-9 space-y-8">
+          <p class="text-[var(--text-muted)] leading-relaxed text-lg">
+            물리적 티켓이 주는 설렘 — 행사 전날 지갑에서 꺼내보는 느낌 — 을 디지털 링크로 옮겼다.
+            TIKIT은 다섯 가지 원칙으로 설계됐다.
+          </p>
 
-            <!-- Top (invitation side) -->
-            <div class="relative h-[62%] p-6 flex flex-col justify-between">
-              <div class="flex items-start justify-between">
-                <span class="mono-label">INVITATION · 2026</span>
-                <span class="mono-label">No.</span>
-              </div>
+          <div class="space-y-4">
+            <div class="flex gap-4 feature-card reveal reveal-delay-1">
+              <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">🎨</div>
               <div>
-                <div class="mono-label mb-2" style="color: rgba(255,255,255,0.5);">Event</div>
-                <h3 class="text-white font-black text-[28px] leading-tight tracking-[-0.02em]">
-                  Friday<br>Night<br>Studio.
-                </h3>
+                <h3 class="font-semibold mb-1">무드 셀렉션 — 분위기부터 고른다</h3>
+                <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+                  Sunset, Midnight, Energetic, Minimal, Romantic, Ocean의 6가지 테마 팔레트와
+                  Aurora, Cosmic, Jungle, Cyber 등 15가지 Lucky 그라디언트. 색을 고르는 것이 초대장 제작의 첫 단계가 된다.
+                </p>
               </div>
             </div>
+            <div class="flex gap-4 feature-card reveal reveal-delay-2">
+              <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">🎫</div>
+              <div>
+                <h3 class="font-semibold mb-1">3D 플립 티켓 — 수집하고 싶은 오브제</h3>
+                <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+                  앞면에는 이벤트명·날짜·무드 그라디언트, 뒷면에는 장소·상세 정보·QR코드가 담긴다.
+                  클릭하면 물리적 티켓처럼 뒤집힌다. 퍼포레이션 점선, 노치 컷, 페이퍼 텍스처까지 실제 티켓의 촉감을 시각 언어로 번역했다.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4 feature-card reveal reveal-delay-3">
+              <div class="feat-icon" style="background:rgba(255,140,66,0.1); color:var(--accent-3);">💬</div>
+              <div>
+                <h3 class="font-semibold mb-1">리얼타임 커뮤니티 — 초대 이후의 여운</h3>
+                <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+                  참석자들이 댓글과 사진(최대 5장, WebP 압축)을 남긴다.
+                  Supabase Realtime으로 즉각 동기화되어 이벤트 페이지가 살아있는 앨범이 된다.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4 feature-card reveal reveal-delay-4">
+              <div class="feat-icon" style="background:rgba(34,211,238,0.1); color:var(--accent-4);">📊</div>
+              <div>
+                <h3 class="font-semibold mb-1">대시보드 3-뷰 — 주최자의 컨트롤 타워</h3>
+                <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+                  Stack(카드 목록), List(테이블), Calendar(월별 뷰) 세 가지 뷰를 전환하며 이벤트를 관리.
+                  RSVP 수락·거절·대기 상태를 한눈에 파악한다.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4 feature-card reveal">
+              <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">🖼️</div>
+              <div>
+                <h3 class="font-semibold mb-1">Dynamic OG 이미지 — 공유될 때도 아름답다</h3>
+                <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+                  카카오·슬랙 등 SNS에 링크를 붙여넣으면 1200×630px 티켓 이미지가 자동 생성된다.
+                  <code class="text-xs px-1.5 py-0.5 rounded" style="background:var(--card);font-family:monospace;">next/og ImageResponse</code>로 서버에서 렌더링.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <!-- Bottom (stub) -->
-            <div class="absolute left-0 right-0 bottom-0 h-[38%] p-6 flex flex-col justify-between">
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <div class="mono-label mb-1" style="color: rgba(255,255,255,0.5);">Date</div>
-                  <div class="text-white font-bold text-sm">04.08 · WED</div>
+    <!-- 03 Mood Palette -->
+    <section class="section-glow reveal" id="mood">
+      <hr class="grad-divider mb-12">
+      <div class="space-y-8">
+        <div class="flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            <div class="section-marker mono-label">03 / MOOD PALETTE</div>
+            <h2 class="text-3xl font-bold mt-4 leading-tight">분위기를 먼저 고른다</h2>
+          </div>
+          <p class="text-sm text-[var(--text-muted)] max-w-sm">
+            색은 분위기를 코딩한다. 초대장을 받는 사람이 열기 전부터 이미 설렌다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <!-- Sunset -->
+          <div class="mood-swatch reveal reveal-delay-1">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #FF6B35 0%, #F7C59F 50%, #FF8C69 100%);"></div>
+            <div class="mood-name"><p class="mono-label">SUNSET</p></div>
+          </div>
+          <!-- Midnight -->
+          <div class="mood-swatch reveal reveal-delay-1">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #0D0221 0%, #1A0533 40%, #2D1B69 100%);"></div>
+            <div class="mood-name"><p class="mono-label">MIDNIGHT</p></div>
+          </div>
+          <!-- Energetic -->
+          <div class="mood-swatch reveal reveal-delay-2">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #F72585 0%, #7209B7 40%, #3A0CA3 100%);"></div>
+            <div class="mood-name"><p class="mono-label">ENERGETIC</p></div>
+          </div>
+          <!-- Minimal -->
+          <div class="mood-swatch reveal reveal-delay-2">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 50%, #D4D4D4 100%);"></div>
+            <div class="mood-name"><p class="mono-label">MINIMAL</p></div>
+          </div>
+          <!-- Romantic -->
+          <div class="mood-swatch reveal reveal-delay-3">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 50%, #FFECD2 100%);"></div>
+            <div class="mood-name"><p class="mono-label">ROMANTIC</p></div>
+          </div>
+          <!-- Ocean -->
+          <div class="mood-swatch reveal reveal-delay-3">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);"></div>
+            <div class="mood-name"><p class="mono-label">OCEAN</p></div>
+          </div>
+          <!-- Aurora (Lucky) -->
+          <div class="mood-swatch reveal reveal-delay-4">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);"></div>
+            <div class="mood-name"><p class="mono-label">AURORA</p></div>
+          </div>
+          <!-- Cosmic -->
+          <div class="mood-swatch reveal reveal-delay-4">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);"></div>
+            <div class="mood-name"><p class="mono-label">COSMIC</p></div>
+          </div>
+          <!-- Jungle -->
+          <div class="mood-swatch reveal">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #134E5E 0%, #71B280 100%);"></div>
+            <div class="mood-name"><p class="mono-label">JUNGLE</p></div>
+          </div>
+          <!-- Cyber -->
+          <div class="mood-swatch reveal">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #00F5FF 0%, #7B2FBE 50%, #FF0080 100%);"></div>
+            <div class="mood-name"><p class="mono-label">CYBER</p></div>
+          </div>
+          <!-- Desert -->
+          <div class="mood-swatch reveal reveal-delay-1">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #D4A574 0%, #C1956B 40%, #8B6340 100%);"></div>
+            <div class="mood-name"><p class="mono-label">DESERT</p></div>
+          </div>
+          <!-- Sakura -->
+          <div class="mood-swatch reveal reveal-delay-1">
+            <div class="mood-chip" style="background: linear-gradient(135deg, #FFB7C5 0%, #FF8FAB 50%, #FF6F91 100%);"></div>
+            <div class="mood-name"><p class="mono-label">SAKURA</p></div>
+          </div>
+          <!-- +9 MORE -->
+          <div class="mood-swatch reveal reveal-delay-2" style="border-style: dashed;">
+            <div class="mood-chip flex items-center justify-center" style="background: rgba(129,140,248,0.06);">
+              <span class="mono-label text-center">+9<br>MORE</span>
+            </div>
+            <div class="mood-name"><p class="mono-label">LUCKY</p></div>
+          </div>
+        </div>
+
+        <div class="callout reveal">
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+            <strong class="text-[var(--text)]">Lucky 그라디언트</strong>는 제작자가 "랜덤으로 추천받기"를 선택하면 15가지 중 하나가 배정된다.
+            예상 못한 색 조합이 오히려 더 기억에 남는 초대장을 만든다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 UX Details -->
+    <section class="section-glow reveal" id="ux">
+      <hr class="grad-divider mb-12">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <div class="section-marker mono-label">04 / UX DETAILS</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">디테일이<br>경험을 만든다</h2>
+        </div>
+        <div class="lg:col-span-9">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="feature-card reveal reveal-delay-1">
+              <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">⚡</div>
+              <h3 class="font-semibold mb-1">Optimistic UI</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">RSVP 버튼 클릭 시 서버 응답 전에 UI가 먼저 반응한다. 체감 속도를 0.3초 이상 단축.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+              <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">🔄</div>
+              <h3 class="font-semibold mb-1">Realtime RSVP 카운터</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">Supabase Realtime 채널로 참석자 수가 실시간 업데이트. 새로고침 없이 살아있는 숫자.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+              <div class="feat-icon" style="background:rgba(255,140,66,0.1); color:var(--accent-3);">📱</div>
+              <h3 class="font-semibold mb-1">모바일 우선 설계</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">초대장 공유의 80%는 모바일. 터치 제스처, 탭 타깃, 웹 공유 API까지 모바일 맥락 최우선.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-4">
+              <div class="feat-icon" style="background:rgba(34,211,238,0.1); color:var(--accent-4);">🖼️</div>
+              <h3 class="font-semibold mb-1">사진 업로드 UX</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">드래그앤드롭 + 클릭, WebP 자동 변환, 최대 5장 제한으로 앨범 큐레이션 의도성 부여.</p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">📅</div>
+              <h3 class="font-semibold mb-1">Calendar 뷰</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">주최자 대시보드에서 Stack·List·Calendar 세 뷰 전환. 월별로 이벤트를 시각화하는 캘린더.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-1">
+              <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">🔒</div>
+              <h3 class="font-semibold mb-1">비밀 이벤트 옵션</h3>
+              <p class="text-sm text-[var(--text-muted)] leading-relaxed">링크를 아는 사람만 접근 가능한 프라이빗 모드. 공개 인덱스에서 숨김 처리.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Features -->
+    <section class="section-glow reveal" id="features">
+      <hr class="grad-divider mb-12">
+      <div class="space-y-8">
+        <div>
+          <div class="section-marker mono-label">05 / FEATURES</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">핵심 기능</h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">✨</div>
+            <h3 class="font-semibold mb-2">이벤트 생성 플로우</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">무드 선택 → 이벤트 정보 입력 → 티켓 프리뷰 확인 → 링크 생성. 5분 이내에 완성.</p>
+            <div class="mt-3"><span class="badge badge-indigo">Step 0–3</span></div>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">💌</div>
+            <h3 class="font-semibold mb-2">RSVP 시스템</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">수락·거절·대기 상태 관리. 초대장별 참석자 목록 확인. 익명 참석도 지원.</p>
+            <div class="mt-3"><span class="badge badge-magenta">Realtime</span></div>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feat-icon" style="background:rgba(255,140,66,0.1); color:var(--accent-3);">📸</div>
+            <h3 class="font-semibold mb-2">포토 앨범</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">행사 후 참석자가 사진을 올리면 이벤트 페이지가 추억 아카이브로 변한다. 최대 5장.</p>
+            <div class="mt-3"><span class="badge badge-orange">R2 Storage</span></div>
+          </div>
+          <div class="feature-card reveal">
+            <div class="feat-icon" style="background:rgba(34,211,238,0.1); color:var(--accent-4);">🔗</div>
+            <h3 class="font-semibold mb-2">Dynamic OG 이미지</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">링크 공유 시 이벤트 무드 기반 1200×630 이미지 자동 생성. SNS 프리뷰가 그 자체로 초대장.</p>
+            <div class="mt-3"><span class="badge badge-cyan">next/og</span></div>
+          </div>
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feat-icon" style="background:rgba(129,140,248,0.1); color:var(--accent);">🗓️</div>
+            <h3 class="font-semibold mb-2">대시보드</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">Stack · List · Calendar 세 가지 뷰로 내 이벤트를 한 눈에. 상태·날짜·참석자 필터링.</p>
+            <div class="mt-3"><span class="badge badge-indigo">3 Views</span></div>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feat-icon" style="background:rgba(232,121,249,0.1); color:var(--accent-2);">💬</div>
+            <h3 class="font-semibold mb-2">실시간 댓글</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">Supabase Realtime으로 동기화. 주최자는 댓글 핀, 삭제 권한 보유. 이모지 반응도 지원.</p>
+            <div class="mt-3"><span class="badge badge-magenta">Supabase RT</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Decisions -->
+    <section class="section-glow reveal" id="decisions">
+      <hr class="grad-divider mb-12">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <div class="section-marker mono-label">06 / DECISIONS</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">왜 이렇게<br>결정했나</h2>
+        </div>
+        <div class="lg:col-span-9">
+          <div class="rounded-xl overflow-hidden" style="border: 1px solid var(--border);">
+            <div class="decision-item">
+              <details>
+                <summary class="px-6 font-semibold">
+                  <span>Next.js 15 App Router를 선택한 이유</span>
+                  <svg class="arrow w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="detail-body px-6">
+                  서버 컴포넌트로 초기 페이지 HTML을 완성된 상태로 전송해 SEO·LCP 모두 잡을 수 있다.
+                  특히 이벤트 상세 페이지는 공유 링크를 통해 유입되는 신규 방문자가 많아 첫 페인트 속도가 중요했다.
+                  Dynamic OG 이미지도 Route Handlers로 같은 코드베이스에서 처리 가능했다.
                 </div>
-                <div>
-                  <div class="mono-label mb-1" style="color: rgba(255,255,255,0.5);">Time</div>
-                  <div class="text-white font-bold text-sm">LAUNCH</div>
+              </details>
+            </div>
+            <div class="decision-item">
+              <details>
+                <summary class="px-6 font-semibold">
+                  <span>Supabase를 백엔드로 택한 이유</span>
+                  <svg class="arrow w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="detail-body px-6">
+                  Row Level Security로 인증·권한 로직을 DB 레이어에서 처리해 앱 코드를 단순하게 유지했다.
+                  Realtime 채널은 별도 WebSocket 인프라 없이 RSVP·댓글 실시간 동기화를 구현할 수 있어
+                  1인 개발 속도에 결정적이었다. 3주 타임라인에서 이것은 게임 체인저였다.
+                </div>
+              </details>
+            </div>
+            <div class="decision-item">
+              <details>
+                <summary class="px-6 font-semibold">
+                  <span>Cloudflare R2를 이미지 스토리지로 사용한 이유</span>
+                  <svg class="arrow w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="detail-body px-6">
+                  S3 호환 API로 코드 변경 없이 마이그레이션 가능하고, egress 비용이 없다.
+                  초대장 앨범 사진은 일시적으로 트래픽이 몰릴 수 있어 비용 예측 가능성이 중요했다.
+                  Workers와 연계해 WebP 변환도 엣지에서 처리할 수 있는 확장 옵션도 고려했다.
+                </div>
+              </details>
+            </div>
+            <div class="decision-item">
+              <details>
+                <summary class="px-6 font-semibold">
+                  <span>Framer Motion을 애니메이션에 쓴 이유</span>
+                  <svg class="arrow w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="detail-body px-6">
+                  티켓 플립, 무드 선택 트랜지션, 페이지 진입 애니메이션 등 TIKIT의 "수집하고 싶은 오브제" 경험은
+                  물리 기반 스프링 애니메이션 없이는 구현하기 어렵다. CSS transition만으로는 자연스러운
+                  관성 느낌이 나오지 않는다. 번들 사이즈는 tree-shaking으로 최소화했다.
+                </div>
+              </details>
+            </div>
+            <div class="decision-item" style="border-bottom:none;">
+              <details>
+                <summary class="px-6 font-semibold">
+                  <span>사진 최대 5장 제한을 둔 이유</span>
+                  <svg class="arrow w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="detail-body px-6">
+                  제한이 큐레이션을 유도한다. 수십 장을 무작위로 올리는 것보다 "가장 기억에 남는 순간"을 고르게 만드는 것이
+                  오히려 앨범의 밀도를 높인다. 인스타그램 캐러셀이 10장 제한인 것과 같은 심리적 원리.
+                  스토리지 비용 절감도 부가적인 이점이었다.
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Tech -->
+    <section class="section-glow reveal" id="tech">
+      <hr class="grad-divider mb-12">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <div class="section-marker mono-label">07 / TECH STACK</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">기술 스택</h2>
+        </div>
+        <div class="lg:col-span-9">
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <h3 class="mono-label">FRONTEND</h3>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Next.js 15</span>
+                  <span class="badge badge-indigo">App Router</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">TypeScript</span>
+                  <span class="badge badge-neutral">Strict Mode</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Tailwind CSS</span>
+                  <span class="badge badge-cyan">v4</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Framer Motion</span>
+                  <span class="badge badge-magenta">v11</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Pretendard</span>
+                  <span class="badge badge-neutral">Variable</span>
                 </div>
               </div>
-              <div class="flex items-end justify-between">
-                <span class="font-black text-white text-lg tracking-tight">TIKIT<span style="color: #E879F9;">.</span></span>
-                <span class="mono-label" style="color: rgba(255,255,255,0.5);">RSVP →</span>
+            </div>
+            <div class="space-y-4">
+              <h3 class="mono-label">BACKEND · INFRA</h3>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Supabase</span>
+                  <span class="badge badge-indigo">Postgres + RT</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Cloudflare R2</span>
+                  <span class="badge badge-orange">Image Storage</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Vercel</span>
+                  <span class="badge badge-neutral">Edge Deploy</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">next/og</span>
+                  <span class="badge badge-cyan">Dynamic OG</span>
+                </div>
+                <div class="flex items-center justify-between py-2.5 px-4 rounded-lg" style="background:var(--card);border:1px solid var(--border);">
+                  <span class="text-sm font-medium">Zod</span>
+                  <span class="badge badge-neutral">Validation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Launch Sprint -->
+    <section class="section-glow reveal" id="sprint">
+      <hr class="grad-divider mb-12">
+      <div class="space-y-8">
+        <div class="flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            <div class="section-marker mono-label">08 / LAUNCH SPRINT</div>
+            <h2 class="text-3xl font-bold mt-4 leading-tight">3주의 기록</h2>
+          </div>
+          <div class="callout" style="max-width:320px;">
+            <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+              <strong class="text-[var(--text)]">AI 사용:</strong> Claude로 반복 보일러플레이트 생성,
+              Cursor로 코드 자동완성. 설계와 판단은 전부 직접.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="sprint-card sprint-1 reveal reveal-delay-1">
+            <div class="mono-label mb-3">WEEK 1</div>
+            <h3 class="font-bold text-lg mb-3">설계 · 프로토타입</h3>
+            <ul class="space-y-2 text-sm text-[var(--text-muted)]">
+              <li class="flex gap-2"><span style="color:var(--accent);">→</span>문제 정의 및 MVP 범위 결정</li>
+              <li class="flex gap-2"><span style="color:var(--accent);">→</span>무드 팔레트 21종 디자인</li>
+              <li class="flex gap-2"><span style="color:var(--accent);">→</span>티켓 컴포넌트 3D 구현</li>
+              <li class="flex gap-2"><span style="color:var(--accent);">→</span>DB 스키마 설계 (Supabase)</li>
+              <li class="flex gap-2"><span style="color:var(--accent);">→</span>인증 플로우 구현</li>
+            </ul>
+          </div>
+          <div class="sprint-card sprint-2 reveal reveal-delay-2">
+            <div class="mono-label mb-3">WEEK 2</div>
+            <h3 class="font-bold text-lg mb-3">핵심 기능 구현</h3>
+            <ul class="space-y-2 text-sm text-[var(--text-muted)]">
+              <li class="flex gap-2"><span style="color:var(--accent-2);">→</span>이벤트 생성 플로우 완성</li>
+              <li class="flex gap-2"><span style="color:var(--accent-2);">→</span>RSVP 시스템 + Realtime</li>
+              <li class="flex gap-2"><span style="color:var(--accent-2);">→</span>Dynamic OG 이미지 생성</li>
+              <li class="flex gap-2"><span style="color:var(--accent-2);">→</span>사진 업로드 (R2 연동)</li>
+              <li class="flex gap-2"><span style="color:var(--accent-2);">→</span>대시보드 3-뷰 구현</li>
+            </ul>
+          </div>
+          <div class="sprint-card sprint-3 reveal reveal-delay-3">
+            <div class="mono-label mb-3">WEEK 3</div>
+            <h3 class="font-bold text-lg mb-3">폴리싱 · 런칭</h3>
+            <ul class="space-y-2 text-sm text-[var(--text-muted)]">
+              <li class="flex gap-2"><span style="color:var(--accent-3);">→</span>댓글 시스템 + 이모지</li>
+              <li class="flex gap-2"><span style="color:var(--accent-3);">→</span>모바일 반응형 최적화</li>
+              <li class="flex gap-2"><span style="color:var(--accent-3);">→</span>LCP 최적화 (< 1.8s)</li>
+              <li class="flex gap-2"><span style="color:var(--accent-3);">→</span>에러 핸들링·엣지 케이스</li>
+              <li class="flex gap-2"><span style="color:var(--accent-3);">→</span>tikit.life 도메인 런칭</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 Role & Summary -->
+    <section class="section-glow reveal" id="role">
+      <hr class="grad-divider mb-12">
+      <div class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-3">
+          <div class="section-marker mono-label">09 / REFLECTION</div>
+          <h2 class="text-3xl font-bold mt-4 leading-tight">배운 것,<br>남은 것</h2>
+        </div>
+        <div class="lg:col-span-9 space-y-8">
+          <div class="space-y-4">
+            <h3 class="font-semibold text-lg gradient-text">솔로 프로덕트 개발의 본질</h3>
+            <p class="text-[var(--text-muted)] leading-relaxed">
+              기획·디자인·개발을 혼자 하면 속도보다 <strong class="text-[var(--text)]">결정의 질</strong>이 핵심이 된다.
+              팀이 없으면 설득할 필요도 없지만, 스스로를 설득해야 한다.
+              "왜 이 기능이 지금 필요한가"를 묻는 것이 가장 어려웠고, 가장 중요했다.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="font-semibold text-lg" style="color:var(--accent-3);">3주 타임라인의 강제력</h3>
+            <p class="text-[var(--text-muted)] leading-relaxed">
+              마감이 명확하면 완벽주의가 설 자리가 없다. "지금 당장 필요한 것"과
+              "언젠가 있으면 좋은 것"의 경계가 선명해진다. 이 긴장감이 오히려 집중도를 높였다.
+              MVP는 작아야 한다. 작아야 끝을 볼 수 있다.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="font-semibold text-lg" style="color:var(--accent-4);">다음 스텝</h3>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="feature-card">
+                <p class="text-sm font-semibold mb-1">카카오 소셜 로그인</p>
+                <p class="text-xs text-[var(--text-muted)]">국내 유저의 가입 허들을 낮추는 가장 빠른 방법</p>
+              </div>
+              <div class="feature-card">
+                <p class="text-sm font-semibold mb-1">커스텀 도메인 초대장</p>
+                <p class="text-xs text-[var(--text-muted)]">브랜드 행사 주최자를 위한 화이트라벨 옵션</p>
+              </div>
+              <div class="feature-card">
+                <p class="text-sm font-semibold mb-1">알림 시스템</p>
+                <p class="text-xs text-[var(--text-muted)]">RSVP 확정·취소·댓글 알림 (웹 푸시 + 카카오)</p>
+              </div>
+              <div class="feature-card">
+                <p class="text-sm font-semibold mb-1">이벤트 템플릿 마켓</p>
+                <p class="text-xs text-[var(--text-muted)]">커뮤니티가 만든 무드·레이아웃 템플릿 공유</p>
               </div>
             </div>
           </div>
 
-          <!-- Floating chips -->
-          <div class="hidden md:block absolute -top-4 -right-4 bg-[var(--card)] border border-[var(--border)] rounded-full px-4 py-2 text-xs font-medium text-[var(--text-muted)]">
-            🎟 이름이 곧 티켓
-          </div>
-          <div class="hidden md:block absolute -bottom-4 -left-4 bg-[var(--card)] border border-[var(--border)] rounded-full px-4 py-2 text-xs font-medium text-[var(--text-muted)]">
-            ⚡ 정원 안 꼬이는 RSVP
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ META / ROLE ═══════════════ -->
-  <section class="relative py-20 border-t border-[var(--border)]">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="reveal grid md:grid-cols-4 gap-8 md:gap-12">
-        <div>
-          <div class="mono-label mb-3">Role</div>
-          <div class="text-white font-semibold">Full-stack Solo</div>
-          <div class="text-sm text-[var(--text-muted)] mt-1">기획 · 디자인 · 개발 · 배포</div>
-        </div>
-        <div>
-          <div class="mono-label mb-3">Timeline</div>
-          <div class="text-white font-semibold">3주 · 3 Sprint</div>
-          <div class="text-sm text-[var(--text-muted)] mt-1">~ 2026.04.08 런칭</div>
-        </div>
-        <div>
-          <div class="mono-label mb-3">Platform</div>
-          <div class="text-white font-semibold">웹 서비스</div>
-          <div class="text-sm text-[var(--text-muted)] mt-1">PC / Mobile 크로스 플랫폼</div>
-        </div>
-        <div>
-          <div class="mono-label mb-3">Status</div>
-          <div class="text-white font-semibold">운영 중</div>
-          <div class="text-sm text-[var(--text-muted)] mt-1">tikit.day</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 01 · PROBLEM ═══════════════ -->
-  <section id="problem" class="relative py-32 border-t border-[var(--border)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">01 · PROBLEM</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          카카오톡으로 뿌려지는 초대는<br>
-          대체로 <span class="gradient-text">셋 중 하나였습니다.</span>
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          사적인 이벤트를 여는 사람은 많은데, "모이게 만드는 초대장"의 비주얼과 참석 관리를 한 번에 해결해주는 서비스가 한국 시장에 없었습니다.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-5">
-        <div class="reveal feature-card p-7">
-          <div class="mono-label mb-4">Option 1</div>
-          <h3 class="text-xl font-bold mb-3">구글폼 · 네이버폼</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            투박하고 정보만 받습니다. "간다 / 안 간다"를 묻는 폼이 이벤트의 첫인상이 됩니다.
-          </p>
-        </div>
-        <div class="reveal feature-card p-7">
-          <div class="mono-label mb-4">Option 2</div>
-          <h3 class="text-xl font-bold mb-3">카카오톡 단톡방</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            참석 의사를 사람 손으로 집계해야 합니다. 이미지나 디자인은 전혀 남지 않고 기록도 없습니다.
-          </p>
-        </div>
-        <div class="reveal feature-card p-7">
-          <div class="mono-label mb-4">Option 3</div>
-          <h3 class="text-xl font-bold mb-3">Partiful · Paperless Post</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            감성은 좋지만 <b class="text-white">카카오톡 OG 미리보기</b>와 한국어 UX가 애초에 맞지 않습니다.
-          </p>
-        </div>
-      </div>
-
-      <div class="reveal mt-16 p-8 md:p-10 rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[rgba(129,140,248,0.08)] to-transparent">
-        <div class="mono-label mb-3" style="color: var(--accent);">INSIGHT</div>
-        <p class="text-xl md:text-2xl font-bold leading-snug text-pretty">
-          카카오톡으로 공유되는 링크는 <span class="gradient-text">OG 이미지 한 장이 첫인상</span>을 좌우합니다.<br>
-          그러면 OG 이미지 자체가 초대장이 되어야 합니다.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 02 · SOLUTION / PRINCIPLES ═══════════════ -->
-  <section id="solution" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">02 · SOLUTION</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          링크 한 줄로 초대가<br><span class="gradient-text">감상이 되는 경험.</span>
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          제품을 만들기 전에 다섯 가지 설계 원칙을 먼저 정했습니다. 이후 모든 기능·품질·보안 의사결정은 이 원칙에서 나왔습니다.
-        </p>
-      </div>
-
-      <div class="space-y-5">
-        <div class="reveal feature-card p-7 md:p-9">
-          <div class="flex items-start gap-6">
-            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">01</div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-bold mb-2">티켓은 장식이 아니라 약속입니다</h3>
-              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
-                초대장은 실물 티켓 카드처럼 보여야 합니다. 카드 앞면, 뒷면, 그라디언트, OG 이미지 모두 <b class="text-white">같은 티켓 언어</b>로 말합니다. 이름에서 뽑아낸 그라디언트가 클라이언트와 서버 어디에서 그려지든 똑같이 나오게 설계했습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal feature-card p-7 md:p-9">
-          <div class="flex items-start gap-6">
-            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">02</div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-bold mb-2">로그인 없이도 참석할 수 있습니다</h3>
-              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
-                참석자에게 가입 장벽을 두지 않습니다. 이름 한 줄, 한 번의 탭으로 RSVP가 끝나야 합니다. 익명 참석자도 안전하게 집계될 수 있도록 인증 계층을 통일했습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal feature-card p-7 md:p-9">
-          <div class="flex items-start gap-6">
-            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">03</div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-bold mb-2">PC와 모바일 어디서 열어도 자연스럽게</h3>
-              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
-                카카오톡에서 탭해 모바일로 들어오는 동선과, 데스크톱에서 공유받아 여는 동선 모두 티켓 경험이 일관되게 유지되도록 크로스 플랫폼 레이아웃을 설계했습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal feature-card p-7 md:p-9">
-          <div class="flex items-start gap-6">
-            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">04</div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-bold mb-2">카카오톡 미리보기가 첫 화면입니다</h3>
-              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
-                공유 링크의 OG 이미지가 곧 이벤트의 얼굴입니다. 서버에서 이벤트마다 고유한 티켓 이미지를 그때그때 생성해 카카오톡 미리보기에 바로 띄웁니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal feature-card p-7 md:p-9">
-          <div class="flex items-start gap-6">
-            <div class="font-mono text-3xl font-black text-[var(--text-dim)] min-w-[60px]">05</div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-bold mb-2">기본은 안전하게</h3>
-              <p class="text-[var(--text-muted)] leading-relaxed text-pretty">
-                RSVP나 외부 API 요청이 반드시 서버를 거치도록 설계했고, 비밀번호 해싱 같은 기본 관행을 따랐습니다. 혼자 작업하는 만큼 AI 도구로 코드를 반복 점검받아 놓칠 수 있는 부분을 줄였습니다.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 03 · UX DETAILS ═══════════════ -->
-  <section id="ux" class="relative py-32 border-t border-[var(--border)]">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">03 · UX DETAILS</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          디테일이 서비스를 완성합니다.
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          기능 목록보다 더 중요한 건 "이 초대장이 카카오톡에서 어떻게 보이는가" 같은 미세한 경험입니다. 아래는 서비스 품질을 결정지은 여섯 가지 디테일입니다.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-5">
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-            한 장의 티켓이 끝까지 이어지는 구조
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            생성 단계에서 본 카드 = 카카오톡에 뜨는 OG 이미지 = 상세 페이지의 티켓이 모두 같은 그림입니다. 앞면은 포스터 감성, 뒷면은 행사 상세. "FLIP" 펄스 애니메이션이 처음 온 사람에게 카드를 뒤집어보도록 자연스럽게 유도합니다.
-          </p>
-        </div>
-
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-2)]"></span>
-            OG 이미지가 곧 제품의 얼굴
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            카카오톡에서 링크를 탭하기 전부터, 사용자는 이미 이벤트의 티켓 카드를 한 번 본 상태입니다. 이미지 있는 이벤트 / 없는 이벤트는 레이아웃을 분기해서 각각 다르게 렌더합니다.
-          </p>
-        </div>
-
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-3)]"></span>
-            바이럴 루프 설계
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            참석자 페이지 하단에 "나도 초대장 만들기 →" 작은 CTA. 호스트 본인에게는 노출되지 않습니다. "이 초대장 예쁘네 → 나도 만들어볼까"까지 가는 심리 동선을 최대한 짧게 유지합니다.
-          </p>
-        </div>
-
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-4)]"></span>
-            카카오톡 중복 메시지 방지
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            카카오 공유 시 제목·설명을 일부러 비웠습니다. 그렇지 않으면 사용자가 친구에게 보낸 메시지 텍스트와 링크 미리보기 텍스트가 중복으로 떠서 스팸처럼 보입니다.
-          </p>
-        </div>
-
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full" style="background: #34D399;"></span>
-            신호등 참석자 UI
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            갈래요 / 미정 / 못가요를 신호등 컬러(초록·노랑·빨강)로 시각화했습니다. 호스트가 한눈에 인원을 파악할 수 있고, "호스트 / 참석" 뱃지로 권한도 명확히 표시됩니다.
-          </p>
-        </div>
-
-        <div class="reveal feature-card p-8">
-          <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full" style="background: #FCA5A5;"></span>
-            휴지통 (soft-delete)
-          </h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            이벤트 삭제는 바로 지우는 게 아니라 휴지통으로 먼저 보냅니다. 소유자는 다시 복구할 수 있고, 실수 삭제와 관리자 감사 두 가지를 모두 대응합니다.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 04 · FEATURES ═══════════════ -->
-  <section id="features" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">04 · FEATURES</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          여섯 개의 기능 축.
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          제품을 여섯 개의 축으로 분해해 각자 독립적으로 작동하면서도, 티켓 메타포로 연결되도록 설계했습니다.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- Feature 1 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#818CF8] to-[#312E81] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">4단계 생성 위저드</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            테마 → 정보 → 장소 → 이미지·공개설정. 6 + 15종의 이름 시드 그라디언트 테마, Google Places 검색, 드래그 기반 이미지 위치 편집기까지.
-          </p>
-        </div>
-
-        <!-- Feature 2 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E879F9] to-[#7C3AED] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">정원 안 꼬이는 RSVP</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            여러 명이 동시에 참석을 눌러도 정원이 꼬이지 않습니다. 서버가 한 번에 한 건씩만 처리해서 중복·초과를 원천 차단합니다.
-          </p>
-        </div>
-
-        <!-- Feature 3 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF8C42] to-[#D97706] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">서버 렌더 OG 이미지</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            이벤트마다 고유한 600×800 티켓 이미지를 서버에서 그려 카카오톡 미리보기에 바로 띄웁니다. 클라이언트 티켓과 완전히 같은 그라디언트로.
-          </p>
-        </div>
-
-        <!-- Feature 4 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#22D3EE] to-[#0891B2] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">공유 바텀시트</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            카카오톡 공유 + 티켓 카드 이미지 저장 + 링크 복사. 세 가지 공유 경로를 바텀시트 하나에 담았습니다. 인스타 스토리용 캡처도 한 번에.
-          </p>
-        </div>
-
-        <!-- Feature 5 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA5A5] to-[#EF4444] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">Google + Kakao + 익명 로그인</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            세 가지 인증 경로를 제공하고, 같은 이메일이면 Google과 Kakao 계정을 자동으로 연결합니다. 익명 로그인으로 비로그인 RSVP도 안전하게 집계.
-          </p>
-        </div>
-
-        <!-- Feature 6 -->
-        <div class="reveal feature-card p-8">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#34D399] to-[#059669] flex items-center justify-center mb-5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-2">마이 이벤트 3뷰</h3>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-            리스트 · 덱(스와이프) · 캘린더 세 가지 뷰를 제공합니다. 호스트·참석 뱃지로 권한을 구분하고, 검색·정렬·필터도 한곳에 모았습니다.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 05 · DECISIONS ═══════════════ -->
-  <section id="decisions" class="relative py-32 border-t border-[var(--border)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">05 · DECISIONS</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          주요 의사결정과 이유.
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          "왜 이렇게 만들었는가"가 코드보다 중요합니다. 기술 세부는 짧게, 결정의 이유는 분명하게 정리했습니다.
-        </p>
-      </div>
-
-      <div class="reveal space-y-4">
-        <!-- Decision 1 -->
-        <details class="feature-card p-6 md:p-7 group" open>
-          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
-            <div class="flex items-center gap-4">
-              <span class="font-mono text-xs text-[var(--text-dim)]">01</span>
-              <h3 class="text-lg md:text-xl font-bold">RSVP는 서버가 한 번에 한 건씩만 처리</h3>
-            </div>
-            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
-            <b class="text-white">문제</b> · 여러 명이 동시에 참석 버튼을 누르면 정원이 꼬이거나 같은 사람이 두 번 등록될 수 있음.<br>
-            <b class="text-white">선택</b> · 저장은 반드시 서버를 거치게 하고, RSVP 경로를 한 곳으로 모음.<br>
-            <b class="text-white">효과</b> · 정원·중복을 다루는 흐름이 한 군데로 모여 점검 범위가 줄어듦.
-          </p>
-        </details>
-
-        <!-- Decision 2 -->
-        <details class="feature-card p-6 md:p-7 group">
-          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
-            <div class="flex items-center gap-4">
-              <span class="font-mono text-xs text-[var(--text-dim)]">02</span>
-              <h3 class="text-lg md:text-xl font-bold">DB 문서와 UI 사이에 변환 함수 한 겹</h3>
-            </div>
-            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
-            <b class="text-white">문제</b> · 개발 초반 필드명과 지금 필드명이 달라서, 예전에 만든 이벤트가 UI에 빈칸으로 뜨는 버그가 있었음.<br>
-            <b class="text-white">선택</b> · DB에서 가져온 원본을 UI가 절대 그대로 쓰지 못하게 하고, 가운데에 "변환 함수 한 겹"을 두어 예전 필드와 지금 필드를 한곳에서 맞춰줌.<br>
-            <b class="text-white">효과</b> · 새 필드를 추가해도 한 곳만 고치면 돼서 같은 종류의 버그가 구조적으로 재발하지 않음.
-          </p>
-        </details>
-
-        <!-- Decision 3 -->
-        <details class="feature-card p-6 md:p-7 group">
-          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
-            <div class="flex items-center gap-4">
-              <span class="font-mono text-xs text-[var(--text-dim)]">03</span>
-              <h3 class="text-lg md:text-xl font-bold">티켓 그라디언트는 "이름에서 뽑아냄"</h3>
-            </div>
-            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
-            <b class="text-white">문제</b> · 티켓 카드(웹 화면)와 OG 이미지(카카오톡 미리보기)가 서로 다른 그라디언트를 그리면 티켓 일관성이 무너짐.<br>
-            <b class="text-white">선택</b> · 이벤트 이름을 시드로 사용하는 그라디언트 생성 함수를 만들어, 클라이언트와 서버가 이 함수 하나를 같이 씀.<br>
-            <b class="text-white">효과</b> · 같은 이벤트 이름은 언제 어디서 렌더해도 같은 티켓이 나옴.
-          </p>
-        </details>
-
-        <!-- Decision 4 -->
-        <details class="feature-card p-6 md:p-7 group">
-          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
-            <div class="flex items-center gap-4">
-              <span class="font-mono text-xs text-[var(--text-dim)]">04</span>
-              <h3 class="text-lg md:text-xl font-bold">카카오 로그인은 서버를 한 번 거쳐서</h3>
-            </div>
-            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
-            <b class="text-white">문제</b> · 사용 중인 인증 시스템에 Kakao 로그인이 기본 제공되지 않음. 한국 서비스에 카카오 로그인은 필수.<br>
-            <b class="text-white">선택</b> · 서버에서 카카오 인증 코드를 받아 내부 인증 토큰으로 교환하는 방식을 직접 구현. 중간에 CSRF 방어 코드도 추가.<br>
-            <b class="text-white">효과</b> · Google, Kakao, 익명 로그인 모두 같은 체계로 권한 관리가 가능해짐.
-          </p>
-        </details>
-
-        <!-- Decision 5 -->
-        <details class="feature-card p-6 md:p-7 group">
-          <summary class="cursor-pointer flex items-center justify-between gap-4 list-none">
-            <div class="flex items-center gap-4">
-              <span class="font-mono text-xs text-[var(--text-dim)]">05</span>
-              <h3 class="text-lg md:text-xl font-bold">AI 도구로 반복 점검 루프 구성</h3>
-            </div>
-            <svg class="w-5 h-5 text-[var(--text-dim)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </summary>
-          <p class="mt-4 pl-10 text-sm text-[var(--text-muted)] leading-relaxed">
-            <b class="text-white">문제</b> · 혼자 3주 안에 런칭하면서 한 사람의 눈으로는 놓치기 쉬운 부분이 생길 수 있음.<br>
-            <b class="text-white">선택</b> · 기획·구현·코드 리뷰·한국어 UX 카피·경계면 일관성을 각각 AI에게 맡겨 여러 관점에서 코드를 다시 읽게 하는 루프를 구성.<br>
-            <b class="text-white">효과</b> · 이터레이션 속도를 유지하면서 보완이 필요한 부분을 런칭 전에 정리할 수 있었음.
-          </p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 06 · TECH SUMMARY (short) ═══════════════ -->
-  <section class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">06 · TECH SUMMARY</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          사용한 기술, 짧게.
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-12 text-pretty">
-          세부 스택보다 선택의 이유가 더 중요합니다. 한 코드베이스 안에서 웹 UI · 서버 API · 인증 · 서버 OG 이미지를 모두 다룰 수 있는 구성을 골랐습니다.
-        </p>
-      </div>
-
-      <div class="reveal grid md:grid-cols-3 gap-5">
-        <div class="feature-card p-7">
-          <div class="mono-label mb-4" style="color: var(--accent);">FRONTEND</div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            모던 웹 UI 프레임워크로 PC와 모바일을 한 번에 대응. 애니메이션·컴포넌트·타이포까지 일관된 디자인 시스템을 유지.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="badge text-[11px]">Next.js 16</span>
-            <span class="badge text-[11px]">React 19</span>
-            <span class="badge text-[11px]">TypeScript</span>
-            <span class="badge text-[11px]">Tailwind 4</span>
-          </div>
-        </div>
-        <div class="feature-card p-7">
-          <div class="mono-label mb-4" style="color: var(--accent-2);">BACKEND</div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            1인 운영에 맞게 서버 없이도 인증·DB·스토리지·실시간까지 돌아가는 BaaS를 선택. 운영 부담을 최소화.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="badge text-[11px]">Firebase Auth</span>
-            <span class="badge text-[11px]">Firestore</span>
-            <span class="badge text-[11px]">Storage</span>
-            <span class="badge text-[11px]">Hosting</span>
-          </div>
-        </div>
-        <div class="feature-card p-7">
-          <div class="mono-label mb-4" style="color: var(--accent-3);">EXTERNAL</div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            카카오 로그인·공유, 장소 검색, 서버 OG 이미지 렌더링 등 한국 사용자 경험에 필요한 외부 서비스를 연동.
-          </p>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="badge text-[11px]">Kakao OAuth</span>
-            <span class="badge text-[11px]">Google Places</span>
-            <span class="badge text-[11px]">next/og</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal mt-12 p-6 md:p-8 rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[rgba(129,140,248,0.06)] to-transparent text-sm text-[var(--text-muted)] leading-relaxed">
-        <span class="text-white font-semibold">한 줄 요약</span> · Next.js 하나 안에서 프론트엔드 · 서버 API · 카카오톡용 OG 이미지까지 모두 처리하고, Firebase로 인증·DB·실시간·배포를 1인 운영에 최적화된 형태로 묶었습니다.
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 07 · LAUNCH SPRINT ═══════════════ -->
-  <section id="sprint" class="relative py-32 border-t border-[var(--border)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">07 · LAUNCH SPRINT</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-8 text-balance">
-          3주, 3개의 마일스톤.
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed max-w-3xl mb-16 text-pretty">
-          기획부터 런칭까지 3주. 각 스프린트마다 목표가 명확히 다르고, AI 제작 파이프라인이 모든 단계의 중심에 있었습니다.
-        </p>
-      </div>
-
-      <div class="reveal space-y-5 mb-20">
-        <!-- Sprint 1 -->
-        <div class="sprint-card sprint-1">
-          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
-            <div>
-              <div class="mono-label mb-2" style="color: #818CF8;">SPRINT 1 · M1</div>
-              <h3 class="text-xl md:text-2xl font-bold">MVP + AI 제작 파이프라인 구축</h3>
-            </div>
-            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-03-27</span>
-          </div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            기본 기능이 돌아가는 MVP를 빠르게 만들고, 동시에 <b class="text-white">AI를 활용한 서비스 제작 파이프라인</b>을 구축했습니다. 설계·코드 생성·리뷰·리팩토링 루프를 세팅해, 짧은 시간에 많은 기능을 만들 수 있는 환경을 확보하는 게 이 스프린트의 진짜 목표였습니다.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge text-[11px]">이벤트 생성·상세</span>
-            <span class="badge text-[11px]">RSVP 기본 흐름</span>
-            <span class="badge text-[11px]">Firebase 연동</span>
-            <span class="badge text-[11px]">기본 티켓 카드</span>
-          </div>
-        </div>
-
-        <!-- Sprint 2 -->
-        <div class="sprint-card sprint-2">
-          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
-            <div>
-              <div class="mono-label mb-2" style="color: #E879F9;">SPRINT 2 · M2</div>
-              <h3 class="text-xl md:text-2xl font-bold">브랜딩 + 실서비스화</h3>
-            </div>
-            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-04-03</span>
-          </div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            단순 기능 중심의 MVP에 <b class="text-white">TIKIT의 브랜드 언어</b>(티켓 메타포, 타이포, 그라디언트)를 입혔습니다. 제작 파이프라인을 한 번 더 강화해 이터레이션 속도를 끌어올렸고, 한 주 안에 여러 번 개선 루프를 돌릴 수 있게 됐습니다. 도메인(<code class="text-[11px] px-1.5 py-0.5 bg-black/40 rounded">tikit.day</code>)을 등록하고 실서비스 운영 준비도 이 단계에서 마쳤습니다.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge text-[11px]">브랜드 언어 적용</span>
-            <span class="badge text-[11px]">OG 이미지 서버 렌더</span>
-            <span class="badge text-[11px]">카카오톡 공유 최적화</span>
-            <span class="badge text-[11px]">도메인 등록</span>
-            <span class="badge text-[11px]">이터레이션 가속</span>
-          </div>
-        </div>
-
-        <!-- Sprint 3 -->
-        <div class="sprint-card sprint-3">
-          <div class="flex items-start justify-between mb-4 flex-wrap gap-3">
-            <div>
-              <div class="mono-label mb-2" style="color: #FF8C42;">SPRINT 3 · M3</div>
-              <h3 class="text-xl md:text-2xl font-bold">QA + 보안 + UI/UX 보완 → GTM</h3>
-            </div>
-            <span class="font-mono text-xs text-[var(--text-dim)] whitespace-nowrap">~ 2026-04-08 런칭</span>
-          </div>
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-            PC·모바일 크로스 플랫폼 회귀 테스트와 엣지 케이스를 점검했습니다. <b class="text-white">AI 도구로 코드를 여러 차례 점검</b>받아 런칭 전에 보완이 필요한 부분을 정리했고, 한국어 카피 리뷰와 인터랙션 회귀 테스트로 사용성을 마감했습니다. <b class="text-white">4월 8일(수) 런칭 완료</b>, 현재 운영 중입니다.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge text-[11px]">크로스 플랫폼 QA</span>
-            <span class="badge text-[11px]">AI 코드 리뷰</span>
-            <span class="badge text-[11px]">한국어 UX 리뷰</span>
-            <span class="badge text-[11px]">런칭 · GTM</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- AI 활용 포인트 -->
-      <div class="reveal">
-        <div class="flex items-center gap-3 mb-8">
-          <span class="text-2xl">🤖</span>
-          <h3 class="text-2xl md:text-3xl font-black tracking-[-0.02em]">AI 활용 포인트</h3>
-        </div>
-        <p class="text-base text-[var(--text-muted)] leading-relaxed mb-8 max-w-3xl text-pretty">
-          혼자 만드는 서비스에서 AI는 주로 <b class="text-white">반복 점검</b> 용도로 활용했습니다. 3주라는 짧은 기간 안에 한 사람의 눈으로는 놓치기 쉬운 부분을 줄이는 데 도움이 됐습니다.
-        </p>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: var(--accent);">01 · 설계 리뷰</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              기능 스펙과 데이터 모델의 영향도를 사전에 분석. 나중에 스키마가 어긋나는 일을 예방.
-            </p>
-          </div>
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: var(--accent-2);">02 · 구현 가속</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              반복 패턴 리팩토링과 보일러플레이트 생성. 손 품이 들어가는 단순 작업을 빠르게 처리.
-            </p>
-          </div>
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: var(--accent-3);">03 · 코드 점검</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              Firestore 규칙·API 인증 흐름·입력 검증을 AI로 반복 점검받아 런칭 전에 보완이 필요한 부분을 정리했습니다.
-            </p>
-          </div>
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: var(--accent-4);">04 · 한국어 UX 카피 리뷰</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              번역투, 톤 일관성, 용어 사전을 AI가 체크. 사람 한 명으로는 놓치기 쉬운 디테일을 잡아냈습니다.
-            </p>
-          </div>
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: #34D399;">05 · 스키마 동기화 점검</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              UI 데이터 계약과 DB 필드가 어긋나지 않는지, 새 필드를 추가할 때마다 자동으로 확인.
-            </p>
-          </div>
-          <div class="feature-card p-6">
-            <div class="mono-label mb-3" style="color: #FCA5A5;">06 · 경계면 QA</div>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              DB → 변환 함수 → UI, API → 프론트 경계를 교차 비교. 사람 눈으로 놓치기 쉬운 불일치를 탐지.
+          <div class="callout">
+            <p class="text-sm leading-relaxed text-[var(--text-muted)]">
+              TIKIT은 제품이기 전에 <strong class="text-[var(--text)]">가설의 집합</strong>이다.
+              "사람들은 초대장이 아름다우면 더 기꺼이 참석할 것이다."
+              3주 런칭 이후 그 가설을 검증하는 중.
             </p>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Sprint stats -->
-      <div class="reveal mt-16 grid md:grid-cols-3 gap-5">
-        <div class="feature-card p-7 text-center">
-          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">3주</div>
-          <div class="text-sm text-[var(--text-muted)]">기획부터 런칭까지</div>
-        </div>
-        <div class="feature-card p-7 text-center">
-          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">0 → 1</div>
-          <div class="text-sm text-[var(--text-muted)]">혼자 만든 실서비스</div>
-        </div>
-        <div class="feature-card p-7 text-center">
-          <div class="text-4xl md:text-5xl font-black gradient-text mb-2">100+</div>
-          <div class="text-sm text-[var(--text-muted)]">커밋 · AI 교차 검증 포함</div>
-        </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t" style="border-color: var(--border);">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <p class="font-bold tracking-widest text-sm letterpress gradient-text">TIKIT.</p>
+        <p class="mono-label mt-1">티켓처럼 공유하는 이벤트 초대장</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ 08 · STACK / CREDITS ═══════════════ -->
-  <section id="stack" class="relative py-32 border-t border-[var(--border)] bg-[var(--bg-soft)]">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="reveal">
-        <div class="section-marker mb-6">08 · ROLE & SUMMARY</div>
-        <h2 class="text-4xl md:text-5xl font-black tracking-[-0.025em] leading-[1.1] mb-16 text-balance">
-          제가 한 일.
-        </h2>
-      </div>
-
-      <div class="reveal grid md:grid-cols-2 gap-12 mb-16">
-        <div>
-          <div class="mono-label mb-4">CORE CONTRIBUTIONS</div>
-          <ul class="space-y-4 text-[var(--text-muted)]">
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">3주 만에 0 → 1</b> · 기획 · 디자인 · 개발 · 배포까지 혼자 마감하고 실서비스 운영</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">AI 제작 파이프라인 구축</b> · 설계 · 구현 · 리뷰 · QA 루프를 AI로 가속. 이터레이션 속도와 품질을 함께 확보</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">AI 기반 반복 점검 구조</b> · UX 카피 · 스키마 일관성 · 코드 흐름을 AI로 교차 체크하는 워크플로우 운영</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">크로스 플랫폼 웹 서비스</b> · PC·모바일 어디서 열어도 일관된 티켓 경험</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">카카오톡 공유 최적화</b> · OG 이미지가 곧 초대장이 되는 구조 설계</span>
-            </li>
-            <li class="flex gap-3">
-              <span class="text-[var(--accent)] font-bold">·</span>
-              <span><b class="text-white">정원 안 꼬이는 RSVP</b> · 서버 한 경로로 묶어 동시 접근·중복 문제를 원천 차단</span>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <div class="mono-label mb-4">TECH STACK</div>
-          <div class="flex flex-wrap gap-2 mb-8">
-            <span class="badge">Next.js 16</span>
-            <span class="badge">React 19</span>
-            <span class="badge">TypeScript</span>
-            <span class="badge">Tailwind 4</span>
-            <span class="badge">shadcn/ui</span>
-            <span class="badge">framer-motion</span>
-            <span class="badge">Firebase</span>
-            <span class="badge">Firestore</span>
-            <span class="badge">Kakao OAuth</span>
-            <span class="badge">Google Places</span>
-            <span class="badge">next/og</span>
-          </div>
-
-          <div class="mono-label mb-4">AI TOOLS</div>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge badge-accent">🤖 Claude (페어 프로그래밍)</span>
-            <span class="badge">코드 리뷰</span>
-            <span class="badge">반복 점검</span>
-            <span class="badge">UX 카피 리뷰</span>
-            <span class="badge">스키마 동기화</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="reveal relative overflow-hidden rounded-3xl border border-[var(--border)] p-10 md:p-14 text-center">
-        <div class="absolute inset-0 bg-gradient-to-br from-[rgba(129,140,248,0.12)] via-[rgba(232,121,249,0.06)] to-transparent"></div>
-        <div class="relative">
-          <div class="mono-label mb-4">LIVE SERVICE</div>
-          <h3 class="text-3xl md:text-4xl font-black mb-4 tracking-[-0.02em]">
-            직접 만들어보세요.
-          </h3>
-          <p class="text-[var(--text-muted)] mb-8 max-w-xl mx-auto">
-            TIKIT은 2026년 4월 8일(수) 런칭 후 운영 중입니다. 링크를 눌러 서비스를 직접 사용해볼 수 있어요.
-          </p>
-          <a href="https://tikit.day" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-3.5 rounded-full hover:scale-[1.03] transition">
-            tikit.day 열기
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ FOOTER ═══════════════ -->
-  <footer class="border-t border-[var(--border)] py-12">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-3">
-          <span class="font-black text-lg tracking-tight">TIKIT<span class="text-[var(--accent)]">.</span></span>
-          <span class="text-xs text-[var(--text-dim)]">Case Study · 2026</span>
-        </div>
-        <div class="flex items-center gap-6 text-xs text-[var(--text-dim)]">
-          <a href="https://tikit.day" target="_blank" rel="noopener" class="hover:text-white transition">tikit.day</a>
-          <a href="#top" class="hover:text-white transition">맨 위로 ↑</a>
-        </div>
+      <div class="flex items-center gap-6">
+        <a href="/prjt-blog/case-studies/" class="nav-link text-xs">← All Case Studies</a>
+        <a href="https://tikit.life" target="_blank" rel="noopener" class="nav-link text-xs">Live Site ↗</a>
+        <a href="/prjt-blog/about/" class="nav-link text-xs">About</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // Scroll progress bar
-    const progress = document.getElementById('scrollProgress');
+    // Scroll progress
+    const progress = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
-      const h = document.documentElement;
-      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-      progress.style.width = pct + '%';
-    }, { passive: true });
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      progress.style.width = Math.min(pct, 100) + '%';
+    });
 
     // Reveal on scroll
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          io.unobserve(entry.target);
+          observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
 
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // 3D mouse tilt on ticket front
+    const heroFront = document.getElementById('heroFront');
+    const ticketScene = document.getElementById('ticketScene');
+
+    ticketScene.addEventListener('mousemove', (e) => {
+      if (ticketScene.classList.contains('is-flipped')) return;
+      const rect = ticketScene.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      const rotY = -8 + dx * 4;
+      const rotX = 4 - dy * 3;
+      heroFront.style.transform = `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg) scale(1.02)`;
+    });
+
+    ticketScene.addEventListener('mouseleave', () => {
+      if (ticketScene.classList.contains('is-flipped')) return;
+      heroFront.style.transform = '';
+    });
+
+    // Flip ticket
+    function flipTicket() {
+      ticketScene.classList.toggle('is-flipped');
+      if (ticketScene.classList.contains('is-flipped')) {
+        heroFront.style.transform = '';
+      }
+    }
   </script>
+
 </body>
 </html>
